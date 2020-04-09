@@ -43,7 +43,7 @@ See who goes first. The explorer who has the next birthday goes first. (Look on 
 
 After setup, the table should look something like this:
 <!-- Source: https://www.ultraboardgames.com/betrayal-at-house-on-the-hill/game-rules.php -->
-<img src="documents/setup.png" alt="Game Setup">
+<img src="images/setup.png" alt="Game Setup">
 
 
 ## Game Play
