@@ -1,0 +1,85 @@
+{
+  "cards": [
+    {
+      "c_type": "ITEM",
+      "name": "SKELETON KEY",
+      "description": "The key to open any door",
+      "effects": {
+        "top_description": "You can open the Vault or Locked Safe without rolling dice. \n If a haunt says you can attempt to open the front door of the house, you can open it without rolling dice.",
+        "special_description": "None",
+        "bottom_description": "None"
+      }
+    },
+    {
+      "c_type": "ITEM",
+      "name": "ROPE",
+      "description": "Good, solid rope. \n Should come in handy.",
+      "effects": {
+        "top_description": "When you use Rope: ",
+        "special_description": [
+          "You can fall down from or climb up to the Gallery or Collapsed Room without taking damage.",
+          "You can use the Mystic Slide without taking damage (but you must still attempt a Might Roll to use it).",
+          "You can move from the Basement Landing to the Coal Chute."
+        ],
+        "bottom_description": "Using the rope doesn't count as moving a space."
+      }
+    },
+    {
+      "c_type": "ITEM",
+      "name": "TOY MONKEY",
+      "description": "Clap! Clap! Clap! Clap!",
+      "effects": {
+        "top_description": "Gain 1 Speed and 1 Knowledge now. \n Lose 1 Speed and 1 Knowledge if you lose the Toy Monkey. \n When you enter a room with an explorer or monster, roll 2 dice: ",
+        "special_description": [
+          "3-4 The monkey chatters happily.",
+          "1-2 The monkey attacks an explorer or monster in the same room. Roll a Speed 3 attack for the Toy Monkey.",
+          "0 The monkey attacks you. The player on your right rolls a Speed 3 attack for the Toy Monkey."
+        ],
+        "bottom_description": "The Toy Monkey is not destroyed if defeated."
+      }
+    },
+    {
+      "c_type": "EVENT",
+      "name": "DRIP... \n DRIP... \n DRIP... ",
+      "description": "A rhythmic sound that needles at your brain.",
+      "effects": {
+        "top_description": "Put the Drip token in this room. \n Each explorer rolls 1 fewer die (minimum of 1) on all trait rolls while in this room.",
+        "special_description": "None",
+        "bottom_description": "None"
+      }
+    },
+    {
+      "c_type": "EVENT",
+      "name": "WEBS",
+      "description": "Causually, you reach up to brush some webs aside... but they won't brush away. The cling.",
+      "effects": {
+        "top_description": "You must attempt a might roll:",
+        "special_description": [
+          "4+ You break free. Gain 1 Might and discard this card.",
+          "0-3 You're stuck. Keep this card."
+        ],
+        "bottom_description": "If you're stuck, you can't attack, move, or use an item until you're free. One during an explorer's turn, any explorer can attempt to free you. (You can also attempt this roll.) A 4+ succeeds. Anyone failing an attempt can't move for the rest of that turn. After 3 unsuccessful attempts, you break free automatically on your next turn and take your turn normally. \n When you're free, discard this event."
+      }
+    },
+    {
+      "c_type": "EVENT",
+      "name": "ROTTEN",
+      "description": "The smell in this room, it's horrible. \n Smells like death, like blood. \n A slaughterhouse smell.",
+      "effects": {
+        "top_description": "You must attempt a Sanity roll: ",
+        "special_description": [],
+        "bottom_description": "None"
+      }
+    },
+    {
+      "c_type": "",
+      "name": "",
+      "description": "",
+      "effects": {
+        "top_description": "None",
+        "special_description": [],
+        "bottom_description": "None"
+      }
+    }
+  ]
+}
