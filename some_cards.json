@@ -1,0 +1,39 @@
+{
+  "cards": [
+    {
+      "c_type": "Item",
+      "name": "Selection Key",
+      "description": "The key to open any door",
+      "effects": {
+        "e_description": "You can open the Vault or Locked Safe without rolling dice. \n If a haunt says you can attempt to open the front door of the house, you can open it without rolling dice.",
+        "e_effects": "None"
+      }
+    },
+    {
+      "c_type": "Item",
+      "name": "Rope",
+      "description": "Good, solid rope. \n Should come in handy.",
+      "effects": {
+        "e_description": "Using the rope doesn't count as moving a space. \n When you use Rope: ",
+        "e_effects": [
+          "You can fall down from or climb up to the Gallery or Collapsed Room without taking damage.",
+          "You can use the Mystic Slide without taking damage (but you must still attempt a Might Roll to use it).",
+          "You can move from the Basement Landing to the Coal Chute."
+        ]
+      }
+    },
+    {
+      "c_type": "Item",
+      "name": "Toy Monkey",
+      "description": "Clap! Clap! Clap! Clap!",
+      "effects": {
+        "e_description": "Gain 1 Speed and 1 Knowledge now. \n Lose 1 Speed and 1 Knowledge if you lose the Toy Monkey. \n When you enter a room with an explorer or monster, roll 2 dice: ",
+        "e_effects": [
+          "3-4 The monkey chatters happily.",
+          "1-2 The monkey attacks an explorer or monster in the same room.",
+          "0 The monkey attacks you."
+        ]
+      }
+    }
+  ]
+}
