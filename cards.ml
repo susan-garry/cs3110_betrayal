@@ -1,4 +1,4 @@
-type card_type = Item | Omen | Event
+type card_type = ITEM | OMEN | EVENT
 
 type card_effects = {top_description: string; special_description: string list option; bottom_description: string option}
 

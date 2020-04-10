@@ -1,0 +1,176 @@
+{
+  "room tiles": [
+    {
+      "floors": [
+        "BASEMENT",
+        "GROUND"
+      ],
+      "name": "ABANDONED ROOM",
+      "description": "None",
+      "symbols": [
+        "OMEN"
+      ],
+      "doors": 4
+    },
+    {
+      "floors": [
+        "UPPER"
+      ],
+      "name": "ATTIC",
+      "description": "When exiting, you must attempt a Speed roll of 3+. If you fail, lose 1 Might (but continue moving) or stop moving and avoid the damage.",
+      "symbols": [
+        "EVENT"
+      ],
+      "doors": 1
+    },
+    {
+      "floors": [
+        "UPPER"
+      ],
+      "name": "BALCONY",
+      "description": "None",
+      "symbols": [
+        "OMEN"
+      ],
+      "doors": 2
+    },
+    {
+      "floors": [
+        "GROUND"
+      ],
+      "name": "BALLROOM",
+      "description": "None",
+      "symbols": [
+        "EVENT"
+      ],
+      "doors": 4
+    },
+    {
+      "floors": [
+        "BASEMENT"
+      ],
+      "name": "BASEMENT LANDING",
+      "description": "None",
+      "symbols": "None",
+      "doors": 4
+    },
+    {
+      "floors": [
+        "UPPER"
+      ],
+      "name": "BEDROOM",
+      "description": "None",
+      "symbols": [
+        "EVENT"
+      ],
+      "doors": 2
+    },
+    {
+      "floors": [
+        "GROUND",
+        "UPPER"
+      ],
+      "name": "BLOODY ROOM",
+      "description": "None",
+      "symbols": [
+        "ITEM"
+      ],
+      "doors": 4
+    },
+    {
+      "floors": [
+        "BASEMENT"
+      ],
+      "name": "CATACOMBS",
+      "description": "You can attempt a Sanity roll of 6+ to cross. If you fail, you stop moving.",
+      "symbols": [
+        "OMEN"
+      ],
+      "doors": 2
+    },
+    {
+      "floors": [
+        "GROUND",
+        "UPPER"
+      ],
+      "name": "CHAPEL",
+      "description": "Once per game, if you end your turn here, gain 1 Sanity.",
+      "symbols": [
+        "EVENT"
+      ],
+      "doors": 1
+    },
+    {
+      "floors": [
+        "GROUND",
+        "UPPER"
+      ],
+      "name": "CHARRED ROOM",
+      "description": "None",
+      "symbols": [
+        "OMEN"
+      ],
+      "doors": 4
+    },
+    {
+      "floors": [
+        "BASEMENT"
+      ],
+      "name": "CHASM",
+      "description": "You can attempt a Speed roll of 3+ to cross. If you fail, you stop moving.",
+      "symbols": "None",
+      "doors": 2
+    },
+    {
+      "floors": [
+        "GROUND"
+      ],
+      "name": "COAL CHUTE",
+      "description": "One-way slide to Basement Landing.",
+      "symbols": "None",
+      "doors": 1
+    },
+    {
+      "floors": [
+        "GROUND",
+        "UPPER"
+      ],
+      "name": "COLLAPSED ROOM",
+      "description": "You must attempt a Speed roll of 5+ to avoid falling. If you fail the roll, draw a basement title and put it in play. You fall in there and take 1 die of physical damage. \n (Rules: Only the discoverer needs to make a Speed roll, others may avoid or fail intentionally.)",
+      "symbols": "None",
+      "doors": 4
+    },
+    {
+      "floors": [
+        "GROUND",
+        "UPPER"
+      ],
+      "name": "CONSERVATORY",
+      "description": "None",
+      "symbols": [
+        "EVENT"
+      ],
+      "doors": 1
+    },
+    {
+      "floors": [
+        ""
+      ],
+      "name": "",
+      "description": "None",
+      "symbols": "None",
+      "doors": 0
+    },
+    {
+      "floors": [
+        ""
+      ],
+      "name": "",
+      "description": "None",
+      "symbols": [
+        ""
+      ],
+      "doors": 0
+    }
+  ]
+}

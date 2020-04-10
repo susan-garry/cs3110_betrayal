@@ -1,7 +1,7 @@
 {
   "cards": [
     {
-      "c_type": "Item",
+      "c_type": "ITEM",
       "name": "SKELETON KEY",
       "description": "The key to open any door",
       "effects": {
@@ -11,7 +11,7 @@
       }
     },
     {
-      "c_type": "Item",
+      "c_type": "ITEM",
       "name": "ROPE",
       "description": "Good, solid rope. \n Should come in handy.",
       "effects": {
@@ -25,7 +25,7 @@
       }
     },
     {
-      "c_type": "Item",
+      "c_type": "ITEM",
       "name": "TOY MONKEY",
       "description": "Clap! Clap! Clap! Clap!",
       "effects": {
@@ -39,7 +39,7 @@
       }
     },
     {
-      "c_type": "Event",
+      "c_type": "EVENT",
       "name": "DRIP... \n DRIP... \n DRIP... ",
       "description": "A rhythmic sound that needles at your brain.",
       "effects": {
@@ -49,7 +49,7 @@
       }
     },
     {
-      "c_type": "Event",
+      "c_type": "EVENT",
       "name": "WEBS",
       "description": "Causually, you reach up to brush some webs aside... but they won't brush away. The cling.",
       "effects": {
@@ -62,7 +62,7 @@
       }
     },
     {
-      "c_type": "Event",
+      "c_type": "EVENT",
       "name": "ROTTEN",
       "description": "The smell in this room, it's horrible. \n Smells like death, like blood. \n A slaughterhouse smell.",
       "effects": {
