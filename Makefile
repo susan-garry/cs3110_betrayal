@@ -1,4 +1,4 @@
-MODULES=cards rooms house main author
+MODULES=command effects gui player rooms state tiles
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
