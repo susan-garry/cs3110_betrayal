@@ -39,5 +39,5 @@ let get_coords t =
 let get_room t =
   failwith "Unimplemented"
 
-let set_room t r =
+let fill_tile t r =
   failwith "Unimplemented"

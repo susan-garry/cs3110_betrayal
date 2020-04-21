@@ -15,9 +15,9 @@ type room_id = string
 (** The type of effect sets *)
 type eff_lst = int list
 
-(** [from_json j] is the list of rooms that [j] represents.
-    Requires: [j] is a valid JSON room list representation. *)
-val from_json : Yojson.Basic.t -> t list
+(** [from_json j] is the room that [j] represents.
+    Requires: [j] is a valid JSON room representation. *)
+val from_json : Yojson.Basic.t -> t
 
 (** [room_id r] is the name of room [r]. *)
 val room_id : t -> room_id
