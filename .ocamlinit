@@ -2,6 +2,8 @@
 #require "yojson";;
 #require "ANSITerminal";;
 #directory "_build";;
-#load "cards.cmo";;
 #load "rooms.cmo";;
-#load "house.cmo";;
+#load "command.cmo";;
+#load "state.cmo";;
+#load "player.cmo";;
+#load "gui.cmo"
