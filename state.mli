@@ -15,7 +15,7 @@ module type State = sig
   val move_player : Player.t -> Room.t -> t -> t
 
   (**[add_room room exit state] adds a room to the board from [exit] of [room].
-  Throws [] if a room already exists through that exit. *)
+     Throws [] if a room already exists through that exit. *)
   val add_room : Room.t -> Room.exit -> t -> t
 
 end

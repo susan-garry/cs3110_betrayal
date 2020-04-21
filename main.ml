@@ -1,6 +1,6 @@
-open Cards
 open Rooms
-open House
+open Command
+open State
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
