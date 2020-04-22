@@ -1,16 +1,11 @@
-module type Player = sig
-  type t
+open Tiles
 
-  type might
-  type speed
-  type knowledge
-  type sanity
+type t
 
-  (**[move p t] returns a player identical to [p] but located in [t]*)
-  val move : player : Tile.t -> player
+(**[move p t] returns a player identical to [p] but located in [t]*)
+val move : Tiles.t -> t -> t
 
-  (**[location p] returns the tile where [player] is currently located*)
-  val location : player -> Tile.t
+(**[location p] returns the tile where [player] is currently located*)
+val location : t -> Tiles.t
 
-  (**[get_] *)
-end
+(**[get_] *)
