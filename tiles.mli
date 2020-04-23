@@ -14,13 +14,20 @@ type exit = Discovered of t | Undiscovered of t option | Nonexistent of t option
 (** The type of tile coordinates. *)
 type coord = int*int
 
-(** Raised when a room is called from an empty tile *)
+(** Raised when a room is called from an empty tile. *)
 exception EmptyTile
 
-(** [new_tile t e] returns tile [t] with a new tile linked to exit [e]. Simply
-    returns [t] if [e] already contains a tile.
-    Requires: [e] is a valid exit of [t] *)
-val new_tile : t -> exit -> t
+(** Raised if character does not correspond to a direction. *)
+exception InvaledDirection of char
+
+(** [empty] is an empty tile.*)
+val empty : t
+
+(** [new_tile t dir] is tile [t] with a new tile linked to the exit in the
+    cardinal direction indicaded by [dir]. Simply returns [t] if that exit
+    already contains a tile.
+    Requires: [dir] is 'N', 'E', 'S' or 'W' (or lowercase counterparts). *)
+val new_tile : t -> char -> t
 
 (** [get_n t] is the north exit of tile [t]. *)
 val get_n : t -> exit

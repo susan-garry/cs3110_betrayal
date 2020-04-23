@@ -1,9 +1,0 @@
-#require "oUnit";;
-#require "yojson";;
-#require "ANSITerminal";;
-#directory "_build";;
-#load "rooms.cmo";;
-#load "command.cmo";;
-#load "state.cmo";;
-#load "player.cmo";;
-#load "gui.cmo"
