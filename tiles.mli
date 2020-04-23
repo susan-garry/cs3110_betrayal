@@ -17,10 +17,14 @@ type coord = int*int
 (** Raised when a room is called from an empty tile *)
 exception EmptyTile
 
-(** [new_tile t e] returns tile [t] with a new tile linked to exit [e]. Simply
-    returns [t] if [e] already contains a tile.
-    Requires: [e] is a valid exit of [t] *)
-val new_tile : t -> exit -> t
+(** [new_tile] returns an empty tile, unlinked to any other tiles.*)
+val new_tile : unit -> t
+
+(** [new_tile t dir] returns tile [t] with a new tile linked to the exit in the
+    cardinal direction indicaded by [dir]. Simply returns [t] if that exit
+    already contains a tile.
+    Requires: [dir] is 'N', 'E', 'S' or 'W' (non-capitals not accepted). *)
+val new_tile : t -> char -> t
 
 (** [get_n t] is the north exit of tile [t]. *)
 val get_n : t -> exit
