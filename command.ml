@@ -1,11 +1,7 @@
 
 
-type command = 
-  | Right | East
-  | Left | West
-  | Up | North
-  | Down | South
-  | Go of string list
+type direction = 
+  | Right | Left | Up | Down
   | Quit
 
 exception Empty
@@ -24,4 +20,14 @@ let rec remove_blanks lst =
     end
 
 let parse str = 
-  failwith "Unimplemented"
+  let temp = str |> String.trim |> String.escaped |> String.split_on_char ' ' |> remove_blanks in 
+  match (temp) with 
+  | [] -> raise (Empty)
+  | h::t -> begin
+      match h with
+      | "right" | "east" -> Right
+      | "left" | "west" -> Left
+      | "up" | "north" -> Up
+      | "down" | "south" -> Down
+      | "quit" -> if (t == []) then Quit else raise (Malformed)
+      | _ -> raise (Malformed) end

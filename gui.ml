@@ -6,12 +6,13 @@ let start_screen = print_string [red]"\n\nWelcome to Betrayal of CU on the Hill!
 
 let prompt = print_endline "> ";
 
-type gui_tile = {top:string; middle: string; bottom: string}
+type gui_tile = {top:string; middle: string; bottom: string; players:string list}
 
 let parse_a_tile = {
   top = " _____ "; 
   middle = "|     |";
-  bottom = "|_____|"
+  bottom = "|_____|";
+  players = []
 }
 
 let print_a_tile r = 
