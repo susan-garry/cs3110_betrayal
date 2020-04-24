@@ -27,3 +27,8 @@ val room_desc : t -> string
 
 (** [room_effects r] is the effect list of room [r] *)
 val room_effects : t -> eff_lst
+
+(* ----------------------------------- *)
+
+(** [tests] is a list of OUnit test cases for all functions in Tiles. *)
+val tests : OUnit2.test list
