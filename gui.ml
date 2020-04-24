@@ -14,14 +14,21 @@ let rec player_count n =
     | _ -> "Sorry, We need 1-6 players. Please try again."
   end
 
-let parse_a_tile = {
+let parse_tile = {
   top = " _____ "; 
   middle = "|     |";
   bottom = "|_____|";
   players = []
 }
 
-let print_a_tile t = 
+let parse_empty_tile = {
+  top = "       "; 
+  middle = "       ";
+  bottom = "       ";
+  players = []
+}
+
+let print_tile t = 
   print_endline t.top;
   print_endline t.middle;
   print_endline t.bottom

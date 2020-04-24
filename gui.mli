@@ -10,6 +10,8 @@
 
 type gui_tile
 
-val parse_a_title : gui_tile
+val parse_tile : gui_tile
+
+val parse_empty_tile: gui_tile
 
 val print_a_tile : gui_tile -> unit
