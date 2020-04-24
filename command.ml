@@ -1,17 +1,9 @@
 open OUnit2
 
 type direction = 
-<<<<<<< HEAD
   | Right | Left | Up | Down 
 
 type command = Go of direction | Quit
-=======
-  | Right | Left | Up | Down
-
-type command =
-  | Go of direction
-  |Quit
->>>>>>> 6d483113176b657f60cccdfab05878aeeab867ea
 
 exception Empty
 

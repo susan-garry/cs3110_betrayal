@@ -5,7 +5,9 @@
     into a verb and possibly a string list. *)
 type direction = 
   | Right | Left | Up | Down
-  | Quit
+
+type command = 
+  |Go of direction | Quit
 
 (** Raised when an empty direction is parsed. *)
 exception Empty
@@ -25,6 +27,6 @@ exception Malformed
     Raises: [Malformed] if the command is malformed. A direction
     is {i malformed} if the verb is neither "quit" nor a common direction like "south" or "up",
     or if the verb is "quit" or a direction and there is a non-empty string list. *)
-val parse : string -> direction
+val parse : string -> command
 
 val tests : OUnit2.test list
