@@ -14,4 +14,8 @@ val parse_tile : gui_tile
 
 val parse_empty_tile: gui_tile
 
-val print_a_tile : gui_tile -> unit
+val print_tile : gui_tile -> unit
+
+val into_tile : gui_tile -> gui_tile
+
+val out_of_tile : gui_tile -> gui_tile

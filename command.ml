@@ -1,9 +1,17 @@
 open OUnit2
 
 type direction = 
+<<<<<<< HEAD
   | Right | Left | Up | Down 
 
 type command = Go of direction | Quit
+=======
+  | Right | Left | Up | Down
+
+type command =
+  | Go of direction
+  |Quit
+>>>>>>> 6d483113176b657f60cccdfab05878aeeab867ea
 
 exception Empty
 
@@ -42,15 +50,14 @@ let parse str =
 let make_parse_test 
     (name : string) 
     (input: string) 
-    (expected_output : direction) : test = 
+    (expected_output : command) : test = 
   name >:: (fun _ -> assert_equal expected_output (parse input))
 
 let parse_test = [
-  make_parse_test "Going Right" "right" Right;
-  make_parse_test "Going Left" "west" Left;
-  make_parse_test "Going Up" "up and down and all around" Up;
-  make_parse_test "Going Down" " down " Down;
-  make_parse_test "Quitting" "quit" Quit
+  make_parse_test "Going Right" "right" (Go Right);
+  make_parse_test "Going Left" "west" (Go Left);
+  make_parse_test "Going Up" "up and down and all around" (Go Up);
+  make_parse_test "Going Down" " down " (Go Down);
 ]
 
 let tests = List.flatten [

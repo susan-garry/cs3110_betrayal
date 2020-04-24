@@ -1,3 +1,4 @@
+open Command
 open Rooms
 open Tiles
 open Player
@@ -96,7 +97,7 @@ let move_player tile player =
 let next_player player state =
   {state with player = Player.get_next player}
 
-let move_player exit =
+let move_player dir =
   failwith "Unimplemented"
 
 (* ------------------------------------------------- *)

@@ -1,10 +1,9 @@
+open Command
 open Player
 open Tiles
 
 (**The abstract type for values representing a game state *)
 type t
-
-type exit
 
 exception NonemptyTile
 
@@ -25,7 +24,7 @@ val go_exit : exit -> Player.t -> Player.t
    of whether or not [tile] is adjacent to [player]'s current location but
    if and only if the tile contains a room. Throws [EmptyTile] if
    the tile does not contain a room. *)
-val move_player : Tiles.t -> Player.t
+val move_player : Command.direction -> Player.t
 
 (**[tests] returns a list of OUnit2 tests for the functions in state*)
 val tests : OUnit2.test list
