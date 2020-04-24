@@ -8,8 +8,11 @@
 (** The abstract type of values representing tiles.*)
 type t
 
+(** The type of exit qualifiers. *)
+type exit_qual = Discovered | Undiscovered | Nonexistent
+
 (** The type of tile exits. *)
-type exit = Discovered of t | Undiscovered of t option | Nonexistent of t option
+type exit = exit_qual * (t option)
 
 (** The type of tile coordinates. *)
 type coord = int*int
@@ -18,48 +21,53 @@ type coord = int*int
 exception EmptyTile
 
 (** Raised if character does not correspond to a direction. *)
-exception InvaledDirection of char
+exception InvalidDirection of char
 
 (** [empty] is an empty tile.*)
 val empty : t
 
-(** [new_tile t dir] is tile [t] with a new tile linked to the exit in the
-    cardinal direction indicaded by [dir]. Simply returns [t] if that exit
-    already contains a tile.
-    Requires: [dir] is 'N', 'E', 'S' or 'W' (or lowercase counterparts). *)
+(** [new_tile t dir] is a new tile linked to the exit of tile [t] in 
+    the cardinal direction indicaded by [dir].
+    Requires: [dir] is 'N', 'E', 'S' or 'W' (or lowercase counterparts);
+            [t] does not currently connect to a tile in direction [dir].
+    Raises: [InvalidDirection dir] if [dir] does not satisfy the requirement. *)
 val new_tile : t -> char -> t
 
 (** [get_n t] is the north exit of tile [t]. *)
 val get_n : t -> exit
 
-(** [set_n t e] is tile [t] with its north exit set to [e]. *)
-val set_n : t -> exit -> t
+(** [set_n t qual] is tile [t] with its north exit set to type [qual]. *)
+val set_n : t -> exit_qual -> unit
 
 (** [get_e t] is the east exit of tile [t]. *)
 val get_e : t -> exit
 
-(** [set_e t e] is tile [t] with its north exit set to [e]. *)
-val set_e : t -> exit -> t
+(** [set_e t qual] is tile [t] with its east exit set to type [qual]. *)
+val set_e : t -> exit_qual -> unit
 
 (** [get_s t] is the south exit of tile [t]. *)
 val get_s : t -> exit
 
-(** [set_s t e] is tile [t] with its north exit set to [e]. *)
-val set_s : t -> exit -> t
+(** [set_s t qual] is tile [t] with its south exit set to type [qual]. *)
+val set_s : t -> exit_qual -> unit
 
 (** [get_w t] is the west exit of tile [t]. *)
 val get_w : t -> exit
 
-(** [set_w t e] is tile [t] with its north exit set to [e]. *)
-val set_w : t -> exit -> t
+(** [set_w t qual] is tile [t] with its west exit set to type [qual]. *)
+val set_w : t -> exit_qual -> unit
 
 (** [get_coords t] is the coordinate pair of tile [t]. *)
 val get_coords : t -> coord
 
-(** [get_room t] is the room contained in tile [t].
-    Raises: [EmptyTile] if [t] does not contain a room. *)
-val get_room : t -> Rooms.t
+(** [get_room t] is the room contained in tile [t].*)
+val get_room : t -> Rooms.t option
 
 (** [fill_tile t r] is tile [t] with its room set to [r]. *)
 (* eventually this will randomize the number of exits and place them *)
 val fill_tile : t -> Rooms.t -> t
+
+(* ----------------------------------- *)
+
+(** [tests] is a list of OUnit test cases for all functions in Tiles. *)
+val tests : OUnit2.test list
