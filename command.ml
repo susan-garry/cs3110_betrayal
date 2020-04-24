@@ -1,8 +1,9 @@
 open OUnit2
 
 type direction = 
-  | Right | Left | Up | Down
-  | Quit
+  | Right | Left | Up | Down 
+
+type command = Go of direction | Quit
 
 exception Empty
 
@@ -25,10 +26,10 @@ let parse str =
   | [] -> raise (Empty)
   | h::t -> begin
       match h with
-      | "right" | "east" -> Right
-      | "left" | "west" -> Left
-      | "up" | "north" -> Up
-      | "down" | "south" -> Down
+      | "right" | "east" -> Go Right
+      | "left" | "west" -> Go Left
+      | "up" | "north" -> Go Up
+      | "down" | "south" -> Go Down
       | "quit" -> if (t == []) then Quit else raise (Malformed)
       | _ -> raise (Malformed) end
 
