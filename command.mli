@@ -26,3 +26,5 @@ exception Malformed
     is {i malformed} if the verb is neither "quit" nor a common direction like "south" or "up",
     or if the verb is "quit" or a direction and there is a non-empty string list. *)
 val parse : string -> direction
+
+val tests : OUnit2.test list

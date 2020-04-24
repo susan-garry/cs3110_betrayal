@@ -1,4 +1,4 @@
-
+open OUnit2
 
 type direction = 
   | Right | Left | Up | Down
@@ -31,3 +31,27 @@ let parse str =
       | "down" | "south" -> Down
       | "quit" -> if (t == []) then Quit else raise (Malformed)
       | _ -> raise (Malformed) end
+
+
+(* ------------------------------------------------- *)
+(* CODE FOR TESTING *)
+
+(** [make_parse_test name input expected_output] constructs an 
+    OUnit test named [name] that asserts the quality of [expected_output] with [parse input]. *)
+let make_parse_test 
+    (name : string) 
+    (input: string) 
+    (expected_output : direction) : test = 
+  name >:: (fun _ -> assert_equal expected_output (parse input))
+
+let parse_test = [
+  make_parse_test "Going Right" "right" Right;
+  make_parse_test "Going Left" "west" Left;
+  make_parse_test "Going Up" "up and down and all around" Up;
+  make_parse_test "Going Down" " down " Down;
+  make_parse_test "Quitting" "quit" Quit
+]
+
+let tests = List.flatten [
+    parse_test
+  ]
