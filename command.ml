@@ -3,7 +3,9 @@ open OUnit2
 type direction = 
   | Right | Left | Up | Down 
 
-type command = Go of direction | Quit
+type command = 
+  | Go of direction 
+  | Quit
 
 exception Empty
 
@@ -49,7 +51,8 @@ let parse_test = [
   make_parse_test "Going Right" "right" (Go Right);
   make_parse_test "Going Left" "west" (Go Left);
   make_parse_test "Going Up" "up and down and all around" (Go Up);
-  make_parse_test "Going Down" " down " (Go Down);
+  make_parse_test "Going Down_with Spaces" " down " (Go Down);
+  make_parse_test "Quitting" "quit" (Quit);
 ]
 
 let tests = List.flatten [
