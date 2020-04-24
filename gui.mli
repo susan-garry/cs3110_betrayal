@@ -10,10 +10,6 @@
 
 type gui_tile
 
-val start_screen : unit
-
-val prompt : unit
-
 val parse_a_title : gui_tile
 
 val print_a_tile : gui_tile -> unit

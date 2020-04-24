@@ -1,13 +1,18 @@
 open ANSITerminal
-open Command
 
 
 type gui_tile = {top:string; middle: string; bottom: string; players:string list}
+type player_icon = {icon: string}
 
 
-let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
+let player_count_question = "How many players are playing?"
 
-let prompt = print_endline "> "
+let rec player_count n = 
+  begin match n with 
+    | 0 -> "umm, no. Please try again.";
+    | 1 | 2 | 3 | 4 | 5 | 6 -> "Perfect! Then let's get started."
+    | _ -> "Sorry, We need 1-6 players. Please try again."
+  end
 
 let parse_a_tile = {
   top = " _____ "; 
