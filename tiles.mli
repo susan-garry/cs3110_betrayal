@@ -23,7 +23,9 @@ exception EmptyTile
 (** Raised if character does not correspond to a direction. *)
 exception InvalidDirection of char
 
-(** [empty] is an empty tile.*)
+(** [empty] is an empty tile to provide the origin.
+    Warning: does not make a second empty tile once the exits to the first tile
+            have been changed*)
 val empty : t
 
 (** [new_tile t dir] is a new tile linked to the exit of tile [t] in 

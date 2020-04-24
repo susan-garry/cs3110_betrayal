@@ -2,7 +2,7 @@ MODULES= rooms tiles player state command gui effects
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
-TEST=test_d.byte test_i.byte test_s.byte
+TEST=test.byte
 MAIN=main.byte
 OCAMLBUILD=ocamlbuild -use-ocamlfind
 
