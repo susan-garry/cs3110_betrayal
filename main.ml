@@ -21,15 +21,18 @@ let rec parse_input () =
   | c -> c
 
 
+let rec play st = 
+  (** TODO: print the board *)
+  print_string "> ";
+  match parse_input () with
+  | Quit -> exit 0
+  | Go d -> State.move_player d
+
 (** [play_game f] starts the adventure in file [f]. *)
 let rec play_game f =
   let state = State.from_json f in
-  let rec play state = 
-    (** TODO: print the board *)
-    print_string "> ";
-    match parse_input () with
-    | Quit -> exit 0
-    | Go d -> State.move_player d
+  play state
+
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
@@ -38,7 +41,7 @@ let main () =
   begin
     match read_line () with
     | exception End_of_file -> ()
-    | f -> play_game f
+    | f -> play_game test_rooms.json
   end
 
 (* Execute the game engine. *)
