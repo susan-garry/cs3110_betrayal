@@ -97,10 +97,10 @@ let move_player (dir:Command.direction) state =
   let loc = Player.location state.player in
   let e =
     match dir with 
-    |North -> get_n loc
-    |South -> get_s loc
-    |East -> get_e loc
-    |West -> get_w loc
+    |Up -> get_n loc
+    |Down -> get_s loc
+    |Left -> get_e loc
+    |Right -> get_w loc
   in match e with
   | (Discovered, Some(tile)) -> 
     {state with player = Player.move tile state.player}

@@ -19,9 +19,10 @@ val get_first_tile : t -> Tiles.t
    Raises EmptyTile if that tile is empty. *)
 val room_desc : t -> string
 
-(**[move_player d] returns a player identical to [player] but
-   located in the tile in direction [d] relative to its current location *)
-val move_player : Command.direction -> Player.t
+(**[move_player d st] returns a state identical to [st] but with the player
+   currently in play located in the tile in direction [d] relative to its 
+   current location *)
+val move_player : Command.direction -> t -> t
 
 (**[teleport tile] returns a player with the same attributes as [p] but located
    in [tile], regardless of whether or not [tile] is adjacent to the tile that

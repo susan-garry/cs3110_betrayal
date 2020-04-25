@@ -2,6 +2,7 @@ open Rooms
 open Command
 (*open State*)
 open Gui
+open Yojson.Basic
 
 let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
 let prompt = print_endline "> "
@@ -21,15 +22,15 @@ let rec parse_input () =
   | c -> c
 
 
-(** [play_game f] starts the adventure in file [f]. *)
-let rec play_game f =
-  let state = State.from_json f in
-  let rec play state = 
-    (** TODO: print the board *)
-    print_string "> ";
-    match parse_input () with
-    | Quit -> exit 0
-    | Go d -> State.move_player d
+(** [play st] resumes play from the game state in [state]. *)
+let rec play state = 
+  (** TODO: -print the board 
+            -prompt the user, print a description of the room*)
+  print_string (State.room_desc state);
+  print_string "> ";
+  match parse_input () with
+  | Quit -> exit 0
+  | Go d -> play (State.move_player d state)
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
@@ -38,7 +39,7 @@ let main () =
   begin
     match read_line () with
     | exception End_of_file -> ()
-    | f -> play_game f
+    | f -> play (State.from_json (Yojson.Basic.from_file f))
   end
 
 (* Execute the game engine. *)

@@ -1,10 +1,30 @@
+open OUnit2
 
-type t = unit
+type t = { name : string;
+           location : Tiles.t;
+           next_player : t ref}
 
-let empty = ()
+exception LastPlayer
 
-let location p = failwith "Unimplemented"
+let empty = { name = "Player 1";
+              location = Tiles.empty;
+              next_player = ref (raise LastPlayer)}
 
-let move t p = failwith "Unimplemented"
+let location p = p.location
 
-let get_next p = failwith "Unimplemented"
+let move t p = {p with location = t}
+
+let get_next p = !(p.next_player)
+
+(*-------------------------------------------*)
+(*Code for testing here*)
+
+let make_location_test
+    (name : string)
+    (player: t)
+    (ex: Tiles.t) =
+  name >:: (fun _ -> assert_equal ex (location player))
+
+let tests = [
+  make_location_test "Empty tile" empty Tiles.empty;
+]
