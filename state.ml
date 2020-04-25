@@ -14,7 +14,9 @@ type t = {first_tile: Tiles.t;
           player : Player.t;
          }
 
+exception EmptyTile
 exception NonemptyTile
+exception NoDoor
 
 type dir = North | South | East | West
 
@@ -67,38 +69,50 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
        x_dim = s.x_dim + 1}
 
 (**[from_json json] takes a json file and creates the initial game state*)
-let from_json json = { 
-  first_tile = json |> member "start_room" |> Rooms.from_json 
-               |> Tiles.fill_tile Tiles.empty;
-  x_dim = 3;
-  y_dim = 3;
-  deck = json |> member "deck" |> create_deck;
-  player = Player.empty
-}
+let from_json json = 
+  let s' = { 
+    first_tile = json |> member "start_room" |> Rooms.from_json 
+                 |> Tiles.fill_tile Tiles.empty;
+    x_dim = 3;
+    y_dim = 3;
+    deck = json |> member "deck" |> create_deck;
+    player = Player.empty
+  }
+  in s' |> add_row South s'.first_tile |> add_row East s'.first_tile 
+     |> add_row West s'.first_tile |> add_row North s'.first_tile
 
 let get_first_tile s = s.first_tile
 
-(**[add_room room exit] adds [room] to the tile through [exit] if there is
-   not already a room in that tile.
-   Raises [NonemptyTile] exception if a room already exists. *)
-let add_room room exit =
-  match exit with
-  |(Nonexistent, Some(t)) |(Undiscovered, Some(t)) -> Tiles.fill_tile t room
-  |(Discovered,_)  -> raise NonemptyTile
-  | _ -> failwith "Cannot add a room if there is no tile"
-
-let move_player tile player = 
-  match Tiles.get_room tile with
+let room_desc s = 
+  match Tiles.get_room s.first_tile with 
+  |Some r -> Rooms.room_desc r
   |None -> raise EmptyTile
-  |Some r -> Player.move tile player
 
-(**[next_turn player state] cycles through the players so that the current
-   player's turn ends and the next player's turn begins*)
-let next_player player state =
-  {state with player = Player.get_next player}
+(**[next_player state] returns a state where the player is 
+   the player who's turn begins after the current player's turn ends *)
+let next_player state =
+  {state with player = Player.get_next state.player}
 
-let move_player dir =
-  failwith "Unimplemented"
+let move_player (dir:Command.direction) state =
+  let loc = Player.location state.player in
+  let e =
+    match dir with 
+    |North -> get_n loc
+    |South -> get_s loc
+    |East -> get_e loc
+    |West -> get_w loc
+  in match e with
+  | (Discovered, Some(tile)) -> 
+    {state with player = Player.move tile state.player}
+  | (Undiscovered, Some(tile)) -> 
+    begin match state.deck with 
+      | h::t ->
+        {state with player = Player.move (Tiles.fill_tile tile h) state.player;
+                    deck = t}
+      | [] -> failwith "There are no more rooms to discover" end
+  | (Nonexistent,_) -> raise NoDoor
+  | _ -> failwith "Impossible because discovered and undiscovered exits
+      must contain a tile"
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)

@@ -6,12 +6,18 @@ open Tiles
 type t
 
 exception NonemptyTile
+exception NoDoor
 
 (**[from_json json] takes a json file and creates the initial game state*)
 val from_json : Yojson.Basic.t -> t
 
 (**[get_first_tile t] returns the upper left corner tile in [t] *)
 val get_first_tile : t -> Tiles.t
+
+(**[get_room_descr st] returns the description of the room occupied by the
+   player who is currently in play. 
+   Raises EmptyTile if that tile is empty. *)
+val room_desc : t -> string
 
 (**[move_player d] returns a player identical to [player] but
    located in the tile in direction [d] relative to its current location *)
