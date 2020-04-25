@@ -4,7 +4,8 @@ open OUnit2
 
 type t
 
-type player_id = string
+type player_id = int
+type player_name = string
 
 exception LastPlayer
 
@@ -14,11 +15,20 @@ val empty : t
 (**[move p t] returns a player identical to [p] but located in [t]*)
 val move : Tiles.t -> t -> t
 
-(**[player_id p] returns the id of [p]*)
-val player_id : t -> player_id
+(**[get_id p] returns the id of [p]*)
+val get_id : t -> player_id
+
+(**[set_id i p] returns a player identical to [p] but whose id is [i]*)
+val set_id : player_id -> t -> t
+
+(**[get_name p] returns the name of [p]*)
+val get_name : t -> player_name
+
+(**[set_id n p] returns a player identical to [p] but whose name is [n]*)
+val set_name : player_name -> t -> t
 
 (**[player_location p] returns the tile where [player] is currently located*)
-val player_loc : t -> Tiles.t
+val get_loc : t -> Tiles.t
 
 (**[get_next p] returns [Some p'] if [p'] is the next player in the turn lineup.
    Returns None if [p] is th last player in the lineup. *)

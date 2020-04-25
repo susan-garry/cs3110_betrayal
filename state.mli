@@ -12,7 +12,7 @@ exception NoDoor
 val from_json : Yojson.Basic.t -> t
 
 (**[get_first_tile t] returns the upper left corner tile in [t] *)
-val get_first_tile : t -> Tiles.t
+val first_tile : t -> Tiles.t
 
 (**[room_id st] returns the name of the room occupied by the player who is 
    currently in play. 
@@ -24,8 +24,11 @@ val room_id : t -> string
    Raises EmptyTile if that tile is empty. *)
 val room_desc : t -> string
 
+(**[player_id st] returns the id of the player who is currently in play *)
+val player_id : t -> int
+
 (**[player_name st] returns the name of the player who is currently in play *)
-val player_id : t -> string
+val player_name : t -> string
 
 (**[move_player d st] returns a state identical to [st] but with the player
    currently in play located in the tile in direction [d] relative to its 

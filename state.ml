@@ -71,10 +71,12 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
 
 (**[from_json json] takes a json file and creates the initial game state*)
 let from_json json = 
-  let p = Player.empty in
+  let start_tile = json |> member "start room" |> Rooms.from_json 
+                   |> Tiles.fill_tile Tiles.empty
+  in
+  let p = Player.move start_tile Player.empty in
   let s' = { 
-    first_tile = json |> member "start room" |> Rooms.from_json 
-                 |> Tiles.fill_tile Tiles.empty;
+    first_tile = start_tile;
     x_dim = 3;
     y_dim = 3;
     deck = json |> member "deck" |> create_deck;
@@ -84,7 +86,7 @@ let from_json json =
   in s' |> add_row South s'.first_tile |> add_row East s'.first_tile 
      |> add_row West s'.first_tile |> add_row North s'.first_tile
 
-let get_first_tile s = s.first_tile
+let first_tile s = s.first_tile
 
 let room_id s =
   match Tiles.get_room s.first_tile with 
@@ -92,11 +94,13 @@ let room_id s =
   |None -> raise EmptyTile
 
 let room_desc s = 
-  match s.player |> player_loc |> Tiles.get_room with 
+  match s.player |> get_loc |> Tiles.get_room with 
   |Some r -> Rooms.room_desc r
   |None -> raise EmptyTile
 
-let player_id s = Player.player_id s.player
+let player_id s = Player.get_id s.player
+
+let player_name s = Player.get_name s.player
 
 (**[next_player state] returns a state where the player is 
    the player who's turn begins after the current player's turn ends *)
@@ -109,7 +113,7 @@ let next_player state =
   {state with player = p}
 
 let move_player (dir:Command.direction) state =
-  let loc = Player.player_loc state.player in
+  let loc = Player.get_loc state.player in
   let e =
     match dir with 
     |Up -> get_n loc
@@ -137,6 +141,12 @@ let first_tile_test
     (state: t)
     (ex : Tiles.t) =
   name >:: (fun _ -> 
-      assert_equal ex (get_first_tile state))
+      assert_equal ex (first_tile state))
+
+
+
+(*let test_state = from_json (Yojson.Basic.from_file "test_rooms.json")*)
+
+let player1 = Player.(empty |> set_id 1 |> set_name "Player 1")
 
 let tests = []
