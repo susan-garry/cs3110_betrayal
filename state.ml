@@ -2,8 +2,8 @@ open Command
 open Rooms
 open Tiles
 open Player
-open OUnit2
 
+open OUnit2
 open Yojson.Basic.Util
 
 (**The abstract type for values representing a game state *)
@@ -41,21 +41,24 @@ let first_coord s = s.first_tile |> get_coords
     to reference a new row of tiles in direction [d] if and only if the exit 
     from [t] leading towards direction [d] is Nonexistent *)
 let add_row (d:dir) (t:Tiles.t) (s:t): t = 
-  let t2 = Tiles.new_tile t (dir_char d) in 
-  let rec add_mult e t acc num =
+  let t2 = 
+    try Tiles.new_tile t (dir_char d) with
+    |_ -> failwith "a tile already exists there!"
+  in 
+  let rec add_mult d t acc num =
     if acc = num then t
-    else add_mult e (Tiles.new_tile t e) (acc+1) num
+    else add_mult d (Tiles.new_tile t d) (acc+1) num
   in 
   match d with
   |North | South -> 
     let r_x_coord = t2 |> Tiles.get_coords |> fst in
     let f_x_coord = s |> first_coord |> fst in
-    ignore (add_mult 'W' t2 0 (r_x_coord - f_x_coord));
-    if d = North then
-      (ignore (add_mult 'E' t2 0 (f_x_coord + s.x_dim - r_x_coord));
+    ignore (add_mult 'E' t2 0 (r_x_coord - f_x_coord));
+    if d = South then
+      (ignore (add_mult 'W' t2 0 (f_x_coord + s.x_dim - r_x_coord));
        {s with y_dim = s.y_dim + 1})
     else  {s with 
-           first_tile = add_mult 'E' t2 0 (f_x_coord + s.x_dim - r_x_coord);
+           first_tile = add_mult 'W' t2 0 (f_x_coord + s.x_dim - r_x_coord);
            y_dim = s.y_dim + 1}
   |East | West ->
     let r_y_coord = t2 |> Tiles.get_coords |> snd in
@@ -136,6 +139,25 @@ let move_player (dir:Command.direction) state =
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
 
+let tile_exists e =
+  match e with 
+  | (_, None) -> false
+  | (_, Some t) -> true
+
+let add_n_row_test
+    (name : string) 
+    (tile : Tiles.t)
+    (state: t) 
+    (ex_fail : bool )=
+  name >:: (fun _ -> 
+      if ex_fail = true then 
+        assert_raises (Failure "tile already exists") 
+          (fun () -> add_row North tile state)
+      else 
+        let state' = add_row North tile state
+        in assert_equal (state.y_dim + 1) state'.y_dim;
+        assert_bool "No tile exists there" (tile_exists (get_n tile)))
+
 let first_tile_test 
     (name : string)
     (state: t)
@@ -143,10 +165,14 @@ let first_tile_test
   name >:: (fun _ -> 
       assert_equal ex (first_tile state))
 
-
-
-(*let test_state = from_json (Yojson.Basic.from_file "test_rooms.json")*)
-
 let player1 = Player.(empty |> set_id 1 |> set_name "Player 1")
+
+let empty_state = { first_tile = Tiles.empty;
+                    x_dim = 1;
+                    y_dim = 2;
+                    deck = [];
+                    first_player = player1;
+                    player = player1;
+                  }
 
 let tests = []

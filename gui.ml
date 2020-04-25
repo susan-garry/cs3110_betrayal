@@ -31,8 +31,8 @@ let rec e_ith_lst e i lst =
   | h::t -> if (i==0) then h::e::t else h::(e_ith_lst e (i-1) t)
 
 
-let parse_empty_tile = 
-  failwith "Unimplemented"
+(*let parse_empty_tile = 
+  failwith "Unimplemented" *)
 
 let parse_tile til =
   let top =
@@ -67,14 +67,14 @@ let print_tile t =
   print_endline t.middle_side;
   print_endline t.bottom_side
 
-let rec print_row lst =
+(*let rec print_row lst =
   failwith "Unimplented"
 
-let into_tile t = 
+  let into_tile t = 
   failwith "Unimplemented"
 
-let out_of_tile t = 
-  failwith "Unimplemented"
+  let out_of_tile t = 
+  failwith "Unimplemented"*)
 
 
 (** If I want to add another floor above, I'll need to change the top of the floor below to work as the above floor's bottom. And if I want to add a floor below, i need the to use the floor's bottom as the below's top. *)
