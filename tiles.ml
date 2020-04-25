@@ -176,7 +176,12 @@ let make_exits_test
       assert_ex_equal ex_w (get_w tile));
 ]
 
-let s1_t1 = empty
+let s1_t1 = {coord = 0,0; 
+             room = None;
+             n_exit = ref (Undiscovered, None); 
+             e_exit = ref (Undiscovered, None);
+             s_exit = ref (Undiscovered, None);
+             w_exit = ref (Undiscovered, None)}
 let s2_t1 = {coord = 0,0; 
              room = None;
              n_exit = ref (Undiscovered, None); 
