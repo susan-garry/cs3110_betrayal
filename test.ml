@@ -8,12 +8,12 @@ open State
 open Tiles
 
 let suite = "test suite for Betrayal"  >::: 
-            List.flatten [ (*Command.tests;*)
-              (*Effects.tests; *)
-              (*Gui.tests; *)
-              Player.tests;
-              (*Rooms.tests; *)
-              (*State.tests; *)
-              (*Tiles.tests; *)]
+            List.flatten [ Command.tests;
+                           (*Effects.tests; *)
+                           (*Gui.tests; *)
+                           Player.tests;
+                           Rooms.tests; 
+                           (*State.tests; *)
+                           Tiles.tests; ]
 
 let _ = run_test_tt_main suite
