@@ -1,6 +1,6 @@
 open Rooms
 open Command
-(*open State*)
+open State
 open Gui
 open Yojson.Basic
 
@@ -39,7 +39,7 @@ let main () =
   begin
     match read_line () with
     | exception End_of_file -> ()
-    | f -> play (State.from_json (Yojson.Basic.from_file f))
+    | f -> play (f |> Yojson.Basic.from_file |> State.from_json)
   end
 
 (* Execute the game engine. *)
