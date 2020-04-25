@@ -7,6 +7,7 @@ open Yojson.Basic
 let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
 let prompt = print_endline "> "
 
+
 (** [parse_input ()] is [i] only if i is a well-formed command. 
     Otherwise, it will prompt the user again for input. *)
 let rec parse_input () =
@@ -41,7 +42,7 @@ let main () =
     | exception End_of_file -> ()
     | f -> play ("test_room.json" |> Yojson.Basic.from_file |> State.from_json)
     end *)
-  play ("test_room.json" |> Yojson.Basic.from_file |> State.from_json)
+  play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)
 
 (* Execute the game engine. *)
 let () = main ()
