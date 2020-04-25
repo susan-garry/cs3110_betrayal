@@ -33,9 +33,10 @@ let rec e_ith_lst e i lst =
   | [] -> e::[]
   | h::t -> if (i==0) then h::e::t else h::(e_ith_lst e (i-1) t)
 
-
+(*
 let parse_tile =
   failwith "Unimplemented"
+
 
 let parse_empty_tile = 
   failwith "Unimplemented"
@@ -50,6 +51,7 @@ let into_tile t =
 
 let out_of_tile t = 
   failwith "Unimplemented"
+*)
 
 (** If I want to add another floor above, I'll need to change the top of the floor below to work as the above floor's bottom. And if I want to add a floor below, i need the to use the floor's bottom as the below's top. *)
 
@@ -65,10 +67,12 @@ let out_of_tile t =
 
 (** [make_parse_test name input expected_output] constructs an 
     OUnit test named [name] that asserts the quality of [expected_output] with [parse input]. *)
+(*   
 let make_parse_tile_test 
     (name : string)
     (expected_output : gui_tile) : test = 
   name >:: (fun _ -> assert_equal expected_output (parse_tile))
+  *)
 
 let parse_test = [
 
