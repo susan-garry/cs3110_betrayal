@@ -1,4 +1,5 @@
 open OUnit2
+open Yojson.Basic.Util
 
 type coord = int*int
 
@@ -223,8 +224,9 @@ let set_ex_tests = [
       assert_ex_equal (Nonexistent, None) (get_s s1_t1));
 ]
 
-let test_rooms = "test_rooms.json" |> Yojson.Basic.from_file 
+let test_rooms = "test_rooms.json" |> Yojson.Basic.from_file |> member "deck"
                  |> Yojson.Basic.Util.to_list
+
 let room0 = List.hd test_rooms |> Rooms.from_json
 
 let fill_tile_tests = List.flatten[

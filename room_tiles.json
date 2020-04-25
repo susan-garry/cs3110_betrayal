@@ -1,5 +1,14 @@
 {
-  "room tiles": [
+  "start room": {
+    "floors": [
+      "GROUND"
+    ],
+    "name": "GRAND ENTRYWAY",
+    "description": "None",
+    "symbols": [],
+    "doors": 4
+  },
+  "deck": [
     {
       "floors": [
         "BASEMENT",
