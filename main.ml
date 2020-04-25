@@ -21,6 +21,7 @@ let rec parse_input () =
     parse_input ()
   | c -> c
 
+<<<<<<< HEAD
 
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
@@ -31,6 +32,21 @@ let rec play state =
   match parse_input () with
   | Quit -> exit 0
   | Go d -> play (State.move_player d state)
+=======
+(** [play st] is the actual game play with the gui and state.
+    GUI not yet implemented. *)
+let rec play st = 
+  (** TODO: print the board *)
+  print_string "> ";
+  match parse_input () with
+  | Quit -> exit 0
+  | Go d -> State.move_player d
+
+(** [play_game f] starts the adventure in file [f]. *)
+let play_game f =
+  let state = State.from_json f in
+  play state
+>>>>>>> 40c045c93adfbf0ccbb74ff29eac9e7a1bbd07b0
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
@@ -39,7 +55,11 @@ let main () =
   begin
     match read_line () with
     | exception End_of_file -> ()
+<<<<<<< HEAD
     | f -> play (f |> Yojson.Basic.from_file |> State.from_json)
+=======
+    | f -> play_game (Yojson.Basic.from_file "test_rooms.json")
+>>>>>>> 40c045c93adfbf0ccbb74ff29eac9e7a1bbd07b0
   end
 
 (* Execute the game engine. *)
