@@ -7,15 +7,12 @@ type walls = {top: string list; middle: string list; bottom: string list}
 type player_icon = {icon: string}
 
 type gui_tile = {top_side: string; middle_side:string; bottom_side:string; players: player_icon option list}
-type gui_floor = gui_tile list
+type gui_row = gui_tile list
 
-let wall_options = {
-  top = ["       "; " _____ "; " _   _ "];
-  middle = ["       "; "|     |"; "|      "; "      |"];
-  bottom = ["       "; "|_____|"; "|_   _|"]
-}
 
-type wall_pick = {first:int; second:int; third:int}
+let top_options = ["       "; " _____ "; " _   _ "]
+let middle_options = ["       "; "|     |"; "|      "; "      |"]
+let bottom_options = ["       "; "|_____|"; "|_   _|"]
 
 
 
@@ -33,25 +30,52 @@ let rec e_ith_lst e i lst =
   | [] -> e::[]
   | h::t -> if (i==0) then h::e::t else h::(e_ith_lst e (i-1) t)
 
-(*
-let parse_tile =
-  failwith "Unimplemented"
-
 
 let parse_empty_tile = 
   failwith "Unimplemented"
+
+let parse_tile til =
+  let top =
+    begin 
+      match Tiles.get_n til with 
+      | (Nonexistent, _) -> List.nth top_options 1
+      | (_,_) -> List.nth top_options 2
+    end in 
+  let middle =
+    begin 
+      match Tiles.get_w til, Tiles.get_e til with 
+      | (Nonexistent, _), (Nonexistent, _) -> List.nth middle_options 1
+      | (Nonexistent,_), (_,_) -> List.nth middle_options 2
+      | (_, _), (Nonexistent, _) -> List.nth middle_options 3
+      | (_, _), (_,_) -> List.nth middle_options 0
+    end in
+  let bottom =
+    begin 
+      match Tiles.get_s til with 
+      | (Nonexistent, _) -> List.nth bottom_options 1
+      | (_, _) -> List.nth bottom_options 2
+    end
+  in {top_side = top;
+      middle_side = middle;
+      bottom_side = bottom;
+      players = []
+     }
+
 
 let print_tile t = 
   print_endline t.top_side;
   print_endline t.middle_side;
   print_endline t.bottom_side
 
+let rec print_row lst =
+  failwith "Unimplented"
+
 let into_tile t = 
   failwith "Unimplemented"
 
 let out_of_tile t = 
   failwith "Unimplemented"
-*)
+
 
 (** If I want to add another floor above, I'll need to change the top of the floor below to work as the above floor's bottom. And if I want to add a floor below, i need the to use the floor's bottom as the below's top. *)
 

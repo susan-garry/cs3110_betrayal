@@ -35,16 +35,6 @@ let rec play state =
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
-<<<<<<< HEAD
-  start_screen
-(*prompt;*)
-(*begin
-  match read_line () with
-  | exception End_of_file -> ()
-  | f -> play ("test_room.json" |> Yojson.Basic.from_file |> State.from_json)
-  end *)
-(*play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)*)
-=======
   start_screen;
   (*prompt;*)
   (*begin
@@ -53,7 +43,6 @@ let main () =
     | f -> play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)
     end *)
   play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)
->>>>>>> e6523a2330bcab58a955a028ed220ab22d516ace
 
 (* Execute the game engine. *)
 let () = main ()
