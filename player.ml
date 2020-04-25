@@ -1,6 +1,7 @@
 open OUnit2
+type player_id = string
 
-type t = { name : string;
+type t = { name : player_id;
            location : Tiles.t;
            next_player : t ref}
 
@@ -10,7 +11,9 @@ let empty = { name = "Player 1";
               location = Tiles.empty;
               next_player = ref (raise LastPlayer)}
 
-let location p = p.location
+let player_id p = p.name
+
+let player_loc p = p.location
 
 let move t p = {p with location = t}
 
@@ -23,7 +26,7 @@ let make_location_test
     (name : string)
     (player: t)
     (ex: Tiles.t) =
-  name >:: (fun _ -> assert_equal ex (location player))
+  name >:: (fun _ -> assert_equal ex (player_loc player))
 
 let tests = [
   make_location_test "Empty tile" empty Tiles.empty;

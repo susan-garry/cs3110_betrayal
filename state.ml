@@ -11,6 +11,7 @@ type t = {first_tile: Tiles.t;
           x_dim : int;
           y_dim : int;
           deck  : Rooms.t list;
+          first_player : Player.t;
           player : Player.t;
          }
 
@@ -70,23 +71,32 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
 
 (**[from_json json] takes a json file and creates the initial game state*)
 let from_json json = 
+  let p = Player.empty in
   let s' = { 
     first_tile = json |> member "start_room" |> Rooms.from_json 
                  |> Tiles.fill_tile Tiles.empty;
     x_dim = 3;
     y_dim = 3;
     deck = json |> member "deck" |> create_deck;
-    player = Player.empty
+    first_player = p;
+    player = p
   }
   in s' |> add_row South s'.first_tile |> add_row East s'.first_tile 
      |> add_row West s'.first_tile |> add_row North s'.first_tile
 
 let get_first_tile s = s.first_tile
 
+let room_id s =
+  match Tiles.get_room s.first_tile with 
+  |Some r -> Rooms.room_id r
+  |None -> raise EmptyTile
+
 let room_desc s = 
   match Tiles.get_room s.first_tile with 
   |Some r -> Rooms.room_desc r
   |None -> raise EmptyTile
+
+let player_id s = Player.player_id s.player
 
 (**[next_player state] returns a state where the player is 
    the player who's turn begins after the current player's turn ends *)
@@ -94,7 +104,7 @@ let next_player state =
   {state with player = Player.get_next state.player}
 
 let move_player (dir:Command.direction) state =
-  let loc = Player.location state.player in
+  let loc = Player.player_loc state.player in
   let e =
     match dir with 
     |Up -> get_n loc
