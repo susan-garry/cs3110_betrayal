@@ -31,7 +31,7 @@ let make_room_effects_test
     (expected_output : int list) : test = 
   name >:: (fun _ -> assert_equal expected_output (room_effects room))
 
-let test_rooms = "test_rooms.json" |> Yojson.Basic.from_file 
+let test_rooms = "test_rooms.json" |> Yojson.Basic.from_file |> member "deck"
                  |> Yojson.Basic.Util.to_list
 let room0 = List.hd test_rooms |> from_json
 let room1 = List.nth test_rooms 1 |> from_json

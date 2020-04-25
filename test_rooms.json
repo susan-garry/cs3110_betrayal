@@ -1,10 +1,15 @@
 {
   "start room": {
-    "id": "None",
-    "description": "You used none room. It wasn't very effective.",
+    "id": "Start Room",
+    "description": "You start off here. Nothing's really happened yet.",
     "effects": []
   },
   "deck": [
+    {
+      "id": "None",
+      "description": "You used none room. It wasn't very effective.",
+      "effects": []
+    },
     {
       "id": "One",
       "description": "You used one room.",
