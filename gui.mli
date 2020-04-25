@@ -10,7 +10,7 @@
 
 type walls
 type gui_tile
-type gui_floor
+type gui_row
 
 (*
 val parse_tile : walls -> gui_tile
