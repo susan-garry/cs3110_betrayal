@@ -1,7 +1,7 @@
 open OUnit2
 open Command
 open Effects
-open Gui
+(*open Gui*)
 open Player
 open Rooms
 open State
