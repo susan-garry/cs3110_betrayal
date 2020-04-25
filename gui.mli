@@ -9,6 +9,7 @@
 *)
 
 type gui_tile
+type gui_floor
 
 val parse_tile : gui_tile
 

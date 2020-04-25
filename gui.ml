@@ -3,9 +3,20 @@ open Tiles
 open OUnit2
 
 
-type gui_tile = {top:string; middle: string; bottom: string; players:string option list}
-type tile_floor = gui_tile list
+type walls = {top: string list; middle: string list; bottom: string list}
 type player_icon = {icon: string}
+
+type gui_tile = {top_side: string; middle_side:string; bottom_side:string; players: player_icon option list}
+type gui_floor = gui_tile list
+
+let wall_options = {
+  top = ["       "; " _____ "; " _   _ "];
+  middle = ["       "; "|     |"; "|      "; "      |"];
+  bottom = ["       "; "|_____|"; "|_   _|"]
+}
+
+type wall_pick = {first:int; second:int; third:int}
+
 
 
 let player_count_question = "How many players are playing?"
@@ -22,26 +33,17 @@ let rec e_ith_lst e i lst =
   | [] -> e::[]
   | h::t -> if (i==0) then h::e::t else h::(e_ith_lst e (i-1) t)
 
-let parse_tile = {
-  top = " _____ "; 
-  middle = "|     |";
-  bottom = "|_____|";
-  players = []
-}
 
-let parse_empty_tile = {
-  top = "       "; 
-  middle = "       ";
-  bottom = "       ";
-  players = []
-}
+let parse_tile =
+  failwith "Unimplemented"
 
+let parse_empty_tile = 
+  failwith "Unimplemented"
 
 let print_tile t = 
-  print_endline t.top;
-  print_endline t.middle;
-  print_endline t.bottom
-
+  print_endline t.top_side;
+  print_endline t.middle_side;
+  print_endline t.bottom_side
 
 let into_tile t = 
   failwith "Unimplemented"
@@ -69,8 +71,7 @@ let make_parse_tile_test
   name >:: (fun _ -> assert_equal expected_output (parse_tile))
 
 let parse_test = [
-  make_parse_tile_test "parse_room_tile" {top = " _____ ";middle = "|     |";bottom = "|_____|";players = []};
-  make_parse_tile_test "parse_empty_tile" {top = "       "; middle = "       "; bottom = "       "; players = []}
+
 ]
 
 let into_tile_test = [

@@ -35,9 +35,11 @@ let rec play_game f =
 let main () =
   start_screen;
   prompt;
-  match read_line () with
-  | exception End_of_file -> ()
-  | f -> play_game f
+  begin
+    match read_line () with
+    | exception End_of_file -> ()
+    | f -> play_game f
+  end
 
 (* Execute the game engine. *)
 let () = main ()
