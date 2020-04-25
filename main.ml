@@ -20,7 +20,8 @@ let rec parse_input () =
     parse_input ()
   | c -> c
 
-
+(** [play st] is the actual game play with the gui and state.
+    GUI not yet implemented. *)
 let rec play st = 
   (** TODO: print the board *)
   print_string "> ";
@@ -29,10 +30,9 @@ let rec play st =
   | Go d -> State.move_player d
 
 (** [play_game f] starts the adventure in file [f]. *)
-let rec play_game f =
+let play_game f =
   let state = State.from_json f in
   play state
-
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
@@ -41,7 +41,7 @@ let main () =
   begin
     match read_line () with
     | exception End_of_file -> ()
-    | f -> play_game test_rooms.json
+    | f -> play_game (Yojson.Basic.from_file "test_rooms.json")
   end
 
 (* Execute the game engine. *)
