@@ -31,19 +31,19 @@ let set_e t q = t.e_exit := q, snd (get_e t)
 let set_s t q = t.s_exit := q, snd (get_s t)
 let set_w t q = t.w_exit := q, snd (get_w t)
 
-(** returns the record for t's north exit *)
-let get_n_exit t = t.n_exit
-(** returns the record for t's east exit *)
-let get_e_exit t = t.e_exit
-(** returns the record for t's south exit *)
-let get_s_exit t = t.s_exit
-(** returns the record for t's west exit *)
-let get_w_exit t = t.w_exit
+(** returns the reference for t's north exit *)
+let get_n_ref t = t.n_exit
+(** returns the reference for t's east exit *)
+let get_e_ref t = t.e_exit
+(** returns the reference for t's south exit *)
+let get_s_ref t = t.s_exit
+(** returns the reference for t's west exit *)
+let get_w_ref t = t.w_exit
 
-(** [link_exits t1 t_op g1 g2] links [t1] and [t2] through the exits 
+(** [link_exits_n t1 t_op g1 g2] links [t1] and [t2] through the exits 
     returned by [g1 t1] and [g2 t2] if [t_op] = [Some t2]. If [t_op] = [None],
     nothing happens. *)
-let link_exits (t1: t) (t_op: t option) (g1:t->exit ref) (g2:t->exit ref) =
+let link_exits_n (t1: t) (t_op: t option) (g1:t->exit ref) (g2:t->exit ref) =
   match t_op with
   |None ->()
   |Some t2 -> let ex = g2 t2 in ex := fst !ex, Some t1; 
@@ -60,10 +60,10 @@ let new_tile_helper (tn:t option) (te:t option) (ts:t option) (tw:t option)
                e_exit = ref (Undiscovered, None);
                s_exit = ref (Undiscovered, None);
                w_exit = ref (Undiscovered, None)} in
-  link_exits t_new tn get_n_exit get_s_exit;
-  link_exits t_new te get_e_exit get_w_exit;
-  link_exits t_new ts get_s_exit get_n_exit;
-  link_exits t_new tw get_w_exit get_e_exit;
+  link_exits_n t_new tn get_n_ref get_s_ref;
+  link_exits_n t_new te get_e_ref get_w_ref;
+  link_exits_n t_new ts get_s_ref get_n_ref;
+  link_exits_n t_new tw get_w_ref get_e_ref;
   t_new
 
 (** [two_from t f1 f2] is the tile two away from [t]  *)
@@ -102,8 +102,24 @@ let new_tile (t:t) (dir:char): t =
       let tw = None in new_tile_helper tn te ts tw (fst t.coord-1) (snd t.coord)
   | _ -> raise (InvalidDirection dir)
 
+(** [link_exits_r t1 t_op g1 g2] links [t1] and [t2] through the exits 
+    returned by [g1 t1] and [g2 t2] and updates t2's exit to Discovered 
+    if [t_op] = [Some t2]. If [t_op] = [None], nothing happens. *)
+let link_exits_r (t1: t) (t_op: t option) (g1:t->exit ref) (g2:t->exit ref) =
+  match t_op with
+  |None ->()
+  |Some t2 -> let ex = g2 t2 in if fst (!ex) = Undiscovered 
+    then ex := Discovered, Some t1 else ex := fst !ex, Some t1
+
 let fill_tile t r =
-  failwith "Unimplemented"
+  print_char 'a';
+  let t_new = {coord=t.coord; room= Some r; n_exit = t.n_exit; 
+               e_exit = t.e_exit; s_exit = t.s_exit; w_exit = t.w_exit} in
+  link_exits_r t_new (snd !(t_new.n_exit)) get_n_ref get_s_ref;
+  link_exits_r t_new (snd !(t_new.e_exit)) get_e_ref get_w_ref;
+  link_exits_r t_new (snd !(t_new.s_exit)) get_s_ref get_n_ref;
+  link_exits_r t_new (snd !(t_new.w_exit)) get_w_ref get_e_ref;
+  t_new
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
@@ -129,6 +145,15 @@ let make_coords_test
     (tile: t)
     (expected_output : int * int) : test = 
   name >:: (fun _ -> assert_equal expected_output (get_coords tile))
+
+(** [make_room_test name tile expected_output] constructs an OUnit
+    test named [name] that asserts the quality of [expected_output]
+    with [get_room tile]. *)
+let make_room_test  
+    (name: string)
+    (tile: t)
+    (expected_output : Rooms.t option) : test = 
+  name >:: (fun _ -> assert_equal expected_output (get_room tile))
 
 (** [make_exits_test name tile ex_n ex_e ex_s ex_w] constructs four OUnit tests
     named [name] cons-ed with the respective direction char that assert the 
@@ -162,6 +187,15 @@ let s2_t2 = new_tile s2_t1 'N'
 let s2_t3 = new_tile s2_t2 'E'
 let s2_t4 = new_tile s2_t3 'S'
 let s2_t5 = new_tile s2_t1 'W'
+let s3_t1 = {coord = 0,0; 
+             room = None;
+             n_exit = ref (Undiscovered, None); 
+             e_exit = ref (Undiscovered, None);
+             s_exit = ref (Undiscovered, None);
+             w_exit = ref (Undiscovered, None)}
+let s3_t2 = new_tile s3_t1 'N'
+let s3_t3 = new_tile s3_t1 'E'
+let s3_t4 = new_tile s3_t1 'S'
 
 let coords_tests = [
   make_coords_test "Solo tile" s1_t1 (0,0);
@@ -173,8 +207,8 @@ let coords_tests = [
 ]
 
 let room_tests = [
-  "Solo tile" >:: (fun _ -> assert_equal None (get_room s1_t1));
-  "Tile with neighbors" >:: (fun _ -> assert_equal None (get_room s2_t1));
+  make_room_test "Solo tile" s1_t1 None;
+  make_room_test "Tile with neighbors" s2_t1 None;
 ]
 
 let set_ex_tests = [
@@ -188,6 +222,33 @@ let set_ex_tests = [
       set_s s1_t1 Nonexistent; 
       assert_ex_equal (Nonexistent, None) (get_s s1_t1));
 ]
+
+let test_rooms = "test_rooms.json" |> Yojson.Basic.from_file 
+                 |> Yojson.Basic.Util.to_list
+let room0 = List.hd test_rooms |> Rooms.from_json
+
+let fill_tile_tests = List.flatten[
+    let s3_t1 = 
+      set_s s3_t2 Nonexistent; 
+      set_w s3_t3 Discovered; 
+      fill_tile s3_t1 room0 in
+    List.flatten[
+      ["Filled tile contains room" >:: (fun _ -> 
+           assert_equal (get_room s3_t1) (Some room0))];
+      make_exits_test "Filled tile has same exits" s3_t1 
+        (Undiscovered, Some s3_t2) (Undiscovered, Some s3_t3) 
+        (Undiscovered, Some s3_t4) (Undiscovered, None);
+      make_exits_test "Undiscovered Exit" s3_t4 
+        (Discovered, Some s3_t1) (Undiscovered, None) 
+        (Undiscovered, None) (Undiscovered, None);
+      make_exits_test "Discovered Exit" s3_t3 
+        (Undiscovered, None) (Undiscovered, None) 
+        (Undiscovered, None) (Discovered, Some s3_t1);
+      make_exits_test "Nonexistant Exit" s3_t2 
+        (Undiscovered, None) (Undiscovered, None) 
+        (Nonexistent, Some s3_t1) (Undiscovered, None)
+    ]
+  ]
 
 let tests = List.flatten [
     coords_tests;
@@ -210,4 +271,6 @@ let tests = List.flatten [
       (Undiscovered, Some s2_t1) (Undiscovered, None) (Undiscovered, None);
 
     set_ex_tests;
+
+    fill_tile_tests;
   ]
