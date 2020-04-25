@@ -40,7 +40,7 @@ let main () =
   (*begin
     match read_line () with
     | exception End_of_file -> ()
-    | f -> play ("test_room.json" |> Yojson.Basic.from_file |> State.from_json)
+    | f -> play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)
     end *)
   play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)
 
