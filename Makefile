@@ -1,4 +1,4 @@
-MODULES= rooms tiles player state command effects
+MODULES= rooms tiles player state command gui effects
 OBJECTS=$(MODULES:=.cmo)
 MLS=$(MODULES:=.ml)
 MLIS=$(MODULES:=.mli)
