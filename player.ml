@@ -3,13 +3,13 @@ type player_id = string
 
 type t = { name : player_id;
            location : Tiles.t;
-           next_player : t ref}
+           next_player : t option ref}
 
 exception LastPlayer
 
 let empty = { name = "Player 1";
               location = Tiles.empty;
-              next_player = ref (raise LastPlayer)}
+              next_player = ref None}
 
 let player_id p = p.name
 

@@ -73,7 +73,7 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
 let from_json json = 
   let p = Player.empty in
   let s' = { 
-    first_tile = json |> member "start_room" |> Rooms.from_json 
+    first_tile = json |> member "start room" |> Rooms.from_json 
                  |> Tiles.fill_tile Tiles.empty;
     x_dim = 3;
     y_dim = 3;
@@ -92,7 +92,7 @@ let room_id s =
   |None -> raise EmptyTile
 
 let room_desc s = 
-  match Tiles.get_room s.first_tile with 
+  match s.player |> player_loc |> Tiles.get_room with 
   |Some r -> Rooms.room_desc r
   |None -> raise EmptyTile
 
@@ -101,7 +101,12 @@ let player_id s = Player.player_id s.player
 (**[next_player state] returns a state where the player is 
    the player who's turn begins after the current player's turn ends *)
 let next_player state =
-  {state with player = Player.get_next state.player}
+  let p =
+    match Player.get_next state.player with 
+    |Some p' -> p'
+    |None -> state.first_player
+  in
+  {state with player = p}
 
 let move_player (dir:Command.direction) state =
   let loc = Player.player_loc state.player in
@@ -127,7 +132,7 @@ let move_player (dir:Command.direction) state =
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
 
-let get_first_tile_test 
+let first_tile_test 
     (name : string)
     (state: t)
     (ex : Tiles.t) =

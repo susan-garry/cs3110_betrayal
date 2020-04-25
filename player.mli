@@ -20,9 +20,9 @@ val player_id : t -> player_id
 (**[player_location p] returns the tile where [player] is currently located*)
 val player_loc : t -> Tiles.t
 
-(**[get_next p] returns the next player in the turn lineup.
-   Raises LastPlayer if p is the last player in the lineup. *)
-val get_next : t -> t
+(**[get_next p] returns [Some p'] if [p'] is the next player in the turn lineup.
+   Returns None if [p] is th last player in the lineup. *)
+val get_next : t -> t option
 
 (**[tests] returns the list of test cases for the Player module *)
 val tests : OUnit2.test list
