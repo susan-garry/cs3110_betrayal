@@ -13,7 +13,7 @@ let suite = "test suite for Betrayal"  >:::
                            (*Gui.tests; *)
                            Player.tests;
                            Rooms.tests; 
-                           (*State.tests; *)
+                           State.tests;
                            Tiles.tests; ]
 
 let _ = run_test_tt_main suite
