@@ -47,8 +47,8 @@ let get_w_ref t = t.w_exit
 let link_exits_n (t1: t) (t_op: t option) (g1:t->exit ref) (g2:t->exit ref) =
   match t_op with
   |None ->()
-  |Some t2 -> let ex = g2 t2 in ex := fst !ex, Some t1; 
-    let ex = g1 t1 in ex := fst !ex, Some t2
+  |Some t2 -> let ex = g2 t2 in ex := (fst !ex, Some t1); 
+    let ex = g1 t1 in ex := (fst !ex, Some t2)
 
 (** [new_tile_helper tn te ts tw] creates a new tile and links it to [tn] on its
     north side, [te] on its east side, [ts] on its south side and [tw] on its 
