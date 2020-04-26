@@ -42,7 +42,7 @@ let main () =
     | exception End_of_file -> ()
     | f -> play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)
     end *)
-  play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)
+  play ("test_game.json" |> Yojson.Basic.from_file |> State.from_json)
 
 (* Execute the game engine. *)
 let () = main ()
