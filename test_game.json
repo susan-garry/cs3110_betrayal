@@ -1,0 +1,64 @@
+{
+  "start room": {
+    "id": "Start Room",
+    "description": "You start off here. Nothing's really happened yet.",
+    "effects": []
+  },
+  "deck": [
+    {
+      "id": "One",
+      "description": "Room one.",
+      "effects": []
+    },
+    {
+      "id": "Two",
+      "description": "Room two.",
+      "effects": []
+    },
+    {
+      "id": "Three",
+      "description": "Room three.",
+      "effects": []
+    },
+    {
+      "id": "Four",
+      "description": "Room Four.",
+      "effects": []
+    },
+    {
+      "id": "Five",
+      "description": "Room five.",
+      "effects": []
+    },
+    {
+      "id": "Seven",
+      "description": "Room seven.",
+      "effects": []
+    },
+    {
+      "id": "Eight",
+      "description": "Room eight.",
+      "effects": []
+    },
+    {
+      "id": "Nine",
+      "description": "Room nine.",
+      "effects": []
+    },
+    {
+      "id": "Ten",
+      "description": "Room ten.",
+      "effects": []
+    },
+    {
+      "id": "Eleven",
+      "description": "Room eleven.",
+      "effects": []
+    },
+    {
+      "id": "Twelve",
+      "description": "Room twelve",
+      "effects": []
+    }
+  ]
+}
