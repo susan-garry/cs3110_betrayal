@@ -25,7 +25,7 @@ let room_effects r = r.effects
 (** [make_room_effects_test name room expected_output] constructs an OUnit
     test named [name] that asserts the quality of [expected_output]
     with [room_effects room]. *)
-let make_room_effects_test  
+let make_room_effects_test
     (name: string)
     (room: t)
     (expected_output : int list) : test = 

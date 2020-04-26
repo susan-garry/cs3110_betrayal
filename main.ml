@@ -27,7 +27,7 @@ let rec parse_input () =
 let rec play state = 
   (** TODO: -print the board 
             -prompt the user, print a description of the room*)
-  print_string (State.room_desc state);
+  print_endline (State.room_desc state);
   print_string "> ";
   match parse_input () with
   | Quit -> exit 0
@@ -42,7 +42,7 @@ let main () =
     | exception End_of_file -> ()
     | f -> play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)
     end *)
-  play ("test_rooms.json" |> Yojson.Basic.from_file |> State.from_json)
+  play ("test_game.json" |> Yojson.Basic.from_file |> State.from_json)
 
 (* Execute the game engine. *)
 let () = main ()

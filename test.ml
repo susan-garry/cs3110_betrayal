@@ -1,7 +1,7 @@
 open OUnit2
 open Command
 open Effects
-open Gui
+(*open Gui*)
 open Player
 open Rooms
 open State
@@ -13,7 +13,7 @@ let suite = "test suite for Betrayal"  >:::
                            (*Gui.tests; *)
                            Player.tests;
                            Rooms.tests; 
-                           (*State.tests; *)
+                           State.tests;
                            Tiles.tests; ]
 
 let _ = run_test_tt_main suite

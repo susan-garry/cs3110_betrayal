@@ -113,7 +113,6 @@ let link_exits_r (t1: t) (t_op: t option) (g1:t->exit ref) (g2:t->exit ref) =
     then ex := Discovered, Some t1 else ex := fst !ex, Some t1
 
 let fill_tile t r =
-  print_char 'a';
   let t_new = {coord=t.coord; room= Some r; n_exit = t.n_exit; 
                e_exit = t.e_exit; s_exit = t.s_exit; w_exit = t.w_exit} in
   link_exits_r t_new (snd !(t_new.n_exit)) get_n_ref get_s_ref;

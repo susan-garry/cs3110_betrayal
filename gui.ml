@@ -72,7 +72,7 @@ let print_tile t =
 let rec print_row lst =
   failwith "Unimplemented"
 
-let into_tile t = 
+  let into_tile t = 
   failwith "Unimplemented"
 
 let out_of_tile t = 
