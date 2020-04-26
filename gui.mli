@@ -8,10 +8,15 @@
 
 *)
 
-type walls
+
 type gui_tile
 type gui_row
 
+
+val go_corner: Tiles.t -> Tiles.t
+
+(**[tests] returns a list of OUnit2 tests for the functions in state*)
+val tests : OUnit2.test list
 (*
 val parse_tile : walls -> gui_tile
 
