@@ -148,8 +148,8 @@ let move_player (dir:Command.direction) state =
     match dir with 
     |Up -> get_n loc
     |Down -> get_s loc
-    |Left -> get_e loc
-    |Right -> get_w loc
+    |Left -> get_w loc
+    |Right -> get_e loc
   in match e with
   | (Discovered, Some(tile)) -> 
     {state with player = Player.move tile state.player}
@@ -163,20 +163,25 @@ let move_player (dir:Command.direction) state =
         in
         let t_coord = Tiles.get_coords tile in 
         let f_coord = first_coord s' in
-        if t_coord = f_coord then s' |> add_n_row tile |> add_w_row tile else
-        if fst t_coord = fst f_coord then add_w_row tile s' else
-        if snd t_coord = snd t_coord then add_n_row tile s' else
-        if (fst t_coord + 1 = fst f_coord + s'.x_dim)
-        && (snd t_coord + 1 = snd f_coord + s'.y_dim) then
-          s' |> add_s_row tile |> add_e_row tile else
+        if fst t_coord = fst f_coord then 
+          (        print_endline "western edge";
+                   print_int (fst t_coord);
+                   print_int (fst f_coord);
+                   add_w_row tile s') else 
+        if snd t_coord = snd f_coord 
+        then 
+          (print_endline "northern edge";
+           print_int (fst t_coord);
+           print_int (fst f_coord);
+           add_n_row tile s') else
         if fst t_coord + 1 = fst f_coord + s'.x_dim then s' |> add_e_row tile 
         else
-        if snd t_coord + 1 = snd f_coord + s'.y_dim then s' |> add_s_row tile 
+        if tile |> Tiles.get_s |> snd = None then s' |> add_s_row tile
         else s'
     end
   | (Nonexistent,_) -> raise NoDoor
-  | _ -> failwith "Impossible because discovered and undiscovered exits
-      must contain a tile"
+  | _ -> failwith "Impossible because discovered and undiscovered exits \
+                   must contain a tile"
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)

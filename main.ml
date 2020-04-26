@@ -27,7 +27,7 @@ let rec parse_input () =
 let rec play state = 
   (** TODO: -print the board 
             -prompt the user, print a description of the room*)
-  print_string (State.room_desc state);
+  print_endline (State.room_desc state);
   print_string "> ";
   match parse_input () with
   | Quit -> exit 0
