@@ -68,15 +68,13 @@ let print_tile t =
 let rec go_corner t = 
   let the_top =
     begin match Tiles.get_n t  with
-      | (Nonexistent, _) -> t
+      | (_, None) -> t
       | (_, Some til) -> go_corner til
-      | (_,_ ) -> t
     end
   in let the_leftest =
        begin match Tiles.get_w the_top with 
-         | (Nonexistent, _) -> t
+         | (_, None) -> t
          | (_, Some til_2) -> go_corner til_2
-         | (_,_ ) -> t
        end
   in the_leftest
 
