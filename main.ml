@@ -1,7 +1,7 @@
 open Rooms
 open Command
 open State
-open Gui
+(*open Gui*)
 open Yojson.Basic
 
 let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
