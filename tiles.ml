@@ -48,7 +48,9 @@ let link_exits_n (t1: t) (t_op: t option) (g1:t->exit ref) (g2:t->exit ref) =
   match t_op with
   |None ->()
   |Some t2 -> let ex = g2 t2 in ex := (fst !ex, Some t1); 
-    let ex = g1 t1 in ex := (fst !ex, Some t2)
+    let ex = g1 t1 in 
+    if t2.room = None then ex := (fst !ex, Some t2) 
+    else ex := (Discovered, Some t2) 
 
 (** [new_tile_helper tn te ts tw] creates a new tile and links it to [tn] on its
     north side, [te] on its east side, [ts] on its south side and [tw] on its 
@@ -113,13 +115,14 @@ let link_exits_r (t1: t) (t_op: t option) (g1:t->exit ref) (g2:t->exit ref) =
     then ex := Discovered, Some t1 else ex := fst !ex, Some t1
 
 let fill_tile t r =
-  let t_new = {coord=t.coord; room= Some r; n_exit = t.n_exit; 
-               e_exit = t.e_exit; s_exit = t.s_exit; w_exit = t.w_exit} in
-  link_exits_r t_new (snd !(t_new.n_exit)) get_n_ref get_s_ref;
-  link_exits_r t_new (snd !(t_new.e_exit)) get_e_ref get_w_ref;
-  link_exits_r t_new (snd !(t_new.s_exit)) get_s_ref get_n_ref;
-  link_exits_r t_new (snd !(t_new.w_exit)) get_w_ref get_e_ref;
-  t_new
+  if t.room != None then t else
+    let t_new = {coord=t.coord; room= Some r; n_exit = t.n_exit; 
+                 e_exit = t.e_exit; s_exit = t.s_exit; w_exit = t.w_exit} in
+    link_exits_r t_new (snd !(t_new.n_exit)) get_n_ref get_s_ref;
+    link_exits_r t_new (snd !(t_new.e_exit)) get_e_ref get_w_ref;
+    link_exits_r t_new (snd !(t_new.s_exit)) get_s_ref get_n_ref;
+    link_exits_r t_new (snd !(t_new.w_exit)) get_w_ref get_e_ref;
+    t_new
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)

@@ -26,6 +26,27 @@ type dir = North | South | East | West
 let create_deck deck =
   deck |> to_list |> List.map Rooms.from_json
 
+(**[shuffle deck] returns a list containing all of the same elements as [deck]
+   but in a randomized order. *)
+let shuffle deck =
+  Random.self_init ();
+  let rec shuffle_helper acc deck n =
+    match n with 
+    |0 -> assert (List.length deck = 0); acc
+    |_ -> let i = Random.int n in
+      (steal i acc deck) (n-1)
+
+  and steal n l1 l2 =
+    let rec steal_helper n l1 p2 =
+      match n, p2 with
+      | 0, (h::t, l3)-> shuffle_helper (h::l1) (List.rev_append t l3)
+      | _, (h::t, l3) -> steal_helper (n-1) l1 (t, h::l3)
+      | _ -> failwith "There are more than n + 1 elements in the list"
+    in steal_helper n l1 (l2, [])
+
+  in shuffle_helper [] deck (List.length deck)
+
+
 (**[dir_char d] returns the character associated with that direction *)
 let dir_char = function
   |North -> 'N'
@@ -109,7 +130,7 @@ let from_json json =
     first_tile = start_tile;
     x_dim = 1;
     y_dim = 1;
-    deck = json |> member "deck" |> create_deck;
+    deck = json |> member "deck" |> create_deck |> shuffle;
     first_player = p;
     player = p
   }
@@ -185,6 +206,13 @@ let tile_exists e =
   | (_, None) -> false
   | (_, Some t) -> true
 
+let make_shuffle_test
+    (name : string)
+    (deck : int list) =
+  name >:: (fun _ ->
+      let compare a b = if a > b then 1 else if a < b then -1 else 0 in
+      assert_equal (List.sort compare deck) (List.sort compare (shuffle deck)))
+
 let add_n_row_test
     (name : string) 
     (tile : Tiles.t)
@@ -223,4 +251,7 @@ let empty_state = { first_tile = Tiles.empty;
 
 let tests = [ 
   (*add_n_row_test "State with one tile" empty_state.first_tile empty_state false*)
+  make_shuffle_test "shuffle []" [];
+  make_shuffle_test "shuffle [2;4;8;9]" [2;4;8;9];
+  make_shuffle_test "shuffle [4;29;38;7;21;0]" [4;29;38;7;21;0];
 ]
