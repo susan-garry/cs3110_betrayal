@@ -8,23 +8,17 @@
 
 *)
 
+(** *)
+type player_icon
 
-type gui_tile
-type gui_row
+(** *)
+val corner_tile: State.t -> Tiles.t
 
+(** *)
+val print_row : Tiles.t -> unit
 
-val go_corner: Tiles.t -> Tiles.t
+(** *)
+val print_board : Tiles.t -> unit
 
 (**[tests] returns a list of OUnit2 tests for the functions in state*)
 val tests : OUnit2.test list
-(*
-val parse_tile : walls -> gui_tile
-
-val parse_empty_tile: gui_tile
-
-val print_tile : gui_tile -> unit
-
-val into_tile : gui_tile -> gui_tile
-
-val out_of_tile : gui_tile -> gui_tile
-*)

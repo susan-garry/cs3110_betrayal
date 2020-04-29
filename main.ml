@@ -1,7 +1,7 @@
 open Rooms
 open Command
 open State
-(*open Gui*)
+open Gui
 open Yojson.Basic
 
 let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
@@ -31,6 +31,7 @@ let rec play state =
   print_string "> ";
   match parse_input () with
   | Quit -> exit 0
+  | Map -> Gui.print_board (Gui.corner_tile state); play state
   | Go d -> play (State.move_player d state)
 
 (** [main ()] prompts for the game to play, then starts it. *)

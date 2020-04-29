@@ -7,7 +7,8 @@ type direction =
   | Right | Left | Up | Down
 
 type command = 
-  | Go of direction 
+  | Go of direction
+  | Map 
   | Quit
 
 (** Raised when an empty command is parsed. *)
