@@ -17,10 +17,6 @@ let rec e_ith_lst e i lst =
   | [] -> e::[]
   | h::t -> if (i==0) then h::e::t else h::(e_ith_lst e (i-1) t)
 
-(** *)
-let parse_empty =
-  List.nth middle_options 0
-
 (** I got to account for when the tile is None *)
 let parse_top til =
   match Tiles.get_n til with 
@@ -66,7 +62,7 @@ let rec print_row_side func t =
   let room_side =
     match Tiles.get_room t with 
     | Some r -> Stdlib.print_string (func t);
-    | None -> Stdlib.print_string parse_empty;
+    | None -> Stdlib.print_string (List.nth middle_options 0);
   in
   room_side;
   match Tiles.get_e t with
@@ -89,7 +85,7 @@ let rec print_board t =
   print_row t;
   match Tiles.get_s t with 
   | (_, Some til) -> print_board til
-  | (_, None) -> print_newline (); ()
+  | (_, None) -> ()
 
 
 
