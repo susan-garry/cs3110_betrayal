@@ -55,7 +55,7 @@ let rec go_corner t =
 
 (** *)
 let corner_tile st =
-  go_corner (State.first_tile st)
+  State.first_tile st
 
 (** *)
 let rec print_row_side func t =
