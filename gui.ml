@@ -4,7 +4,6 @@ open OUnit2
 
 
 type player_icon = {icon: string}
-type gui_tile = {top: string; middle:string; bottom:string;}
 
 (** *)
 let top_options = ["       "; " _____ "; " _   _ "]
@@ -18,12 +17,9 @@ let rec e_ith_lst e i lst =
   | [] -> e::[]
   | h::t -> if (i==0) then h::e::t else h::(e_ith_lst e (i-1) t)
 
-let parse_empty_tile = 
-  {
-    top = List.nth top_options 0;
-    middle = List.nth middle_options 0;
-    bottom = List.nth bottom_options 0;
-  }
+(** *)
+let parse_empty =
+  List.nth middle_options 0
 
 (** I got to account for when the tile is None *)
 let parse_top til =
@@ -67,10 +63,16 @@ let corner_tile st =
 
 (** *)
 let rec print_row_side func t =
-  Stdlib.print_string (func t);
+  let room_side =
+    match Tiles.get_room t with 
+    | Some r -> Stdlib.print_string (func t);
+    | None -> Stdlib.print_string parse_empty;
+  in
+  room_side;
   match Tiles.get_e t with
   | (_, Some til) -> print_row_side func til
-  | (_, None) -> ()
+  | (_, None) -> () 
+
 
 let print_row t =
   print_row_side parse_top t;
