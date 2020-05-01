@@ -1,6 +1,6 @@
 (**
    Metadata about this submission.
-   @author shg64. 
+   @author Susan Garry (shg64), Daphne Rios (dr434), Isabel Selin. 
 *)
 
 (** [hours_worked] is the number of hours you worked on this assignment. *)
