@@ -4,8 +4,9 @@ open OUnit2
 
 type t
 
-type player_id = int
-type player_name = string
+type player_id
+type player_name
+type status
 
 exception LastPlayer
 

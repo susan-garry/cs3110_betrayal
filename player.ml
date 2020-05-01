@@ -1,10 +1,12 @@
 open OUnit2
 type player_id = int
 type player_name = string
+type status = {speed:int; might:int; sanity:int; knowledge:int}
 
 type t = { id : player_id;
            name : player_name;
            location : Tiles.t;
+           stats: status;
            next_player : t option ref}
 
 exception LastPlayer
@@ -12,6 +14,7 @@ exception LastPlayer
 let empty = { id = 0;
               name = "Player 1";
               location = Tiles.empty;
+              stats = {speed=4; might=4; sanity=4; knowledge=4};
               next_player = ref None}
 
 let get_id p = p.id
