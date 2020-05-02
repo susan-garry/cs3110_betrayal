@@ -87,6 +87,17 @@ let add_s_row t s =
   ignore (add_mult 'W' t2 (rx_coord - fx_coord));
   {s with y_dim = s.y_dim + 1}
 
+let add_w_row t s = 
+  let t2 = 
+    try Tiles.new_tile t 'W' with
+    |_ -> failwith "a tile already exists there!"
+  in
+  let ry_coord = t2 |> Tiles.get_coords |> snd in
+  let fy_coord = s |> first_coord |> snd in
+  ignore (add_mult 'S' t2 (ry_coord + s.y_dim - 1 - fy_coord));
+  {s with first_tile = add_mult 'N' t2 (fy_coord - ry_coord);
+          x_dim = s.x_dim + 1}
+
 let add_e_row t s = 
   let t2 = 
     try Tiles.new_tile t 'E' with
@@ -98,16 +109,7 @@ let add_e_row t s =
   ignore (add_mult 'N' t2 (fy_coord - ry_coord));
   {s with x_dim = s.x_dim + 1}
 
-let add_w_row t s = 
-  let t2 = 
-    try Tiles.new_tile t 'W' with
-    |_ -> failwith "a tile already exists there!"
-  in
-  let ry_coord = t2 |> Tiles.get_coords |> snd in
-  let fy_coord = s |> first_coord |> snd in
-  ignore (add_mult 'S' t2 (ry_coord + s.y_dim - 1 - fy_coord));
-  {s with first_tile = add_mult 'N' t2 (fy_coord - ry_coord);
-          x_dim = s.x_dim + 1}
+
 
 (** [add_row d t s] returns a [state] with the new appropriate start tile and
     alters the exits of other tiles on the board
@@ -178,20 +180,20 @@ let move_player (dir:Command.direction) state =
     begin match state.deck with 
       | [] -> failwith "There are no more rooms to discover"
       | h::t ->
-        let s' =
-          {state with player = Player.move (Tiles.fill_tile tile h) state.player;
-                      deck = t}
+        let new_tile = Tiles.fill_tile tile h in
+        let s' = {state with 
+                  player = Player.move new_tile state.player;
+                  deck = t}
         in
-        let t_coord = Tiles.get_coords tile in 
+        let t_coord = Tiles.get_coords new_tile in 
         let f_coord = first_coord s' in
         if fst t_coord = fst f_coord then
-          add_w_row tile s' else 
-        if snd t_coord = snd f_coord 
-        then 
-          add_n_row tile s' else
-        if fst t_coord + 1 = fst f_coord + s'.x_dim then s' |> add_e_row tile 
+          add_w_row new_tile s' else 
+        if snd t_coord = snd f_coord then 
+          add_n_row new_tile s' else
+        if new_tile |> Tiles.get_e |> snd = None then s' |> add_e_row new_tile 
         else
-        if tile |> Tiles.get_s |> snd = None then s' |> add_s_row tile
+        if new_tile |> Tiles.get_s |> snd = None then s' |> add_s_row new_tile
         else s'
     end
   | (Nonexistent,_) -> raise NoDoor
