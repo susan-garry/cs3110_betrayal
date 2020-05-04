@@ -97,13 +97,7 @@ let out_of_tile t =
   failwith "Unimplemented"
 *)
 
-(** If I want to add another floor above, I'll need to change the top of the floor below to work as the above floor's bottom. And if I want to add a floor below, i need the to use the floor's bottom as the below's top. *)
 
-
-
-(** print " _____ \n|     |\n|     | \n|_____|" *)
-
-(** print " _____ _____ _____ _____ _____ _____\n|     |     |     |     |     |     |\n|     |     |     |     |     |     |\n|_____|_____|_____|_____|_____|_____|" *)
 
 (** For printing a good square in utop, use this:
     print_endline "  _____ \n |     | \n |     |\n |_____|";;; *)

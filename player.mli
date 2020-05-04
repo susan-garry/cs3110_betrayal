@@ -4,9 +4,15 @@ open OUnit2
 
 type t
 
+<<<<<<< HEAD
 type player_id = int
 type player_name = string
 type stat = int
+=======
+type player_id
+type player_name
+type status
+>>>>>>> c1c9789b7d6be2acf4a0f51c5ecb9c05a6c17dfd
 
 exception LastPlayer
 
