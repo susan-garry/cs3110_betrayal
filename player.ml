@@ -1,12 +1,12 @@
 open OUnit2
 type player_id = int
 type player_name = string
-type status = {speed:int; might:int; sanity:int; knowledge:int}
+type player_stats = {speed:int; might:int; sanity:int; knowledge:int}
 
 type t = { id : player_id;
            name : player_name;
            location : Tiles.t;
-           stats: status;
+           stats: player_stats;
            next_player : t option ref}
 
 exception LastPlayer
@@ -30,6 +30,7 @@ let get_loc p = p.location
 let move t p = {p with location = t}
 
 let get_next p = !(p.next_player)
+
 
 (*-------------------------------------------*)
 (*Code for testing here*)
