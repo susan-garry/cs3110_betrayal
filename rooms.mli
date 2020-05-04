@@ -13,7 +13,7 @@ type t
 type room_id = string
 
 (** The type of effect sets *)
-type eff_lst = int list
+type eff_lst = Yojson.Basic.t list
 
 (** [from_json j] is the room that [j] represents.
     Requires: [j] is a valid JSON room representation. *)
