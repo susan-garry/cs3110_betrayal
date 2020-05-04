@@ -24,11 +24,17 @@ val room_id : t -> string
    Raises EmptyTile if that tile is empty. *)
 val room_desc : t -> string
 
-(**[player_id st] returns the id of the player who is currently in play *)
-val player_id : t -> int
-
 (**[player_name st] returns the name of the player who is currently in play *)
 val player_name : t -> string
+
+(**[player_id st] returns the id of the player who is currently in play *)
+val player_desc : t -> string
+
+(**[get_locs st] returns an association list of tile coordinates and 
+   player lists, where a tile coordinate maps to a list of the players contained
+   within it if there is at least one player inside of that room; otherwise it
+   has no binding in the association list. *)
+val get_locs : t -> (Tiles.coord * int list) list
 
 (**[move_player d st] returns a state identical to [st] but with the player
    currently in play located in the tile in direction [d] relative to its 

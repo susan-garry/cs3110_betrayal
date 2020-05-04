@@ -11,8 +11,8 @@ type t = {first_tile: Tiles.t;
           x_dim : int;
           y_dim : int;
           deck  : Rooms.t list;
-          first_player : Player.t;
-          player : Player.t;
+          players : Player.t option array;
+          in_play : int;
          }
 
 exception EmptyTile
@@ -122,6 +122,11 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
   |East -> add_e_row t s
   |West -> add_w_row t s
 
+(**[add_player p st] returns a state identical to st but with p at the end of
+   the play order if  *)
+let add_player (p : Player.t) (st : t) : t = 
+  (st.players.(st.in_play) <- Some p); st
+
 (**[from_json json] takes a json file and creates the initial game state*)
 let from_json json = 
   let start_tile = json |> member "start room" |> Rooms.from_json 
@@ -133,13 +138,28 @@ let from_json json =
     x_dim = 1;
     y_dim = 1;
     deck = json |> member "deck" |> create_deck |> shuffle;
-    first_player = p;
-    player = p
+    players = Array.make 9 None;
+    in_play = 0
   }
   in s' |> add_row South s'.first_tile |> add_row East s'.first_tile 
      |> add_row West s'.first_tile |> add_row North s'.first_tile
+     |> add_player p
 
 let first_tile s = s.first_tile
+
+(**[get_player s] returns the player who is currently in play*)
+let get_player s = 
+  match s.players.(s.in_play) with 
+  |Some p -> p
+  |None -> failwith "This is an invalid state"
+
+(**[get_player_option s] returns the player option that is currently in play*)
+let get_player_option s = s.players.(s.in_play)
+
+(**[set_current_player p_opt s] returns a state identical to [s] but with the 
+   player at the current spot in the play order replaced with [p_opt] *)
+let set_current_player p_opt s =
+  Array.set s.players s.in_play p_opt; s
 
 let room_id s =
   match Tiles.get_room s.first_tile with 
@@ -147,26 +167,44 @@ let room_id s =
   |None -> raise EmptyTile
 
 let room_desc s = 
-  match s.player |> get_loc |> Tiles.get_room with 
+  match s |> get_player |> get_loc |> Tiles.get_room with 
   |Some r -> Rooms.room_desc r
   |None -> raise EmptyTile
 
-let player_id s = Player.get_id s.player
+let player_name s = Player.get_name (get_player s)
 
-let player_name s = Player.get_name s.player
+let player_desc s = 
+  let player_id = string_of_int (s.in_play)
+  in (player_name s) ^ " (" ^ (player_id)
+
+let get_locs s = 
+  let rec add_loc lst id arr = 
+    if id = 9 then lst else
+      match arr.(id) with 
+      |None -> add_loc lst (id+1) arr
+      |Some p ->
+        let coord = p |> Player.get_loc |> Tiles.get_coords
+        in match List.assoc_opt coord lst with 
+        |None -> add_loc ((coord,[id])::lst) (id+1) arr
+        |Some l2 -> add_loc ((coord,id::l2)::lst) (id+1) arr
+  in add_loc [] 0 s.players
+
 
 (**[next_player state] returns a state where the player is 
    the player who's turn begins after the current player's turn ends *)
-let next_player state =
-  let p =
-    match Player.get_next state.player with 
-    |Some p' -> p'
-    |None -> state.first_player
-  in
-  {state with player = p}
+let rec next_player state =
+  let state' = {state with in_play = (state.in_play + 1) mod 9} in
+  match get_player_option state' with 
+  |None -> next_player state'
+  |Some p -> state'
 
-let move_player (dir:Command.direction) state =
-  let loc = Player.get_loc state.player in
+(**[fill_exits st] returns a state that is identical to st but with every
+   unbound exit (exits leading to undiscovered tiles) closed so that players
+   can no longer traverse through them *)
+let fill_exits st = failwith "fill_exits is unimplemented"
+
+let rec move_player (dir : Command.direction) state =
+  let loc = Player.get_loc (get_player state) in
   let e =
     match dir with 
     |Up -> get_n loc
@@ -174,31 +212,37 @@ let move_player (dir:Command.direction) state =
     |Left -> get_w loc
     |Right -> get_e loc
   in match e with
-  | (Discovered, Some(tile)) -> 
-    {state with player = Player.move tile state.player}
-  | (Undiscovered, Some(tile)) -> 
-    begin match state.deck with 
-      | [] -> failwith "There are no more rooms to discover"
-      | h::t ->
-        let new_tile = Tiles.fill_tile tile h in
-        let s' = {state with 
-                  player = Player.move new_tile state.player;
-                  deck = t}
-        in
-        let t_coord = Tiles.get_coords new_tile in 
-        let f_coord = first_coord s' in
-        if fst t_coord = fst f_coord then
-          add_w_row new_tile s' else 
-        if snd t_coord = snd f_coord then 
-          add_n_row new_tile s' else
-        if new_tile |> Tiles.get_e |> snd = None then s' |> add_e_row new_tile 
-        else
-        if new_tile |> Tiles.get_s |> snd = None then s' |> add_s_row new_tile
-        else s'
-    end
+  | (Discovered, Some(tile)) ->
+    let p' = Player.move tile (get_player state) in
+    set_current_player (Some p') state
+  | (Undiscovered, Some(tile)) -> move_player_undiscovered tile state
   | (Nonexistent,_) -> raise NoDoor
   | _ -> failwith "Impossible because discovered and undiscovered exits \
                    must contain a tile"
+
+(**move_player_undiscovered tile state returns a state where [tile] has been
+   filled with a room and the player in play has been moved to that tile.
+   Requires: [tile] is undiscovered*)
+and move_player_undiscovered tile state =
+  match state.deck with 
+  | [] -> failwith "There are no more rooms to discover"
+  | h::t ->
+    let new_tile = Tiles.fill_tile tile h in
+    let p' = Player.move new_tile (get_player state) in
+    let s' = 
+      let s'' = set_current_player (Some p') {state with deck = t} in
+      if t = [] then fill_exits s'' else s''
+    in
+    let t_coord = Tiles.get_coords new_tile in 
+    let f_coord = first_coord s' in
+    if fst t_coord = fst f_coord then
+      add_w_row new_tile s' else 
+    if snd t_coord = snd f_coord then 
+      add_n_row new_tile s' else
+    if new_tile |> Tiles.get_e |> snd = None then s' |> add_e_row new_tile 
+    else
+    if new_tile |> Tiles.get_s |> snd = None then s' |> add_s_row new_tile
+    else s'
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
@@ -241,14 +285,14 @@ let first_tile_test
   name >:: (fun _ -> 
       assert_equal ex (first_tile state))
 
-let player1 = Player.(empty |> set_id 1 |> set_name "Player 1")
+let player1 = Player.(empty |> set_name "Player 1")
 
 let empty_state = { first_tile = Tiles.empty;
                     x_dim = 1;
                     y_dim = 1;
                     deck = [];
-                    first_player = player1;
-                    player = player1;
+                    players = Array.make 1 (Some player1);
+                    in_play = 0
                   }
 
 let tests = [ 
