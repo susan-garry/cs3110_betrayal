@@ -1,16 +1,15 @@
 open Tiles
 open OUnit2
 
-type player_id = int
 type player_stats = {speed:int; might:int; sanity:int; knowledge:int}
 
 type t = { name : string;
-           id: player_id;
+           id: int;
            location : Tiles.t;
            stats: player_stats; }
 
+exception UnknownStatus
 
-exception LastPlayer
 
 let empty = { name = "Player 1";
               id = 1;
@@ -30,7 +29,15 @@ let get_loc p = p.location
 
 let move t p = {p with location = t}
 
-let get_stats p = [p.speed; p.might; p.sanity; p.knowledge]
+let set_stat sts s change = 
+  let stat_changed = 
+    match s with
+    | "speed" -> {sts with speed = change}
+    | "might" -> {sts with might = change}
+    | "sanity" -> {sts with sanity = change}
+    | "knowledge" -> {sts with knowledge = change}
+    | _ -> raise UnknownStatus
+  in stat_changed
 
 let player_lose p count = 
   (p.stats.speed <= count || p.stats.might <= count || p.stats.sanity <= count || p.stats.knowledge <= count)

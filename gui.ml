@@ -88,7 +88,6 @@ let rec print_board t =
   | (_, None) -> ()
 
 
-
 (*
 let into_tile t = 
   failwith "Unimplemented"
