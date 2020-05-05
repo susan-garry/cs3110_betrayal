@@ -37,13 +37,17 @@ let parse_move d state =
     print_endline "Something went wrong! Oh no. ";
     print_newline ();
     state
-  | st -> st
+  | st -> 
+    st
 
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
   (** TODO: -print the board 
             -prompt the user, print a description of the room*)
   print_endline (State.room_desc state);
+  print_newline ();
+  print_string "It is "; print_string (State.player_name state); 
+  print_endline "'s Turn.";
   print_string "> ";
   match parse_input () with
   | Quit -> exit 0

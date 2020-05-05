@@ -24,7 +24,7 @@ val move : Tiles.t -> t -> t
 
 (** [set_stat sts s change] is a player_stats with field [s] changed to int [change]. 
     Raises: [Unknown Status] if [s] is not a field (in string form) of player_stats  *)
-val set_stat : string -> int -> player_stats
+val set_stat : player_stats -> string -> int -> player_stats
 
 (** [player_lose p count] is true if one of the player's stats is less than or equal to [count]. 
     Otherwise, false *)
