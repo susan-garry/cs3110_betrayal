@@ -2,6 +2,7 @@
 
 
 type player_stats
+type player_condition = Winner | Loser |Playing
 
 type t
 

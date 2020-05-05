@@ -2,30 +2,32 @@ open Tiles
 open OUnit2
 
 type player_stats = {speed:int; might:int; sanity:int; knowledge:int}
+type player_condition = Winner | Loser |Playing
 
 type t = { name : string;
-           id: int;
            location : Tiles.t;
-           stats: player_stats; }
+           stats: player_stats;
+           condition: player_condition
+         }
 
 exception UnknownStatus
 
 
 let empty = { name = "Player 1";
-              id = 1;
               location = Tiles.empty;
               stats = {speed=4; might=4; sanity=4; knowledge=4};
+              condition = Playing
             }
-
-let get_id p = p.id
-
-let set_id id p = {p with id = id}
 
 let get_name p = p.name
 
 let set_name name player = {player with name = name}
 
 let get_loc p = p.location
+
+let get_condition p = p.condition
+
+let set_condition p con = {p with condition = con}
 
 let move t p = {p with location = t}
 
@@ -44,6 +46,7 @@ let player_lose p count =
 
 let player_win p count = 
   (p.stats.speed >= count || p.stats.might >= count || p.stats.sanity >= count || p.stats.knowledge >= count)
+
 
 (** [print_stats sts] is unit;  *)
 let print_stats sts = 
