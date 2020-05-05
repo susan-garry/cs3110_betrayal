@@ -215,8 +215,7 @@ let cut_corner st =
 let fill_exits st = 
   let rec fill_row tile =
     match get_e tile with 
-    |(_, Some t2) -> (*Tiles.close_off tile; fill_row t2*)
-      failwith "Tiles.close_off currently unimplemented"
+    |(_, Some t2) -> Tiles.close tile; fill_row t2
     |(_, None) -> ()
   in let rec fill_board tile =
        match get_s tile with 
