@@ -1,5 +1,4 @@
 open OUnit2
-type player_id = int
 type player_name = string
 type status = int
 
