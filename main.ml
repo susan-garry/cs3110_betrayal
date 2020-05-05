@@ -37,8 +37,7 @@ let parse_move d state =
     print_endline "Something went wrong! Oh no. ";
     print_newline ();
     state
-  | st -> 
-    st
+  | st -> st
 
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
@@ -47,12 +46,13 @@ let rec play state =
   print_endline (State.room_desc state);
   print_newline ();
   print_string "It is "; print_string (State.player_name state); 
-  print_endline "'s Turn.";
+  print_endline "'s turn.";
   print_string "> ";
   match parse_input () with
   | Quit -> exit 0
   | Map -> Gui.print_board (Gui.corner_tile state); play state
-  | Stats -> play state; (** call [print_player p] for the current player in play *)
+  | Stats -> State.print_current_player state; play state;
+    (** call [print_player p] for the current player in play *)
   | Go d -> play (parse_move d state)
 
 (** [main ()] prompts for the game to play, then starts it. *)

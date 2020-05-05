@@ -47,11 +47,10 @@ let player_win p count =
 
 (** [print_stats sts] is unit;  *)
 let print_stats sts = 
-  print_endline "Player Stats:";
-  print_endline "Speed: "; print_int sts.speed;
-  print_endline "Might: "; print_int sts.might;
-  print_endline "Sanity: "; print_int sts.sanity;
-  print_endline "Knowledge: "; print_int sts.knowledge;
+  print_string "Speed: "; print_int sts.speed; print_newline ();
+  print_string "Might: "; print_int sts.might; print_newline ();
+  print_string "Sanity: "; print_int sts.sanity; print_newline ();
+  print_string "Knowledge: "; print_int sts.knowledge; print_newline ();
   ()
 
 let print_player p =
@@ -60,9 +59,10 @@ let print_player p =
       | None -> "Unknon"
       | Some r -> Rooms.room_id r
     end in
-  print_endline "Player"; print_string p.name;
-  print_endline "Location"; print_string locale;
+  print_string "Player: "; print_endline p.name;
+  print_string "Location: "; print_endline locale;
   print_stats p.stats;
+  print_string "Room: ";
   ()
 (*-------------------------------------------*)
 (*Code for testing here*)
