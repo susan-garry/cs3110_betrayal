@@ -32,6 +32,7 @@ let rec play state =
   match parse_input () with
   | Quit -> exit 0
   | Map -> Gui.print_board (Gui.corner_tile state); play state
+  | Stats -> play state; (** call [print_player p] for the current player in play *)
   | Go d -> play (State.move_player d state)
 
 (** [main ()] prompts for the game to play, then starts it. *)

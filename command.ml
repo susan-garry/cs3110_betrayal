@@ -6,6 +6,7 @@ type direction =
 type command = 
   | Go of direction 
   | Map
+  | Stats
   | Quit
 
 exception Empty
@@ -34,6 +35,7 @@ let parse str =
       | "up" | "north" -> Go Up
       | "down" | "south" -> Go Down
       | "map" | "board" | "where" -> Map
+      | "stats" | "status" | "check" | "well-being" | "me" -> Stats
       | "quit" -> if (t == []) then Quit else raise (Malformed)
       | _ -> raise (Malformed) end
 
@@ -55,6 +57,7 @@ let parse_test = [
   make_parse_test "Going Up" "up and down and all around" (Go Up);
   make_parse_test "Going Down_with Spaces" " down " (Go Down);
   make_parse_test "Viewing the map" "board game" (Map);
+  make_parse_test "Check Stats" "well-being" (Stats);
   make_parse_test "Quitting" "quit" (Quit);
 ]
 
