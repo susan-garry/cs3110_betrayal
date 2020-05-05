@@ -45,7 +45,7 @@ let rec play state =
             -prompt the user, print a description of the room*)
   print_endline (State.room_desc state);
   print_newline ();
-  print_string "It is "; print_string (State.player_name state); 
+  print_string "It is "; print_string (State.player_desc state); 
   print_endline "'s turn.";
   print_string "> ";
   match parse_input () with
