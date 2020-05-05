@@ -38,7 +38,7 @@ val get_locs : t -> (Tiles.coord * int list) list
 
 (**[move_player d st] returns a state identical to [st] but with the player
    currently in play located in the tile in direction [d] relative to its 
-   current location *)
+   current location and the next player in the play order in play *)
 val move_player : Command.direction -> t -> t
 
 (**[teleport tile] returns a player with the same attributes as [p] but located

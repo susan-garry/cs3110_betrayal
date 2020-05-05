@@ -46,13 +46,14 @@ let shuffle deck =
 
   in shuffle_helper [] deck (List.length deck)
 
-
-(**[dir_char d] returns the character associated with that direction *)
-let dir_char = function
-  |North -> 'N'
-  |South -> 'S'
-  |East -> 'E'
-  |West -> 'W'
+(**[count_exits st] returns an integer between 1 and 4 to determine the number
+   of exits that a new room being added to the board will contain*)
+let count_exits st =
+  Random.self_init ();
+  let rand = Random.int 100 in 
+  if rand < 15 then 1 else
+  if rand < 40 then 2 else
+  if rand < 75 then 3 else 4
 
 (**[start_coord s] returns the coordinates of the first room in [s]*)
 let first_coord s = s.first_tile |> get_coords
@@ -108,8 +109,6 @@ let add_e_row t s =
   ignore (add_mult 'S' t2 (ry_coord + s.y_dim - 1 - fy_coord));
   ignore (add_mult 'N' t2 (fy_coord - ry_coord));
   {s with x_dim = s.x_dim + 1}
-
-
 
 (** [add_row d t s] returns a [state] with the new appropriate start tile and
     alters the exits of other tiles on the board
@@ -198,10 +197,32 @@ let rec next_player state =
   |None -> next_player state'
   |Some p -> state'
 
+(** [cut_corner st] returns the tile that is diagonally adjacent to the 
+    upper left tile*)
+let cut_corner st =
+  match get_s st.first_tile with 
+  |(_,Some t2) -> 
+    begin match get_e t2 with 
+      |(_,Some t3) -> t3
+      | _ -> failwith "Invalid state"
+    end
+  |_ -> failwith "Invalid state"
+
+
 (**[fill_exits st] returns a state that is identical to st but with every
    unbound exit (exits leading to undiscovered tiles) closed so that players
    can no longer traverse through them *)
-let fill_exits st = failwith "fill_exits is unimplemented"
+let fill_exits st = 
+  let rec fill_row tile =
+    match get_e tile with 
+    |(_, Some t2) -> (*Tiles.close_off tile; fill_row t2*)
+      failwith "Tiles.close_off currently unimplemented"
+    |(_, None) -> ()
+  in let rec fill_board tile =
+       match get_s tile with 
+       |(_, Some t2) -> fill_row tile; fill_board t2
+       |_ -> fill_row tile
+  in fill_board st.first_tile; st
 
 let rec move_player (dir : Command.direction) state =
   let loc = Player.get_loc (get_player state) in
@@ -214,14 +235,15 @@ let rec move_player (dir : Command.direction) state =
   in match e with
   | (Discovered, Some(tile)) ->
     let p' = Player.move tile (get_player state) in
-    set_current_player (Some p') state
+    set_current_player (Some p') state |> next_player
   | (Undiscovered, Some(tile)) -> move_player_undiscovered tile state
   | (Nonexistent,_) -> raise NoDoor
   | _ -> failwith "Impossible because discovered and undiscovered exits \
                    must contain a tile"
 
 (**move_player_undiscovered tile state returns a state where [tile] has been
-   filled with a room and the player in play has been moved to that tile.
+   filled with a room, the player in play has been moved to that tile, and the
+   next player in the play order is in play.
    Requires: [tile] is undiscovered*)
 and move_player_undiscovered tile state =
   match state.deck with 
@@ -231,7 +253,7 @@ and move_player_undiscovered tile state =
     let p' = Player.move new_tile (get_player state) in
     let s' = 
       let s'' = set_current_player (Some p') {state with deck = t} in
-      if t = [] then fill_exits s'' else s''
+      if t = [] then (fill_exits s'') else s'' |> next_player
     in
     let t_coord = Tiles.get_coords new_tile in 
     let f_coord = first_coord s' in

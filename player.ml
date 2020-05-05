@@ -7,8 +7,8 @@ type player_stats = {speed:int; might:int; sanity:int; knowledge:int}
 type t = { name : string;
            id: player_id;
            location : Tiles.t;
-           stats: player_stats;
-           next_player : t option ref}
+           stats: player_stats; }
+
 
 exception LastPlayer
 
@@ -16,7 +16,6 @@ let empty = { name = "Player 1";
               id = 1;
               location = Tiles.empty;
               stats = {speed=4; might=4; sanity=4; knowledge=4};
-              next_player = ref None
             }
 
 let get_id p = p.id
@@ -30,8 +29,6 @@ let set_name name player = {player with name = name}
 let get_loc p = p.location
 
 let move t p = {p with location = t}
-
-let get_next p = !(p.next_player)
 
 let get_stats p = [p.speed; p.might; p.sanity; p.knowledge]
 
@@ -60,7 +57,6 @@ let print_player p =
   print_endline "Location"; print_string locale;
   print_stats p.stats;
   ()
-
 (*-------------------------------------------*)
 (*Code for testing here*)
 
