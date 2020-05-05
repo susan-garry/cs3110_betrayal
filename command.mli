@@ -8,7 +8,8 @@ type direction =
 
 type command = 
   | Go of direction
-  | Map 
+  | Map
+  | Stats 
   | Quit
 
 (** Raised when an empty command is parsed. *)
