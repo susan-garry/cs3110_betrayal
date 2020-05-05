@@ -22,6 +22,24 @@ let rec parse_input () =
     parse_input ()
   | c -> c
 
+(** [parse_move d state] is a new state [st] only if State.move_player in direction [d] in state [state] is a valid move. 
+    Otherwise, the state remains unchanged. *)
+let parse_move d state =
+  match State.move_player d state with 
+  | exception State.NoDoor -> 
+    print_endline "You can't go that way! Go elsewhere.";
+    print_newline ();
+    state
+  | exception State.EmptyTile -> 
+    print_endline "Something went wrong, it's empty!";
+    print_newline ();
+    state
+  | exception _ -> 
+    print_endline "Something went wrong! Oh no. ";
+    print_newline ();
+    state
+  | st -> st
+
 
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
@@ -33,7 +51,7 @@ let rec play state =
   | Quit -> exit 0
   | Map -> Gui.print_board (Gui.corner_tile state); play state
   | Stats -> play state; (** call [print_player p] for the current player in play *)
-  | Go d -> play (State.move_player d state)
+  | Go d -> play (parse_move d state)
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =

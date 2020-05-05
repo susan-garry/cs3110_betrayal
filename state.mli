@@ -5,7 +5,7 @@ open Tiles
 (**The abstract type for values representing a game state *)
 type t
 
-exception NonemptyTile
+exception EmptyTile
 exception NoDoor
 
 (**[from_json json] takes a json file and creates the initial game state*)

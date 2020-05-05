@@ -32,11 +32,11 @@ let move t p = {p with location = t}
 
 let get_stats p = [p.speed; p.might; p.sanity; p.knowledge]
 
-let player_lose p = 
-  (p.stats.speed == 0 || p.stats.might == 0 || p.stats.sanity == 0 || p.stats.knowledge == 0)
+let player_lose p count = 
+  (p.stats.speed <= count || p.stats.might <= count || p.stats.sanity <= count || p.stats.knowledge <= count)
 
-let player_win p = 
-  (p.stats.speed >= 8 || p.stats.might >= 8 || p.stats.sanity >= 8 || p.stats.knowledge >= 8)
+let player_win p count = 
+  (p.stats.speed >= count || p.stats.might >= count || p.stats.sanity >= count || p.stats.knowledge >= count)
 
 (** [print_stats sts] is unit;  *)
 let print_stats sts = 

@@ -98,10 +98,6 @@ let out_of_tile t =
 *)
 
 
-
-(** For printing a good square in utop, use this:
-    print_endline "  _____ \n |     | \n |     |\n |_____|";;; *)
-
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
 

@@ -21,11 +21,13 @@ val set_name : string -> t -> t
 (**[player_location p] returns the tile where [player] is currently located*)
 val get_loc : t -> Tiles.t
 
-(** [player_lose p] is true if one of the player's stats has gone down to zero, else it is false *)
-val player_lose : t -> bool
+(** [player_lose p count] is true if one of the player's stats is less than or equal to [count]. 
+    Otherwise, false *)
+val player_lose : t -> int -> bool
 
-(** [player_win p] is true if one of the player's stats has gone up to at least 8, else it is false. *)
-val player_win : t -> bool
+(** [player_win p count] is true if one of the player's stats is greater than or euqal to [count]. 
+    Otherwise, false. *)
+val player_win : t -> int -> bool
 
 (** [print_player p] returns unit; printing out the name, location, and stats of player [p]. *)
 val print_player : t -> unit
