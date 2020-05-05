@@ -42,7 +42,7 @@ val get_locs : t -> (Tiles.coord * int list) list
 val move_player : Command.direction -> t -> t
 
 
-(** *)
+(** [print_current_player p] returns unit; printing out the name, location, and stats of the player [p] who is currently in play. *)
 val print_current_player : t -> unit
 
 
