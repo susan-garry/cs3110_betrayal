@@ -124,6 +124,10 @@ let fill_tile t r =
     link_exits_r t_new (snd !(t_new.w_exit)) get_w_ref get_e_ref;
     t_new
 
+let set_exits t n = failwith "set_exits unimplemented"
+
+let close t = failwith "close unimplemented"
+
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
 

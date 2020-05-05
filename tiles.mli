@@ -69,6 +69,14 @@ val get_room : t -> Rooms.t option
 (* eventually this will randomize the number of exits and place them *)
 val fill_tile : t -> Rooms.t -> t
 
+(** [set_exits t n] is tile [t] with [n] exits that the player can pass through.
+    Prioritizes aligning exits with discovered rooms' exits first.
+    Requres: n is an integer between 1 and 4. *)
+val set_exits: t -> int -> t
+
+(** [close t] is tile [t] with all Undiscovered exits set to Nonexistent *)
+val close: t -> t
+
 (* ----------------------------------- *)
 
 (** [tests] is a list of OUnit test cases for all functions in Tiles. *)
