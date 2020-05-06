@@ -1,3 +1,7 @@
+(** @author: Primary author, Susan Garry shg64
+             Additional contributor: Isabel Selin, is389 
+*)
+
 open Command
 open Player
 open Tiles

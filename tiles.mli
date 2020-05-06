@@ -3,6 +3,8 @@
 
     This module defines the data structure for tiles. It handles updating and
     querying that data, as well as adding new tiles to the board.
+
+    @author: Primary author Isabel Selin, is389
 *)
 
 (** The abstract type of values representing tiles.*)
@@ -16,9 +18,6 @@ type exit = exit_qual * (t option)
 
 (** The type of tile coordinates. *)
 type coord = int*int
-
-(** Raised when a room is called from an empty tile. *)
-exception EmptyTile
 
 (** Raised if character does not correspond to a direction. *)
 exception InvalidDirection of char
@@ -62,20 +61,19 @@ val set_w : t -> exit_qual -> unit
 (** [get_coords t] is the coordinate pair of tile [t]. *)
 val get_coords : t -> coord
 
-(** [get_room t] is the room contained in tile [t].*)
+(** [get_room t] is the room option contained in tile [t].*)
 val get_room : t -> Rooms.t option
 
-(** [fill_tile t r] is tile [t] with its room set to [r]. *)
-(* eventually this will randomize the number of exits and place them *)
+(** [fill_tile t r] is tile [t] with its room set to [r]. Randomly chooses exits
+    to be assigned as nonexistent. Updates exits of tiles surrounding [t]. *)
 val fill_tile : t -> Rooms.t -> t
 
-(** [set_exits t n] is tile [t] with [n] exits that the player can pass through.
-    Prioritizes aligning exits with discovered rooms' exits first.
-    Requres: n is an integer between 1 and 4. *)
-val set_exits: t -> int -> t
+(** [fill_start t r] is tile [t] with its room set to [r] and all exits open.
+    Updates exits of tiles surrounding [t].*)
+val fill_start : t -> Rooms.t -> t
 
-(** [close t] is tile [t] with all Undiscovered exits set to Nonexistent *)
-val close: t -> t
+(** [close t] sets the Undiscovered exits of tile [t] to Nonexistent *)
+val close: t -> unit
 
 (* ----------------------------------- *)
 

@@ -4,6 +4,8 @@
 
     This module defines the data structure for rooms. It handles loading that
     data from JSON files and querying that data.
+
+    @author: Primary author Isabel Sein, is389
 *)
 
 (** The abstract type of values representing rooms *)
