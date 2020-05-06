@@ -29,11 +29,11 @@ val set_stat : player_stats -> string -> int -> player_stats
 
 (** [player_lose p count] is true if one of the player's stats is less than or equal to [count]. 
     Otherwise, false *)
-val player_lose : t -> int -> bool
+val player_lose : t -> bool
 
 (** [player_win p count] is true if one of the player's stats is greater than or euqal to [count]. 
     Otherwise, false. *)
-val player_win : t -> int -> bool
+val player_win : t -> bool
 
 (** [print_player p] returns unit; printing out the name, location, and stats of player [p]. *)
 val print_player : t -> unit
