@@ -14,7 +14,9 @@ type t
 (** The type of room names *)
 type room_id = string
 
-(** The type of effect sets *)
+(** The type of effect sets.
+    Requires: each effect contains a field "id" corresponding to its effect 
+    type.*)
 type eff_lst = Yojson.Basic.t list
 
 (** [from_json j] is the room that [j] represents.
@@ -27,8 +29,13 @@ val room_id : t -> room_id
 (** [room_desc r] is the description of room [r]. *)
 val room_desc : t -> string
 
-(** [room_effects r] is the effect list of room [r] *)
-val room_effects : t -> eff_lst
+(** [init_effects r] is the list of effects that occur when room [r] is first
+    entered. *)
+val init_effects : t -> eff_lst
+
+(** [rep_effects r] is the list of effects that occur each time room [r] is
+    entered. *)
+val rep_effects : t -> eff_lst
 
 (* ----------------------------------- *)
 

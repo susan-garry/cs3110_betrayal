@@ -4,19 +4,22 @@ open OUnit2
 type room_id = string
 type eff_lst = Yojson.Basic.t list
 
-type t = {id: room_id; desc: string; effects: eff_lst}
+type t = {id: room_id; desc: string; init_effs: eff_lst; rep_effs: eff_lst}
 
 let from_json json =
   let j_assoc = json |> to_assoc in
   {id = j_assoc |> List.assoc "id" |> to_string;
    desc = j_assoc |> List.assoc "description" |> to_string;
-   effects = j_assoc |> List.assoc "effects" |> to_list}
+   init_effs = j_assoc |> List.assoc "effects" |> to_list;
+   rep_effs = j_assoc |> List.assoc "effects" |> to_list;}
 
 let room_id r = r.id
 
 let room_desc r = r.desc
 
-let room_effects r = r.effects
+let init_effects r = r.init_effs
+
+let rep_effects r = r.rep_effs
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
