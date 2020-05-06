@@ -1,6 +1,5 @@
-open ANSITerminal
-open State
 open OUnit2
+open ANSITerminal
 
 
 type player_icon = {icon: string}

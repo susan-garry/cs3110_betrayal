@@ -1,5 +1,5 @@
-open OUnit2
 open Yojson.Basic.Util
+open OUnit2
 open Random
 
 type coord = int*int

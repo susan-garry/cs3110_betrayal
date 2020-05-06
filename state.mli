@@ -2,10 +2,6 @@
              Additional contributor: Isabel Selin, is389 
 *)
 
-open Command
-open Player
-open Tiles
-
 (**The abstract type for values representing a game state *)
 type t
 
