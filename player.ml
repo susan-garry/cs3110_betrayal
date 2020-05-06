@@ -41,12 +41,11 @@ let set_stat sts s change =
     | _ -> raise UnknownStatus
   in stat_changed
 
-let player_lose p count = 
-  (p.stats.strength <= count || p.stats.hunger <= count || p.stats.sanity <= count || p.stats.insight <= count)
+let player_lose p = 
+  (p.stats.strength <= 0 || p.stats.hunger <= 0 || p.stats.sanity <= 0 || p.stats.insight <= 0)
 
-let player_win p count = 
-  (p.stats.strength >= count || p.stats.hunger >= count || p.stats.sanity >= count || p.stats.insight >= count)
-
+let player_win p = 
+  (p.stats.strength >= 8 || p.stats.hunger >= 8 || p.stats.sanity >= 8 || p.stats.insight >= 8)
 
 (** [print_stats sts] is unit;  *)
 let print_stats sts = 
