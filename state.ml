@@ -174,7 +174,7 @@ let player_name s = Player.get_name (get_player s)
 
 let player_desc s = 
   let player_id = string_of_int (s.in_play)
-  in (player_name s) ^ " (" ^ (player_id)
+  in (player_name s) ^ " (" ^ (player_id) ^ ")"
 
 let get_locs s = 
   let rec add_loc lst id arr = 
@@ -265,6 +265,11 @@ and move_player_undiscovered tile state =
     else
     if new_tile |> Tiles.get_s |> snd = None then s' |> add_s_row new_tile
     else s'
+
+
+let print_current_player st =
+  Player.print_player (get_player st)
+
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)

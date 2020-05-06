@@ -1,26 +1,23 @@
 open Tiles
 open OUnit2
 
-type player_id = int
-type player_stats = {speed:int; might:int; sanity:int; knowledge:int}
+type player_stats = {sanity:int; insight:int; strength:int; hunger:int}
+type player_condition = Winner | Loser |Playing
 
 type t = { name : string;
-           id: player_id;
            location : Tiles.t;
-           stats: player_stats; }
+           stats: player_stats;
+           condition: player_condition
+         }
 
+exception UnknownStatus
 
-exception LastPlayer
 
 let empty = { name = "Player 1";
-              id = 1;
               location = Tiles.empty;
-              stats = {speed=4; might=4; sanity=4; knowledge=4};
+              stats = {sanity=4; insight=4; strength=4; hunger=4};
+              condition = Playing
             }
-
-let get_id p = p.id
-
-let set_id id p = {p with id = id}
 
 let get_name p = p.name
 
@@ -28,23 +25,34 @@ let set_name name player = {player with name = name}
 
 let get_loc p = p.location
 
+let get_condition p = p.condition
+
+let set_condition p con = {p with condition = con}
+
 let move t p = {p with location = t}
 
-let get_stats p = [p.speed; p.might; p.sanity; p.knowledge]
+let set_stat sts s change = 
+  let stat_changed = 
+    match s with
+    | "speed" -> {sts with strength = change}
+    | "might" -> {sts with hunger = change}
+    | "sanity" -> {sts with sanity = change}
+    | "knowledge" -> {sts with insight = change}
+    | _ -> raise UnknownStatus
+  in stat_changed
 
 let player_lose p = 
-  (p.stats.speed == 0 || p.stats.might == 0 || p.stats.sanity == 0 || p.stats.knowledge == 0)
+  (p.stats.strength <= 0 || p.stats.hunger <= 0 || p.stats.sanity <= 0 || p.stats.insight <= 0)
 
 let player_win p = 
-  (p.stats.speed >= 8 || p.stats.might >= 8 || p.stats.sanity >= 8 || p.stats.knowledge >= 8)
+  (p.stats.strength >= 8 || p.stats.hunger >= 8 || p.stats.sanity >= 8 || p.stats.insight >= 8)
 
 (** [print_stats sts] is unit;  *)
 let print_stats sts = 
-  print_endline "Player Stats:";
-  print_endline "Speed: "; print_int sts.speed;
-  print_endline "Might: "; print_int sts.might;
-  print_endline "Sanity: "; print_int sts.sanity;
-  print_endline "Knowledge: "; print_int sts.knowledge;
+  print_string "Sanity: "; print_int sts.sanity; print_newline ();
+  print_string "Insight: "; print_int sts.insight; print_newline ();
+  print_string "Strength: "; print_int sts.strength; print_newline ();
+  print_string "Hunger: "; print_int sts.hunger; print_newline ();
   ()
 
 let print_player p =
@@ -53,9 +61,10 @@ let print_player p =
       | None -> "Unknon"
       | Some r -> Rooms.room_id r
     end in
-  print_endline "Player"; print_string p.name;
-  print_endline "Location"; print_string locale;
+  print_string "Player: "; print_endline p.name;
+  print_string "Location: "; print_endline locale;
   print_stats p.stats;
+  print_string "Room: ";
   ()
 (*-------------------------------------------*)
 (*Code for testing here*)

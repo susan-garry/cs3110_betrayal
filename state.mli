@@ -9,7 +9,7 @@ open Tiles
 (**The abstract type for values representing a game state *)
 type t
 
-exception NonemptyTile
+exception EmptyTile
 exception NoDoor
 
 (**[from_json json] takes a json file and creates the initial game state*)
@@ -44,6 +44,11 @@ val get_locs : t -> (Tiles.coord * int list) list
    currently in play located in the tile in direction [d] relative to its 
    current location and the next player in the play order in play *)
 val move_player : Command.direction -> t -> t
+
+
+(** [print_current_player p] returns unit; printing out the name, location, and stats of the player [p] who is currently in play. *)
+val print_current_player : t -> unit
+
 
 (**[teleport tile] returns a player with the same attributes as [p] but located
    in [tile], regardless of whether or not [tile] is adjacent to the tile that
