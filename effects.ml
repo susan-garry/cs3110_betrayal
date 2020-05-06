@@ -1,9 +1,18 @@
 open Yojson.Basic.Util
+open Player
 
-(** [update_p changes player] is [player] with stats updated  *)
+(** [update_p changes player] is [player] with stats updated according to 
+    [changes] where its entries correspond to changes in strength, hunger, 
+    sanity and insight in that order.
+    Requires: [changes] is a list of length 4. *)
 let update_p changes player = 
-  failwith "update_p unimplemented (needs players to have stat setters)"
-
+  match changes with 
+  | str::hun::san::ins::[] ->
+    let update1 = (get_stat_strength player + str) |> set_stat_strength player 
+    in let update2 = (get_stat_hunger update1 + hun) |> set_stat_hunger update1 
+    in let update3 = (get_stat_sanity update2 + san) |> set_stat_sanity update2 
+    in (get_stat_insight update3 + ins) |> set_stat_insight update3
+  |_ -> failwith "Malformed stat change array"
 
 (** [eff_auto j_assoc player players] is [players] with the automatic stat 
     changes indicated by [j_assoc] when [player] enters its room.*)
@@ -12,13 +21,16 @@ let eff_auto j_assoc players p =
     try (j_assoc |> List.assoc "self_changes" |> to_list |> List.map to_int)
     with Not_found -> 
       failwith {|Automatic effects must have field "self_changes|} 
-  in Array.set players p (update_p self_ch (Array.get players p)); players
-(* CODE FOR WHEN MULTIPLAYER IS IMPLEMENTED *)
-(*let other_ch = 
-  j_assoc |> List.assoc "other_changes" |> to_list |> List.map to_int in
-  Random.self_init ();
-  let o = Random.int 8 |> (fun n -> (if (n = p) then (n+1) mod 9 else n)) in
-  Array.set players o (update_p other_ch players o); players*)
+  in Array.set players p (update_p self_ch (Array.get players p));
+  (* CODE FOR WHEN MULTIPLAYER IS IMPLEMENTED *)
+  (*let other_ch = 
+    try (j_assoc |> List.assoc "other_changes" |> to_list |> List.map to_int)
+    with Not_found -> 
+      failwith {|Automatic effects must have field "other_changes|} 
+    in Random.self_init ();
+    let o = Random.int 8 |> (fun n -> (if (n = p) then (n+1) mod 9 else n)) in
+    Array.set players o (update_p other_ch (Array.get players o));*)
+  players
 
 
 (** [exec_eff j_assoc player players] is [players] with stats updated according 
