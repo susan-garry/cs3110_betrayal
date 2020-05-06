@@ -31,13 +31,24 @@ let move t p = {p with location = t}
 
 let get_stats p = p.stats
 
-let set_stat_sanity p change = {p.stats with sanity = change}
+let set_stat_sanity p change = 
+  let changed_stats = {p.stats with sanity = change} 
+  in {p with stats = changed_stats}
 
-let set_stat_insight p change = {p.stats with insight = change}
+let set_stat_insight p change = 
+  let changed_stats = {p.stats with insight = change} 
+  in {p with stats = changed_stats}
 
-let set_stat_strength p change = {p.stats with strength = change}
 
-let set_stat_hunger p change = {p.stats with hunger = change}
+let set_stat_strength p change = 
+  let changed_stats = {p.stats with strength = change} 
+  in {p with stats = changed_stats}
+
+
+let set_stat_hunger p change = 
+  let changed_stats = {p.stats with hunger = change} 
+  in {p with stats = changed_stats}
+
 
 let player_lose p = 
   (p.stats.strength <= 0 || p.stats.hunger <= 0 || p.stats.sanity <= 0 || p.stats.insight <= 0)
