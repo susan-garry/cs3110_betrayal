@@ -31,13 +31,15 @@ let set_condition p con = {p with condition = con}
 
 let move t p = {p with location = t}
 
+let get_stats p = p.stats
+
 let set_stat sts s change = 
   let stat_changed = 
     match s with
-    | "speed" -> {sts with strength = change}
-    | "might" -> {sts with hunger = change}
-    | "sanity" -> {sts with sanity = change}
-    | "knowledge" -> {sts with insight = change}
+    | "sanity" -> {sts with strength = change}
+    | "insight" -> {sts with hunger = change}
+    | "strength" -> {sts with sanity = change}
+    | "hunger" -> {sts with insight = change}
     | _ -> raise UnknownStatus
   in stat_changed
 
