@@ -22,19 +22,16 @@ val get_loc : t -> Tiles.t
 val move : Tiles.t -> t -> t
 
 (** *)
-val get_stats : t -> player_stats
+val set_stat_sanity : t -> int -> t
 
 (** *)
-val set_stat_sanity : t -> int -> player_stats
+val set_stat_insight : t -> int -> t
 
 (** *)
-val set_stat_insight : t -> int -> player_stats
+val set_stat_strength : t -> int -> t
 
 (** *)
-val set_stat_strength : t -> int -> player_stats
-
-(** *)
-val set_stat_hunger : t -> int -> player_stats
+val set_stat_hunger : t -> int -> t
 
 (** [player_lose p count] is true if one of the player's stats is less than or equal to [count]. 
     Otherwise, false *)
