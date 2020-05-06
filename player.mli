@@ -22,6 +22,18 @@ val get_loc : t -> Tiles.t
 val move : Tiles.t -> t -> t
 
 (** *)
+val get_stat_sanity : t -> int
+
+(** *)
+val get_stat_insight : t -> int
+
+(** *)
+val get_stat_strength : t -> int
+
+(** *)
+val get_stat_hunger : t -> int
+
+(** *)
 val set_stat_sanity : t -> int -> t
 
 (** *)
