@@ -1,22 +1,19 @@
-open Command
-open Rooms
-open Tiles
-open Player
-
 open OUnit2
 open Yojson.Basic.Util
 
-(**The abstract type for values representing a game state *)
+type outcome = Win of string | Lose of string
+
 type t = {first_tile: Tiles.t;
           x_dim : int;
           y_dim : int;
           deck  : Rooms.t list;
           players : Player.t option array;
           in_play : int;
+          players_status : outcome list
          }
 
 exception EmptyTile
-exception NonemptyTile
+exception FullGame
 exception NoDoor
 
 type dir = North | South | East | West
@@ -46,17 +43,80 @@ let shuffle deck =
 
   in shuffle_helper [] deck (List.length deck)
 
-(**[count_exits st] returns an integer between 1 and 4 to determine the number
-   of exits that a new room being added to the board will contain*)
-let count_exits st =
-  Random.self_init ();
-  let rand = Random.int 100 in 
-  if rand < 15 then 1 else
-  if rand < 40 then 2 else
-  if rand < 75 then 3 else 4
-
 (**[start_coord s] returns the coordinates of the first room in [s]*)
-let first_coord s = s.first_tile |> get_coords
+let first_coord s = s.first_tile |> Tiles.get_coords
+
+let first_tile s = s.first_tile
+
+(**[get_player s] returns the player who is currently in play*)
+let get_player s = 
+  match s.players.(s.in_play) with 
+  |Some p -> p
+  |None -> failwith "This is an invalid state"
+
+(**[get_player_option s] returns the player option that is currently in play*)
+let get_player_option s = s.players.(s.in_play)
+
+(**[set_current_player p_opt s] returns a state identical to [s] but with the 
+   player at the current spot in the play order replaced with [p_opt] *)
+let set_current_player p_opt s =
+  Array.set s.players s.in_play p_opt; s
+
+let room_id s =
+  match Tiles.get_room s.first_tile with 
+  |Some r -> Rooms.room_id r
+  |None -> raise EmptyTile
+
+let room_desc s = 
+  match s |> get_player |> Player.get_loc |> Tiles.get_room with 
+  |Some r -> Rooms.room_desc r
+  |None -> raise EmptyTile
+
+let player_name s = Player.get_name (get_player s)
+
+let player_desc s = 
+  let player_id = string_of_int (s.in_play)
+  in (player_name s) ^ " (" ^ (player_id) ^ ")"
+
+let get_locs s = 
+  let rec add_loc lst id arr = 
+    if id = 9 then lst else
+      match arr.(id) with 
+      |None -> add_loc lst (id+1) arr
+      |Some p ->
+        let coord = p |> Player.get_loc |> Tiles.get_coords
+        in match List.assoc_opt coord lst with 
+        |None -> add_loc ((coord,[id])::lst) (id+1) arr
+        |Some l2 -> add_loc ((coord,id::l2)::lst) (id+1) arr
+  in add_loc [] 0 s.players
+
+let get_status st = st.players_status
+
+(**[set_players_status st] adds any instance of a player who has won/lost to 
+   the state's players_status list*)
+let set_players_status st =
+  (*let f l p = 
+    match Player.player_condition p with
+    |Playing -> l
+    |Winner m ->
+    |Loser m ->
+    Array.fold_left *)
+  failwith "Player.player_condition not exposed"
+
+(**[add_player_helper o p st] returns a state identical to st but with [p] added
+   to at the end of the play order in spot [o] *)
+let add_player_helper o p st = 
+  if o > 8 then failwith "There can only be 9 players in a game" else
+    st.players.(o) <- Some p; st
+
+(**[add_player name st] returns a state identical to st but with a player with
+   name [name] at the end of the play order if [get_player st] returns the last
+   player in the play order *)
+let add_player name st = 
+  if st.in_play = 8 then raise FullGame else
+    let loc = st |> get_player |> Player.get_loc in
+    let p = Player.(empty |> set_name name |> move loc) in
+    add_player_helper (st.in_play+1) p st
 
 (**[add_mult d t n] adds n tile off of tile [t] in direction [d] and returns
    the last tile that gets added, e.i. the one furthest in direction [d]*)
@@ -121,11 +181,6 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
   |East -> add_e_row t s
   |West -> add_w_row t s
 
-(**[add_player p st] returns a state identical to st but with p at the end of
-   the play order if  *)
-let add_player (p : Player.t) (st : t) : t = 
-  (st.players.(st.in_play) <- Some p); st
-
 (**[from_json json] takes a json file and creates the initial game state*)
 let from_json json = 
   let start_tile = json |> member "start room" |> Rooms.from_json 
@@ -138,71 +193,20 @@ let from_json json =
     y_dim = 1;
     deck = json |> member "deck" |> create_deck |> shuffle;
     players = Array.make 9 None;
-    in_play = 0
+    in_play = 0;
+    players_status = []
   }
   in s' |> add_row South s'.first_tile |> add_row East s'.first_tile 
      |> add_row West s'.first_tile |> add_row North s'.first_tile
-     |> add_player p
+     |> add_player_helper 0 p
 
-let first_tile s = s.first_tile
-
-(**[get_player s] returns the player who is currently in play*)
-let get_player s = 
-  match s.players.(s.in_play) with 
-  |Some p -> p
-  |None -> failwith "This is an invalid state"
-
-(**[get_player_option s] returns the player option that is currently in play*)
-let get_player_option s = s.players.(s.in_play)
-
-(**[set_current_player p_opt s] returns a state identical to [s] but with the 
-   player at the current spot in the play order replaced with [p_opt] *)
-let set_current_player p_opt s =
-  Array.set s.players s.in_play p_opt; s
-
-let room_id s =
-  match Tiles.get_room s.first_tile with 
-  |Some r -> Rooms.room_id r
-  |None -> raise EmptyTile
-
-let room_desc s = 
-  match s |> get_player |> get_loc |> Tiles.get_room with 
-  |Some r -> Rooms.room_desc r
-  |None -> raise EmptyTile
-
-let player_name s = Player.get_name (get_player s)
-
-let player_desc s = 
-  let player_id = string_of_int (s.in_play)
-  in (player_name s) ^ " (" ^ (player_id) ^ ")"
-
-let get_locs s = 
-  let rec add_loc lst id arr = 
-    if id = 9 then lst else
-      match arr.(id) with 
-      |None -> add_loc lst (id+1) arr
-      |Some p ->
-        let coord = p |> Player.get_loc |> Tiles.get_coords
-        in match List.assoc_opt coord lst with 
-        |None -> add_loc ((coord,[id])::lst) (id+1) arr
-        |Some l2 -> add_loc ((coord,id::l2)::lst) (id+1) arr
-  in add_loc [] 0 s.players
-
-
-(**[next_player state] returns a state where the player is 
-   the player who's turn begins after the current player's turn ends *)
-let rec next_player state =
-  let state' = {state with in_play = (state.in_play + 1) mod 9} in
-  match get_player_option state' with 
-  |None -> next_player state'
-  |Some p -> state'
 
 (** [cut_corner st] returns the tile that is diagonally adjacent to the 
     upper left tile*)
 let cut_corner st =
-  match get_s st.first_tile with 
+  match Tiles.get_s st.first_tile with 
   |(_,Some t2) -> 
-    begin match get_e t2 with 
+    begin match Tiles.get_e t2 with 
       |(_,Some t3) -> t3
       | _ -> failwith "Invalid state"
     end
@@ -214,24 +218,31 @@ let cut_corner st =
    can no longer traverse through them *)
 let fill_exits st = 
   let rec fill_row tile =
-    match get_e tile with 
-    |(_, Some t2) -> (*Tiles.close_off tile; fill_row t2*)
-      failwith "Tiles.close_off currently unimplemented"
+    match Tiles.get_e tile with 
+    |(_, Some t2) -> Tiles.close tile; fill_row t2
     |(_, None) -> ()
   in let rec fill_board tile =
-       match get_s tile with 
+       match Tiles.get_s tile with 
        |(_, Some t2) -> fill_row tile; fill_board t2
        |_ -> fill_row tile
   in fill_board st.first_tile; st
+
+(**[next_player state] returns a state where the player is 
+   the player who's turn begins after the current player's turn ends *)
+let rec next_player state =
+  let state' = {state with in_play = (state.in_play + 1) mod 9} in
+  match get_player_option state' with 
+  |None -> next_player state'
+  |Some p -> state'
 
 let rec move_player (dir : Command.direction) state =
   let loc = Player.get_loc (get_player state) in
   let e =
     match dir with 
-    |Up -> get_n loc
-    |Down -> get_s loc
-    |Left -> get_w loc
-    |Right -> get_e loc
+    |Up -> Tiles.get_n loc
+    |Down -> Tiles.get_s loc
+    |Left -> Tiles.get_w loc
+    |Right -> Tiles.get_e loc
   in match e with
   | (Discovered, Some(tile)) ->
     let p' = Player.move tile (get_player state) in
@@ -319,7 +330,8 @@ let empty_state = { first_tile = Tiles.empty;
                     y_dim = 1;
                     deck = [];
                     players = Array.make 1 (Some player1);
-                    in_play = 0
+                    in_play = 0;
+                    players_status = []
                   }
 
 let tests = [ 

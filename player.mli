@@ -1,5 +1,4 @@
-(** *)
-
+open Tiles
 
 type player_stats
 type player_condition = Winner | Loser |Playing
@@ -8,13 +7,14 @@ type t
 
 exception UnknownStatus
 
+
 (**[empty] returns a bare-bones player with minimum attributes*)
 val empty : t
 
 (**[get_name p] returns the name of [p]*)
 val get_name : t -> string
 
-(**[set_id n p] returns a player identical to [p] but whose name is [n]*)
+(**[set_name n p] returns a player identical to [p] but whose name is [n]*)
 val set_name : string -> t -> t
 
 (**[player_location p] returns the tile where [player] is currently located*)

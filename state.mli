@@ -1,3 +1,7 @@
+(** @author: Primary author, Susan Garry shg64
+             Additional contributor: Isabel Selin, is389 
+*)
+
 open Command
 open Player
 open Tiles
@@ -5,10 +9,15 @@ open Tiles
 (**The abstract type for values representing a game state *)
 type t
 
+(**The abstract type representing winning and losing conditions *)
+type outcome = Win of string | Lose of string
+
 exception EmptyTile
+exception FullGame
 exception NoDoor
 
-(**[from_json json] takes a json file and creates the initial game state*)
+(**[from_json json] takes a json file and creates the initial game state. The
+   play order is initialized with an "empty" player.*)
 val from_json : Yojson.Basic.t -> t
 
 (**[get_first_tile t] returns the upper left corner tile in [t] *)
@@ -30,19 +39,31 @@ val player_name : t -> string
 (**[player_id st] returns the id of the player who is currently in play *)
 val player_desc : t -> string
 
+(**[add_player name st] adds a player with name [name] in the same room as the 
+   current player to the end of the play order of [st] and makes them the 
+   current player.
+   Requires that the current player in [st] is the last player in the play order
+   and there are not already 9 players in the play order.
+   Raises FullGame if there are already 9 player in the play order. *)
+val add_player : string -> t -> t
+
 (**[get_locs st] returns an association list of tile coordinates and 
    player lists, where a tile coordinate maps to a list of the players contained
    within it if there is at least one player inside of that room; otherwise it
    has no binding in the association list. *)
 val get_locs : t -> (Tiles.coord * int list) list
 
+(**[get_status st] returns a list of win/lose conditions that occurred during
+   the last turn, with lose conditions appearing before the win conditions.*)
+val get_status : t -> outcome list
+
 (**[move_player d st] returns a state identical to [st] but with the player
    currently in play located in the tile in direction [d] relative to its 
    current location and the next player in the play order in play *)
 val move_player : Command.direction -> t -> t
 
-
-(** [print_current_player p] returns unit; printing out the name, location, and stats of the player [p] who is currently in play. *)
+(** [print_current_player p] returns unit; printing out the name, location, and 
+    stats of the player [p] who is currently in play. *)
 val print_current_player : t -> unit
 
 
