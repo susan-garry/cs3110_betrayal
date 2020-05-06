@@ -88,7 +88,6 @@ let rec print_board t =
   | (_, None) -> ()
 
 
-
 (*
 let into_tile t = 
   failwith "Unimplemented"
@@ -97,10 +96,6 @@ let out_of_tile t =
   failwith "Unimplemented"
 *)
 
-
-
-(** For printing a good square in utop, use this:
-    print_endline "  _____ \n |     | \n |     |\n |_____|";;; *)
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)

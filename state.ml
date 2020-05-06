@@ -265,6 +265,11 @@ and move_player_undiscovered tile state =
     if new_tile |> Tiles.get_s |> snd = None then s' |> add_s_row new_tile
     else s'
 
+
+let print_current_player st =
+  Player.print_player (get_player st)
+
+
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
 
