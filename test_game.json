@@ -8,22 +8,38 @@
     {
       "id": "One",
       "description": "Room one.",
-      "effects": []
+      "effects": [
+        {
+          "id": "nothing"
+        }
+      ]
     },
     {
       "id": "Two",
       "description": "Room two.",
-      "effects": []
+      "effects": [
+        {
+          "id": "nothing"
+        }
+      ]
     },
     {
       "id": "Three",
       "description": "Room three.",
-      "effects": []
+      "effects": [
+        {
+          "id": "nothing"
+        }
+      ]
     },
     {
       "id": "Four",
       "description": "Room Four.",
-      "effects": []
+      "effects": [
+        {
+          "id": "nothing"
+        }
+      ]
     },
     {
       "id": "Five",

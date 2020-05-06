@@ -27,8 +27,13 @@ val room_id : t -> room_id
 (** [room_desc r] is the description of room [r]. *)
 val room_desc : t -> string
 
-(** [room_effects r] is the effect list of room [r] *)
-val room_effects : t -> eff_lst
+(** [init_effects r] is the list of effects that occur when room [r] is first
+    entered. *)
+val init_effects : t -> eff_lst
+
+(** [rep_effects r] is the list of effects that occur each time room [r] is
+    entered. *)
+val rep_effects : t -> eff_lst
 
 (* ----------------------------------- *)
 
