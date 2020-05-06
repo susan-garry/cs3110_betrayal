@@ -1,17 +1,23 @@
 open OUnit2
 open Yojson.Basic.Util
+open Random
 
 type coord = int*int
 
 type exit_qual = Discovered | Undiscovered | Nonexistent
 
-exception EmptyTile
-
-exception InvalidDirection of char
-
 type t = {coord: coord; room: Rooms.t option; n_exit: exit ref; 
           e_exit: exit ref; s_exit: exit ref; w_exit: exit ref}
 and exit = exit_qual * (t option)
+
+exception InvalidDirection of char
+
+(** [secret_chance] is the inverse chance of a secret door being created each
+    time an exit of a new room is lined up with an existing room. *)
+let secret_chance: int = 3
+(** [new_chance] is the inverse chance that each unaligned door of a room being 
+    discovered is set to Nonexistent. *)
+let new_chance: int = 1
 
 let empty = {coord = 0,0; 
              room = None;
@@ -107,26 +113,44 @@ let new_tile (t:t) (dir:char): t =
 
 (** [link_exits_r t1 t_op g1 g2] links [t1] and [t2] through the exits 
     returned by [g1 t1] and [g2 t2] and updates t2's exit to Discovered 
-    if [t_op] = [Some t2]. If [t_op] = [None], nothing happens. *)
-let link_exits_r (t1: t) (t_op: t option) (g1:t->exit ref) (g2:t->exit ref) =
+    if [t_op] = [Some t2]. 
+    If [t_op] = [None], there is a chance of 1 in [nc] that [fst g1 t] 
+    is set to [Nonexistent]. *)
+let link_exits_r t1 t_op (g1:t->exit ref) (g2:t->exit ref) nc: unit =
+  let new_set = if Random.int nc = 1 then (g1 t1) := Nonexistent, t_op 
+    else () in
+  let update_other t2 = let ex2 = g2 t2 in if fst (!ex2) = Undiscovered 
+    then ex2 := Discovered, Some t1 else ex2 := fst !ex2, Some t1 in
+  let secret_set = if Random.int secret_chance = 1 
+    then (g1 t1) := Nonexistent, t_op else () in
   match t_op with
-  |None ->()
-  |Some t2 -> let ex = g2 t2 in if fst (!ex) = Undiscovered 
-    then ex := Discovered, Some t1 else ex := fst !ex, Some t1
+  |None -> new_set
+  |Some t2 -> (if t2.room = None then new_set
+               else let ex2 = g2 t2 in 
+                 if fst !(ex2) = Nonexistent then secret_set
+                 else g1 t1 := Discovered, Some t2);
+    update_other t2
 
-let fill_tile t r =
+(** [fill_helper t r chance] is tile [t] with its room set to [r] and a chance
+    of one in [chance] that its new exits are closed. Updates exits of tiles
+    surrounding [t]. *)
+let fill_helper t r chance=
+  Random.self_init ();
   if t.room != None then t else
-    let t_new = {coord=t.coord; room= Some r; n_exit = t.n_exit; 
-                 e_exit = t.e_exit; s_exit = t.s_exit; w_exit = t.w_exit} in
-    link_exits_r t_new (snd !(t_new.n_exit)) get_n_ref get_s_ref;
-    link_exits_r t_new (snd !(t_new.e_exit)) get_e_ref get_w_ref;
-    link_exits_r t_new (snd !(t_new.s_exit)) get_s_ref get_n_ref;
-    link_exits_r t_new (snd !(t_new.w_exit)) get_w_ref get_e_ref;
+    let t_new = {t with room= Some r} in
+    link_exits_r t_new (snd !(t_new.n_exit)) get_n_ref get_s_ref chance;
+    link_exits_r t_new (snd !(t_new.e_exit)) get_e_ref get_w_ref chance;
+    link_exits_r t_new (snd !(t_new.s_exit)) get_s_ref get_n_ref chance;
+    link_exits_r t_new (snd !(t_new.w_exit)) get_w_ref get_e_ref chance;
     t_new
 
-let set_exits t n = failwith "set_exits unimplemented"
+let fill_tile t r = fill_helper t r new_chance
 
-let close t = failwith "close unimplemented"
+let fill_start t r = fill_helper t r 0
+
+let close t =
+  let update e = if fst !e = Undiscovered then e:= Nonexistent, (snd !e) else ()
+  in update t.n_exit; update t.e_exit; update t.s_exit; update t.w_exit
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)

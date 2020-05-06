@@ -1,18 +1,22 @@
 open Tiles
 open OUnit2
 
-type player_stats = {speed:int; might:int; sanity:int; knowledge:int}
+type player_stats = {sanity:int; insight:int; strength:int; hunger:int}
+type player_condition = Winner | Loser |Playing
 
 type t = { name : string;
            location : Tiles.t;
-           stats: player_stats; }
+           stats: player_stats;
+           condition: player_condition
+         }
 
 exception UnknownStatus
 
 
 let empty = { name = "Player 1";
               location = Tiles.empty;
-              stats = {speed=4; might=4; sanity=4; knowledge=4};
+              stats = {sanity=4; insight=4; strength=4; hunger=4};
+              condition = Playing
             }
 
 let get_name p = p.name
@@ -21,30 +25,34 @@ let set_name name player = {player with name = name}
 
 let get_loc p = p.location
 
+let get_condition p = p.condition
+
+let set_condition p con = {p with condition = con}
+
 let move t p = {p with location = t}
 
 let set_stat sts s change = 
   let stat_changed = 
     match s with
-    | "speed" -> {sts with speed = change}
-    | "might" -> {sts with might = change}
+    | "speed" -> {sts with strength = change}
+    | "might" -> {sts with hunger = change}
     | "sanity" -> {sts with sanity = change}
-    | "knowledge" -> {sts with knowledge = change}
+    | "knowledge" -> {sts with insight = change}
     | _ -> raise UnknownStatus
   in stat_changed
 
-let player_lose p count = 
-  (p.stats.speed <= count || p.stats.might <= count || p.stats.sanity <= count || p.stats.knowledge <= count)
+let player_lose p = 
+  (p.stats.strength <= 0 || p.stats.hunger <= 0 || p.stats.sanity <= 0 || p.stats.insight <= 0)
 
-let player_win p count = 
-  (p.stats.speed >= count || p.stats.might >= count || p.stats.sanity >= count || p.stats.knowledge >= count)
+let player_win p = 
+  (p.stats.strength >= 8 || p.stats.hunger >= 8 || p.stats.sanity >= 8 || p.stats.insight >= 8)
 
 (** [print_stats sts] is unit;  *)
 let print_stats sts = 
-  print_string "Speed: "; print_int sts.speed; print_newline ();
-  print_string "Might: "; print_int sts.might; print_newline ();
   print_string "Sanity: "; print_int sts.sanity; print_newline ();
-  print_string "Knowledge: "; print_int sts.knowledge; print_newline ();
+  print_string "Insight: "; print_int sts.insight; print_newline ();
+  print_string "Strength: "; print_int sts.strength; print_newline ();
+  print_string "Hunger: "; print_int sts.hunger; print_newline ();
   ()
 
 let print_player p =
