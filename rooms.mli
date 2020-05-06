@@ -4,6 +4,8 @@
 
     This module defines the data structure for rooms. It handles loading that
     data from JSON files and querying that data.
+
+    @author: Primary author Isabel Sein, is389
 *)
 
 (** The abstract type of values representing rooms *)
@@ -13,7 +15,7 @@ type t
 type room_id = string
 
 (** The type of effect sets *)
-type eff_lst = int list
+type eff_lst = Yojson.Basic.t list
 
 (** [from_json j] is the room that [j] represents.
     Requires: [j] is a valid JSON room representation. *)

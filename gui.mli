@@ -7,3 +7,18 @@
    |__ __|_____|
 
 *)
+
+(** *)
+type player_icon
+
+(** *)
+val corner_tile: State.t -> Tiles.t
+
+(** *)
+val print_row : Tiles.t -> unit
+
+(** *)
+val print_board : Tiles.t -> unit
+
+(**[tests] returns a list of OUnit2 tests for the functions in state*)
+val tests : OUnit2.test list
