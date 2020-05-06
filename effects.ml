@@ -1,7 +1,7 @@
 open Yojson.Basic.Util
 
-(** [update_p changes players p_idx] *)
-let update_p changes players p_idx = 
+(** [update_p changes player] is [player] with stats updated  *)
+let update_p changes player = 
   failwith "update_p unimplemented (needs players to have stat setters)"
 
 
@@ -9,8 +9,10 @@ let update_p changes players p_idx =
     changes indicated by [j_assoc] when [player] enters its room.*)
 let eff_auto j_assoc players p =
   let self_ch = 
-    j_assoc |> List.assoc "self_changes" |> to_list |> List.map to_int in
-  Array.set players p (update_p self_ch players p); players
+    try (j_assoc |> List.assoc "self_changes" |> to_list |> List.map to_int)
+    with Not_found -> 
+      failwith {|Automatic effects must have field "self_changes|} 
+  in Array.set players p (update_p self_ch (Array.get players p)); players
 (* CODE FOR WHEN MULTIPLAYER IS IMPLEMENTED *)
 (*let other_ch = 
   j_assoc |> List.assoc "other_changes" |> to_list |> List.map to_int in
@@ -22,7 +24,9 @@ let eff_auto j_assoc players p =
 (** [exec_eff j_assoc player players] is [players] with stats updated according 
     to the effect [j_assoc] indicates when [player] enters its room.*)
 let exec_eff j_assoc players p = 
-  let j_name = j_assoc |> List.assoc "id" |> to_string in
+  let j_name = 
+    try (j_assoc |> List.assoc "id" |> to_string) 
+    with Not_found -> failwith {|Effects must have field "id." |} in
   match j_name with
   |"automatic" -> eff_auto j_assoc players p
   |"nothing" -> print_endline "For now, you are safe."; players
