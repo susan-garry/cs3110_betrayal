@@ -29,8 +29,6 @@ let set_condition p con = {p with condition = con}
 
 let move t p = {p with location = t}
 
-let get_stats p = p.stats
-
 let set_stat_sanity p change = 
   let changed_stats = {p.stats with sanity = change} 
   in {p with stats = changed_stats}
