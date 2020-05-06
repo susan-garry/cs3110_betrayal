@@ -45,11 +45,9 @@ let set_stat_insight p change =
   let changed_stats = {p.stats with insight = change} 
   in {p with stats = changed_stats}
 
-
 let set_stat_strength p change = 
   let changed_stats = {p.stats with strength = change} 
   in {p with stats = changed_stats}
-
 
 let set_stat_hunger p change = 
   let changed_stats = {p.stats with hunger = change} 
