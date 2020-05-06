@@ -5,8 +5,6 @@ type player_condition = Winner | Loser |Playing
 
 type t
 
-exception UnknownStatus
-
 
 (**[empty] returns a bare-bones player with minimum attributes*)
 val empty : t
@@ -23,9 +21,20 @@ val get_loc : t -> Tiles.t
 (**[move p t] returns a player identical to [p] but located in [t]*)
 val move : Tiles.t -> t -> t
 
-(** [set_stat sts s change] is a player_stats with field [s] changed to int [change]. 
-    Raises: [Unknown Status] if [s] is not a field (in string form) of player_stats  *)
-val set_stat : player_stats -> string -> int -> player_stats
+(** *)
+val get_stats : t -> player_stats
+
+(** *)
+val set_stat_sanity : t -> int -> player_stats
+
+(** *)
+val set_stat_insight : t -> int -> player_stats
+
+(** *)
+val set_stat_strength : t -> int -> player_stats
+
+(** *)
+val set_stat_hunger : t -> int -> player_stats
 
 (** [player_lose p count] is true if one of the player's stats is less than or equal to [count]. 
     Otherwise, false *)

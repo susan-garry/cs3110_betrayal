@@ -10,8 +10,6 @@ type t = { name : string;
            condition: player_condition
          }
 
-exception UnknownStatus
-
 
 let empty = { name = "Player 1";
               location = Tiles.empty;
@@ -31,15 +29,15 @@ let set_condition p con = {p with condition = con}
 
 let move t p = {p with location = t}
 
-let set_stat sts s change = 
-  let stat_changed = 
-    match s with
-    | "speed" -> {sts with strength = change}
-    | "might" -> {sts with hunger = change}
-    | "sanity" -> {sts with sanity = change}
-    | "knowledge" -> {sts with insight = change}
-    | _ -> raise UnknownStatus
-  in stat_changed
+let get_stats p = p.stats
+
+let set_stat_sanity p change = {p.stats with sanity = change}
+
+let set_stat_insight p change = {p.stats with insight = change}
+
+let set_stat_strength p change = {p.stats with strength = change}
+
+let set_stat_hunger p change = {p.stats with hunger = change}
 
 let player_lose p = 
   (p.stats.strength <= 0 || p.stats.hunger <= 0 || p.stats.sanity <= 0 || p.stats.insight <= 0)
@@ -58,7 +56,7 @@ let print_stats sts =
 let print_player p =
   let locale = 
     begin match (p.location |> Tiles.get_room) with 
-      | None -> "Unknon"
+      | None -> "Unknown"
       | Some r -> Rooms.room_id r
     end in
   print_string "Player: "; print_endline p.name;
