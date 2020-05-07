@@ -88,12 +88,12 @@ let rec print_board t =
   | (_, None) -> ()
 
 
-(*
-let into_tile t = 
-  failwith "Unimplemented"
 
-let out_of_tile t = 
-  failwith "Unimplemented"
+(* let into_tile t = 
+   failwith "Unimplemented"
+
+   let out_of_tile t = 
+   failwith "Unimplemented"
 *)
 
 

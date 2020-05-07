@@ -19,6 +19,9 @@ exception Empty
 exception Malformed
 
 
+(** [remove_blanks lst] removes any empty strings in string list [lst]. *)
+val remove_blanks : string list -> string list
+
 (** [parse str] parses a player's input into a [command], as follows. 
     The first word (i.e., consecutive sequence of non-space characters) of [str] will indicate the verb & direction the player will move/perform.
 

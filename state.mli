@@ -44,9 +44,9 @@ val player_desc : t -> string
 val add_player : string -> t -> t
 
 (**[get_locs st] returns an association list of tile coordinates and 
-   player lists, where a tile coordinate maps to a list of the players contained
-   within it if there is at least one player inside of that room; otherwise it
-   has no binding in the association list. *)
+   player lists, 
+   where a tile coordinate maps to a list of the players contained within it if there is at least one player inside of that room; 
+   Otherwise it has no binding in the association list. *)
 val get_locs : t -> (Tiles.coord * int list) list
 
 (**[get_status st] returns a list of win/lose conditions that occurred during
@@ -58,9 +58,10 @@ val get_status : t -> outcome list
    current location and the next player in the play order in play *)
 val move_player : Command.direction -> t -> t
 
-(** [print_current_player p] returns unit; printing out the name, location, and 
-    stats of the player [p] who is currently in play. *)
+(** [print_current_player p] returns unit; printing out the name, location, and stats of the player [p] who is currently in play. *)
 val print_current_player : t -> unit
+
+val get_player : t -> Player.t 
 
 
 (**[teleport tile] returns a player with the same attributes as [p] but located

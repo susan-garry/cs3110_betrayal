@@ -14,7 +14,6 @@ exception Empty
 exception Malformed
 
 
-(** [remove_blanks lst] removes any empty strings in string list [lst]. *)
 let rec remove_blanks lst = 
   match lst with 
   | [] -> []
