@@ -10,7 +10,6 @@ type t = { name : string;
            condition: player_condition
          }
 
-
 let empty = { name = "Player 1";
               location = Tiles.empty;
               stats = {sanity=4; insight=4; strength=4; hunger=4};
@@ -37,19 +36,19 @@ let get_stat_strength p = p.stats.strength
 
 let get_stat_hunger p = p.stats.hunger
 
-let set_stat_sanity p change = 
+let set_stat_sanity change p = 
   let changed_stats = {p.stats with sanity = change} 
   in {p with stats = changed_stats}
 
-let set_stat_insight p change = 
+let set_stat_insight change p = 
   let changed_stats = {p.stats with insight = change} 
   in {p with stats = changed_stats}
 
-let set_stat_strength p change = 
+let set_stat_strength change p = 
   let changed_stats = {p.stats with strength = change} 
   in {p with stats = changed_stats}
 
-let set_stat_hunger p change = 
+let set_stat_hunger change p = 
   let changed_stats = {p.stats with hunger = change} 
   in {p with stats = changed_stats}
 
@@ -94,12 +93,45 @@ let make_get_loc_test
     (ex: Tiles.t) =
   name >:: (fun _ -> assert_equal ex (get_loc player))
 
-let player1 = empty |> set_name "Player 1"
+let make_get_stat_sanity_test
+    (name : string)
+    (player: t)
+    (ex: int) =
+  name >:: (fun _ -> assert_equal ex (get_stat_sanity player))
 
-let player2 = player1 |> set_name "Davis"
+let make_get_stat_insight_test
+    (name : string)
+    (player: t)
+    (ex: int) =
+  name >:: (fun _ -> assert_equal ex (get_stat_insight player))
+
+let make_get_stat_strength_test
+    (name : string)
+    (player: t)
+    (ex: int) =
+  name >:: (fun _ -> assert_equal ex (get_stat_strength player))
+
+let make_get_stat_hunger_test
+    (name : string)
+    (player: t)
+    (ex: int) =
+  name >:: (fun _ -> assert_equal ex (get_stat_hunger player))
+
+let player1 = empty |> set_name "Player 1"
+let player2 = player1 |> set_name "Davis" |> set_stat_sanity 3 |> set_stat_insight 9 |> set_stat_strength 2 |> set_stat_hunger 10
+let player3 = player2 |> set_name "Marshell" |> set_stat_sanity 0 |> set_stat_insight 1 |> set_stat_strength 7 |> set_stat_hunger 5
 
 let tests = [
-  make_get_loc_test "Empty tile" player1 Tiles.empty;
   make_get_name_test "1st Player name" player1 "Player 1";
-  make_get_name_test "Different name" player2 "Davis"
+  make_get_name_test "Different name" player2 "Davis";
+
+  make_get_loc_test "Empty tile" player1 Tiles.empty;
+
+  make_get_stat_sanity_test "Sanity Stat" player1 4;
+  make_get_stat_sanity_test "Sanity Maxed" player2 3;
+  make_get_stat_sanity_test "Sanity Zero" player3 0;
+
+  make_get_stat_insight_test "Insight Stat" player1 4;
+  make_get_stat_insight_test "Insight Maxed" player2 9;
+  make_get_stat_insight_test "Insight Low" player3 1
 ]
