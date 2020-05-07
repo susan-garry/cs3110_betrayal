@@ -34,16 +34,16 @@ val get_stat_strength : t -> int
 val get_stat_hunger : t -> int
 
 (** *)
-val set_stat_sanity : t -> int -> t
+val set_stat_sanity : int -> t -> t
 
 (** *)
-val set_stat_insight : t -> int -> t
+val set_stat_insight : int -> t -> t
 
 (** *)
-val set_stat_strength : t -> int -> t
+val set_stat_strength : int -> t -> t
 
 (** *)
-val set_stat_hunger : t -> int -> t
+val set_stat_hunger : int -> t -> t
 
 (** [player_lose p count] is true if one of the player's stats is less than or equal to [count]. 
     Otherwise, false *)
