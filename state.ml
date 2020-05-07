@@ -15,6 +15,7 @@ type t = {first_tile: Tiles.t;
 exception EmptyTile
 exception FullGame
 exception NoDoor
+exception OutOfBounds
 
 type dir = North | South | East | West
 
@@ -61,6 +62,16 @@ let get_player_option s = s.players.(s.in_play)
    player at the current spot in the play order replaced with [p_opt] *)
 let set_current_player p_opt s =
   Array.set s.players s.in_play p_opt; s
+
+let set_player p i st = failwith "Unimplemented"
+
+let get_players st = st.players
+
+let set_players ps st = {st with players = ps}
+
+let get_current_index st = st.in_play
+
+let set_current_index i st = {st with in_play = i}
 
 let room_id s =
   match Tiles.get_room s.first_tile with 
