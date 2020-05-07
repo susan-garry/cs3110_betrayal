@@ -117,17 +117,34 @@ let make_get_stat_hunger_test
     (ex: int) =
   name >:: (fun _ -> assert_equal ex (get_stat_hunger player))
 
+let make_player_lose_test
+    (name : string)
+    (player: t)
+    (ex: bool) =
+  name >:: (fun _ -> assert_equal ex (player_lose player))
+
+let make_player_win_test
+    (name : string)
+    (player: t)
+    (ex: bool) =
+  name >:: (fun _ -> assert_equal ex (player_win player))
+
+
 let player1 = empty |> set_name "Player 1"
 let player2 = player1 |> set_name "Davis" |> set_stat_sanity 3 |> set_stat_insight 9 |> set_stat_strength 2 |> set_stat_hunger 10
 let player3 = player2 |> set_name "Marshell" |> set_stat_sanity 0 |> set_stat_insight 1 |> set_stat_strength 7 |> set_stat_hunger 5
 let player4 = player1 |> set_stat_strength (get_stat_strength player1 + 4) |> set_stat_hunger (get_stat_hunger player1 + 4) |> set_stat_sanity (get_stat_sanity player1 + 4) |> set_stat_insight (get_stat_insight player1 + 4)
 
-let tests = [
+let name_tests = [
   make_get_name_test "1st Player name" player1 "Player 1";
   make_get_name_test "Different name" player2 "Davis";
+]
 
+let loc_tests = [
   make_get_loc_test "Empty tile" player1 Tiles.empty;
+]
 
+let stat_tests = [
   make_get_stat_sanity_test "Sanity Stat" player1 4;
   make_get_stat_sanity_test "Sanity Maxed" player2 3;
   make_get_stat_sanity_test "Sanity Zero" player3 0;
@@ -136,5 +153,17 @@ let tests = [
   make_get_stat_insight_test "Insight Stat" player1 4;
   make_get_stat_insight_test "Insight Maxed" player2 9;
   make_get_stat_insight_test "Insight Low" player3 1;
-  make_get_stat_insight_test "Advanced Insight" player4 8
+  make_get_stat_insight_test "Advanced Insight" player4 8;
 ]
+
+let condition_tests = [
+  make_player_lose_test "Player playing 1" player1 false;
+  make_player_win_test "Player playing 1" player1 false
+]
+
+let tests = List.flatten [
+    name_tests;
+    loc_tests;
+    stat_tests;
+    condition_tests
+  ]

@@ -274,7 +274,7 @@ let fill_tile_tests = List.flatten[
            assert_equal (get_room s3_t1) (Some room0))];
       make_exits_test "Filled tile has same exits" s3_t1 
         (Undiscovered, Some s3_t2) (Undiscovered, Some s3_t3) 
-        (Undiscovered, Some s3_t4) (Undiscovered, None);
+        (Undiscovered, Some s3_t4) (Undiscovered, None); 
       make_exits_test "Undiscovered Exit" s3_t4 
         (Discovered, Some s3_t1) (Undiscovered, None) 
         (Undiscovered, None) (Undiscovered, None);

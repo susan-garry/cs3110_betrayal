@@ -100,45 +100,4 @@ let out_of_tile t =
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
 
-(** [make_parse_test name input expected_output] constructs an 
-    OUnit test named [name] that asserts the quality of [expected_output] with [parse input]. *)
-(*   
-let make_parse_tile_test 
-    (name : string)
-    (expected_output : gui_tile) : test = 
-  name >:: (fun _ -> assert_equal expected_output (parse_tile))
-  *)
-
-(*
-let empty_state = "test_game.json" |> Yojson.Basic.from_file |> State.from_json *)
-
-(** [make_go_corner_test name input expected_output] constructs an 
-    OUnit test named [name] that asserts the quality of [expected_output] with [parse input].
-    let make_go_corner_tile_test 
-    (name : string)
-    (input: Tiles.t)
-    (expected_output : Tiles.exit_qual) : test = 
-    name >:: (fun _ -> assert_equal expected_output (go_corner input |> Tiles.get_n |> fst))
-*)
-
-let go_corner_test = [
-  (*  make_go_corner_tile_test "first test" (State.first_tile empty_state) Nonexistent*)
-]
-
-let parse_test = [
-
-]
-
-let into_tile_test = [
-
-]
-
-let out_of_tile_test = [
-
-]
-
-let tests = List.flatten [
-    parse_test;
-    into_tile_test;
-    out_of_tile_test
-  ]
+let tests = []
