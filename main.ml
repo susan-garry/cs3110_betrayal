@@ -18,7 +18,7 @@ let rec preface n state =
   begin match read_line () with 
     | "no" -> state
     | "yes" -> more_players (n) state |> preface (n+1)
-    | _ -> print_endline "What? I didn't understand that."; state
+    | _ -> print_endline "What? I didn't understand that."; preface n state
   end 
 (** [parse_input ()] is [i] only if i is a well-formed command. 
     Otherwise, it will prompt the user again for input. *)
@@ -75,7 +75,8 @@ let main () =
     print_string "> ";
     let first_player = read_line () |> String.trim |> String.escaped |> String.split_on_char ' ' |> Command.remove_blanks |> String.concat " " in 
     let start_state = Player.set_name first_player (get_player pre_state) in*)
-  play (pre_state)
+  let start_state = preface 1 pre_state in
+  play (start_state)
 
 (* Execute the game engine. *)
 let () = main ()

@@ -35,7 +35,7 @@ let parse str =
       | "down" | "south" -> Go Down
       | "map" | "board" | "where" -> Map
       | "stats" | "status" | "check" | "well-being" | "me" -> Stats
-      | "quit" -> if (t == []) then Quit else raise (Malformed)
+      | "quit" | "exit" | "end" -> if (t == []) then Quit else raise (Malformed)
       | _ -> raise (Malformed) end
 
 
