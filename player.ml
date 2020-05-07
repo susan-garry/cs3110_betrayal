@@ -82,6 +82,12 @@ let print_player p =
 (*-------------------------------------------*)
 (*Code for testing here*)
 
+let make_get_name_test 
+    (name : string)
+    (player: t)
+    (ex : string) =
+  name >:: (fun _ -> assert_equal ex (get_name player))
+
 let make_get_loc_test
     (name : string)
     (player: t)
@@ -90,6 +96,10 @@ let make_get_loc_test
 
 let player1 = empty |> set_name "Player 1"
 
+let player2 = player1 |> set_name "Davis"
+
 let tests = [
   make_get_loc_test "Empty tile" player1 Tiles.empty;
+  make_get_name_test "1st Player name" player1 "Player 1";
+  make_get_name_test "Different name" player2 "Davis"
 ]

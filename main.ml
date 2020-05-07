@@ -5,6 +5,10 @@ open Gui
 
 let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
 
+(** [setUp ()] will set up some of the parameters of the game by asking things like how many players are playing and their names. *)
+let setUp n () = 
+  print_string "What is Player"; print_int n; print_endline "'s name?";
+  ()
 
 (** [parse_input ()] is [i] only if i is a well-formed command. 
     Otherwise, it will prompt the user again for input. *)
