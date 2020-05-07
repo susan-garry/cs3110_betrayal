@@ -7,11 +7,8 @@ open Player
     Requires: [changes] is a list of length 4. *)
 let update_p changes player = 
   match changes with 
-  | str::hun::san::ins::[] ->
-    let update1 = player |> set_stat_strength (get_stat_strength player + str)
-    in let update2 = update1 |> set_stat_hunger (get_stat_hunger update1 + hun)
-    in let update3 = update2 |> set_stat_sanity (get_stat_sanity update2 + san)
-    in update3 |> set_stat_insight (get_stat_insight update3 + ins)
+  | str::hun::san::ins::[] -> 
+    player |> set_stat_strength (get_stat_strength player + str) |> set_stat_hunger (get_stat_hunger player + hun) |> set_stat_sanity (get_stat_sanity player + san) |> set_stat_insight (get_stat_insight player + ins)
   |_ -> failwith "Malformed stat change array"
 
 (** [eff_auto j_assoc player players] is [players] with the automatic stat 
