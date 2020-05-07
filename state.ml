@@ -15,6 +15,7 @@ type t = {first_tile: Tiles.t;
 exception EmptyTile
 exception FullGame
 exception NoDoor
+exception OutOfBounds
 
 type dir = North | South | East | West
 
