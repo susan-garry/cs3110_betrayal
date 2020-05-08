@@ -53,6 +53,12 @@ let set_stat_hunger change p =
   in {p with stats = changed_stats}
 
 
+let player_loss p =
+  if (p.stats.sanity <=0 ) then "You lose all your sanity" else
+  if (p.stats.insight <= 0) then "You lose all your insight" else 
+  if (p.stats.strength <= 0) then "" else 
+  if (p.stats.hunger <= 0) then "" else ""
+
 let player_lose p = 
   (p.stats.strength <= 0 || p.stats.hunger <= 0 || p.stats.sanity <= 0 || p.stats.insight <= 0)
 
