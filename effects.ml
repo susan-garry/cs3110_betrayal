@@ -50,17 +50,16 @@ let eff_auto j_assoc state =
    in match Array.get players idx with
    |Some p -> Array.set players idx (Some (update_p self_ch p))
    |None -> failwith "Current player does not exist, eff_auto");
-  if next_player state (idx+1) = idx then players else
+  if next_player state (idx+1) = idx then players else try(
     let other_ch =
-      try (j_assoc |> List.assoc "other changes" |> to_list |> List.map to_int)
-      with Not_found -> 
-        failwith {|Automatic effects must have field "other_changes|}
+      j_assoc |> List.assoc "other changes" |> to_list |> List.map to_int
     in Random.self_init ();
     let o = next_player state (Random.int 8) 
             |> (fun n -> (if (n = idx) then next_player state (n+1) else n)) 
     in match Array.get players o with
     |Some p -> Array.set players o (Some (update_p other_ch p)); players
-    |None -> failwith "Should not happen, eff_auto"
+    |None -> failwith "Should not happen, eff_auto")
+    with Not_found -> players
 (*let o = Random.int 8 |> (fun n -> (if (n = p) then (n+1) mod 9 else n)) in
   Array.set players o (update_p other_ch (Array.get players o)); players*)
 
@@ -75,6 +74,7 @@ let exec_eff j_assoc state: State.t =
   |"automatic" -> 
     state |> State.set_players (eff_auto j_assoc state)
   |"nothing" -> print_endline "For now, you are safe."; state
+  |"repeat" -> print_endline "Take another turn."; state
   |"next" -> state |> State.set_current_index (next_player state idx)
   |_ -> failwith ("effect " ^ j_name ^ " not yet implemented")
 
