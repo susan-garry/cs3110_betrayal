@@ -1,0 +1,101 @@
+{
+  "start room": {
+    "id": "Start Room",
+    "description": "You know you entered the mansion by this room, but you don't seem to see an exit to the outside.",
+    "initial effects": [],
+    "repeated effects": [
+      {
+        "id": "nothing"
+      },
+      {
+        "id": "next"
+      }
+    ]
+  },
+  "deck": [
+    {
+      "id": "Orchard",
+      "description": "You emerge into an orchard. Dark fruit drip invitingly from the trees.\nWill you grab one?",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "choice",
+          "result": "As you reach to grab a fruit, its dark flesh morphs into fingers and grabs you back.",
+          "self changes": [
+            0,
+            -1,
+            0,
+            -1
+          ],
+          "other changes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Mirror",
+      "description": "As you look into a mirror, another face emerges behind you.\nIt offers you a deal.",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Dolls",
+      "description": "You enter a room filled with shelves of dolls.\nOne looks like another player, accompanied by a set of pins. \nYou try a few.",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "other changes": [
+            -1,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Dining Hall",
+      "description": "As you enter the dining hall, an ghostly banquet appears before you. \nYour mouth waters, and you can't help but gorge yourself on the delicious meal.",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            1,
+            -2,
+            0
+          ],
+          "other changes": [
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ]
+    }
+  ]
+}

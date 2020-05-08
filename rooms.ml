@@ -10,8 +10,8 @@ let from_json json =
   let j_assoc = json |> to_assoc in
   {id = j_assoc |> List.assoc "id" |> to_string;
    desc = j_assoc |> List.assoc "description" |> to_string;
-   init_effs = j_assoc |> List.assoc "effects" |> to_list;
-   rep_effs = j_assoc |> List.assoc "effects" |> to_list;}
+   init_effs = j_assoc |> List.assoc "initial effects" |> to_list;
+   rep_effs = j_assoc |> List.assoc "repeated effects" |> to_list;}
 
 let room_id r = r.id
 

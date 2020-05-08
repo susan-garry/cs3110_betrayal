@@ -74,10 +74,8 @@ let exec_eff j_assoc state: State.t =
   match j_name with
   |"automatic" -> 
     state |> State.set_players (eff_auto j_assoc state)
-    |> State.set_current_index (next_player state idx)
-  |"nothing" -> 
-    print_endline "For now, you are safe."; 
-    state |> State.set_current_index (next_player state idx)
+  |"nothing" -> print_endline "For now, you are safe."; state
+  |"next" -> state |> State.set_current_index (next_player state idx)
   |_ -> failwith ("effect " ^ j_name ^ " not yet implemented")
 
 let rec exec_effects jlist state =
