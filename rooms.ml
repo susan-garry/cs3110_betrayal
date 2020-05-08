@@ -8,10 +8,17 @@ type t = {id: room_id; desc: string; init_effs: eff_lst; rep_effs: eff_lst}
 
 let from_json json =
   let j_assoc = json |> to_assoc in
-  {id = j_assoc |> List.assoc "id" |> to_string;
-   desc = j_assoc |> List.assoc "description" |> to_string;
-   init_effs = j_assoc |> List.assoc "initial effects" |> to_list;
-   rep_effs = j_assoc |> List.assoc "repeated effects" |> to_list;}
+  let id = try j_assoc |> List.assoc "id" |> to_string
+    with Not_found -> failwith "Rooms must have ids" in
+  {id = id;
+   desc = (try j_assoc |> List.assoc "description" |> to_string 
+           with Not_found -> failwith ("Room " ^ id ^ " must have a description"));
+   init_effs = (try j_assoc |> List.assoc "initial effects" |> to_list
+                with Not_found -> failwith ("Room " ^ id ^ 
+                                            " must have an initial effect"));
+   rep_effs = (try j_assoc |> List.assoc "repeated effects" |> to_list
+               with Not_found -> failwith ("Room " ^ id ^ 
+                                           " must have a repeated effect"));}
 
 let room_id r = r.id
 
