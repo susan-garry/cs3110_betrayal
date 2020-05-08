@@ -6,7 +6,7 @@ type player_condition = Winner | Loser |Playing
 type t
 
 
-(**[empty] returns a bare-bones player with minimum attributes*)
+(**[empty] returns a bare-bones player with all attributes set to 4*)
 val empty : t
 
 (**[get_name p] returns the name of [p]*)

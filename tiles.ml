@@ -229,9 +229,6 @@ let s3_t1 = {coord = 0,0;
              e_exit = ref (Undiscovered, None);
              s_exit = ref (Undiscovered, None);
              w_exit = ref (Undiscovered, None)}
-let s3_t2 = new_tile s3_t1 'N'
-let s3_t3 = new_tile s3_t1 'E'
-let s3_t4 = new_tile s3_t1 'S'
 
 let coords_tests = [
   make_coords_test "Solo tile" s1_t1 (0,0);
@@ -264,28 +261,11 @@ let test_rooms = "test_rooms.json" |> Yojson.Basic.from_file |> member "deck"
 
 let room0 = List.hd test_rooms |> Rooms.from_json
 
-let fill_tile_tests = List.flatten[
-    let s3_t1 = 
-      set_s s3_t2 Nonexistent; 
-      set_w s3_t3 Discovered; 
-      fill_tile s3_t1 room0 in
-    List.flatten[
-      ["Filled tile contains room" >:: (fun _ -> 
-           assert_equal (get_room s3_t1) (Some room0))];
-      make_exits_test "Filled tile has same exits" s3_t1 
-        (Undiscovered, Some s3_t2) (Undiscovered, Some s3_t3) 
-        (Undiscovered, Some s3_t4) (Undiscovered, None); 
-      make_exits_test "Undiscovered Exit" s3_t4 
-        (Discovered, Some s3_t1) (Undiscovered, None) 
-        (Undiscovered, None) (Undiscovered, None);
-      make_exits_test "Discovered Exit" s3_t3 
-        (Undiscovered, None) (Undiscovered, None) 
-        (Undiscovered, None) (Discovered, Some s3_t1);
-      make_exits_test "Nonexistant Exit" s3_t2 
-        (Undiscovered, None) (Undiscovered, None) 
-        (Nonexistent, Some s3_t1) (Undiscovered, None)
-    ]
-  ]
+let fill_tile_tests =
+  let s3_t1 = 
+    fill_tile s3_t1 room0 in
+  ["Filled tile contains room" >:: (fun _ -> 
+       assert_equal (get_room s3_t1) (Some room0))]
 
 let tests = List.flatten [
     coords_tests;

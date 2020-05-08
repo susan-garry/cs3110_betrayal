@@ -4,7 +4,7 @@
 
 (** [exec_effect jlist players p] is a copy of [players] updated according to 
     the effects [jlist] indicates when [p] enters its room. *)
-val exec_effects: Yojson.Basic.t list -> Player.t array -> int -> Player.t array
+val exec_effects: Yojson.Basic.t list -> State.t -> State.t
 
 (**
     EFFECT DEFINITIONS:
