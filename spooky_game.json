@@ -26,12 +26,6 @@
             -1,
             0,
             -1
-          ],
-          "other changes": [
-            0,
-            0,
-            0,
-            0
           ]
         }
       ]
@@ -59,7 +53,7 @@
             0
           ],
           "other changes": [
-            -1,
+            -2,
             0,
             0,
             0
@@ -84,9 +78,22 @@
             1,
             -2,
             0
-          ],
-          "other changes": [
-            0,
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Decaying floor boards",
+      "description": "The floor boards crumble benesth you, causing you to twist your ankle.",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            -2,
             0,
             0,
             0
@@ -94,6 +101,74 @@
         },
         {
           "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Bedroom",
+      "description": "You see a massive luxurious bed and decide to take a rest.\nWhen you wake up, you aren't quite sure who you are or where you're supposed to be.",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            1,
+            0,
+            0,
+            -2
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Pond",
+      "description": "In the corner of the room sits the ghost of a loved one. \nThey tell you not to give up hope.",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            0,
+            2,
+            0
+          ]
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Speed Runes",
+      "description": "You step on a rune and feel an otherworldly power course through you.",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            1,
+            1,
+            -2,
+            1
+          ]
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "repeat"
         }
       ]
     }
