@@ -37,8 +37,8 @@ let rec next_player state idx=
   |Some p -> idx
   |None -> next_player state (idx+1 mod 9)
 
-(** [eff_auto j_assoc player players] is [players] with the automatic stat 
-    changes indicated by [j_assoc] when [player] enters its room.*)
+(** [eff_auto j_assoc state] is the players of [state] with the automatic stat 
+    changes indicated by [j_assoc] when the current player enters its room.*)
 let eff_auto j_assoc state =
   let players = State.get_players state in
   let idx = State.get_current_index state in
@@ -46,7 +46,7 @@ let eff_auto j_assoc state =
   (let self_ch = 
      try (j_assoc |> List.assoc "self changes" |> to_list |> List.map to_int)
      with Not_found -> 
-       failwith {|Automatic effects must have field "self_changes"|} 
+       failwith {|Stat change effects must have field "self changes"|} 
    in match Array.get players idx with
    |Some p -> Array.set players idx (Some (update_p self_ch p))
    |None -> failwith "Current player does not exist, eff_auto");
@@ -63,6 +63,31 @@ let eff_auto j_assoc state =
 (*let o = Random.int 8 |> (fun n -> (if (n = p) then (n+1) mod 9 else n)) in
   Array.set players o (update_p other_ch (Array.get players o)); players*)
 
+(** [parse_eff_input ()] is [i] only if i is a well-formed choice. 
+    Otherwise, it will prompt the user again for input. *)
+let rec parse_eff_input () =
+  match Command.eff_parse (read_line ()) with
+  | exception _ -> 
+    print_endline "You must choose: Yes or No?."; 
+    print_string "> ";
+    parse_eff_input ()
+  | c -> c
+
+(** [eff_choice j_assoc state] is the players of [state] if input is "no" or
+    the players with the automatic stat changes indicated by [j_assoc] when the 
+    current player enters its room if input is "yes".*)
+let rec eff_choice j_assoc state =
+  let choice = (try (j_assoc |> List.assoc "choice" |> to_string)
+                with Not_found -> 
+                  failwith {|Choice effects must have field "choice"|}) in
+  print_endline choice;
+  let result = (try (j_assoc |> List.assoc "result" |> to_string)
+                with Not_found -> 
+                  failwith {|Choice effects must have field "result"|}) in
+  match parse_eff_input () with
+  | Yes -> print_endline result; eff_auto j_assoc state
+  | No -> State.get_players state
+
 (** [exec_eff j_assoc player players] is [players] with stats updated according 
     to the effect [j_assoc] indicates when [player] enters its room.*)
 let exec_eff j_assoc state: State.t = 
@@ -71,8 +96,8 @@ let exec_eff j_assoc state: State.t =
     try (j_assoc |> List.assoc "id" |> to_string) 
     with Not_found -> failwith {|Effects must have field "id." |} in
   match j_name with
-  |"automatic" -> 
-    state |> State.set_players (eff_auto j_assoc state)
+  |"automatic" -> state |> State.set_players (eff_auto j_assoc state)
+  |"choice" -> state |> State.set_players (eff_choice j_assoc state)
   |"nothing" -> print_endline "For now, you are safe."; state
   |"repeat" -> print_endline "Take another turn."; state
   |"next" -> state |> State.set_current_index (next_player state idx)
