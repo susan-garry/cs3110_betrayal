@@ -50,10 +50,10 @@ let insert_players s_lst lst =
     else s_lst
   in 
   let playerInRoom2 =
-    if (List.length lst >= 2) then e_ith_lst (List.hd lst) 3 playerInRoom 
+    if (List.length lst >= 2) then e_ith_lst (List.hd lst) 2 playerInRoom 
     else playerInRoom
   in 
-  if (List.length lst <= 3) then e_ith_lst (List.hd lst) 6 playerInRoom2 else playerInRoom2
+  if (List.length lst <= 3) then e_ith_lst (List.hd lst) 3 playerInRoom2 else playerInRoom2
 
 (** I got to account for when the tile is None *)
 let parse_top til =
