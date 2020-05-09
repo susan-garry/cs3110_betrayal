@@ -18,6 +18,12 @@ val set_name : string -> t -> t
 (**[player_location p] returns the tile where [player] is currently located*)
 val get_loc : t -> Tiles.t
 
+(** *)
+val get_condition : t -> player_condition
+
+(** *)
+val set_condition : t -> player_condition -> t
+
 (**[move p t] returns a player identical to [p] but located in [t]*)
 val move : Tiles.t -> t -> t
 
