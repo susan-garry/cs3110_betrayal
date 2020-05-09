@@ -86,7 +86,7 @@ let main () =
   print_string "> ";
   read_line () |> String.trim |> String.escaped 
   |> String.split_on_char ' ' |> Command.remove_blanks |> String.concat " " 
-  |> pre_state |> preface 1 |> play
+  |> pre_state |> preface 2 |> play
 
 (* Execute the game engine. *)
 let () = main ()
