@@ -23,10 +23,14 @@ let update_p changes player =
     print_change "hunger" hun player;
     print_change "sanity" san player;
     print_change "insight" ins player;
-    player |> set_stat_strength (get_stat_strength player + str) 
-    |> set_stat_hunger (get_stat_hunger player + hun) 
-    |> set_stat_sanity (get_stat_sanity player + san) 
-    |> set_stat_insight (get_stat_insight player + ins)
+    let changed =
+      player |> set_stat_strength (get_stat_strength player + str) 
+      |> set_stat_hunger (get_stat_hunger player + hun) 
+      |> set_stat_sanity (get_stat_sanity player + san) 
+      |> set_stat_insight (get_stat_insight player + ins) in 
+    if (player_win changed) then set_condition changed Winner 
+    else if (player_lose changed) then set_condition changed Loser 
+    else changed
   |_ -> failwith "Malformed stat change array"
 
 (** [next_player state idx] returns the occupied index closest to [idx] cycling 

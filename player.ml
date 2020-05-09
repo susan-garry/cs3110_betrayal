@@ -54,11 +54,14 @@ let set_stat_hunger change p =
 
 
 let player_win_loss p =
-  if (p.stats.sanity >=8 ) then "You feel very sane and suddenly realize how to escape this house." else
+  if (p.stats.sanity >=8 ) then "You feel very sane for once." else
+  if (p.stats.insight >=8 ) then "Your third eye opens." else
+  if (p.stats.strength >=8 ) then "You have regained your strength." else
+  if (p.stats.hunger >=8 ) then "You wander the halls of this house for a few more days. Although you haven't eaten in a while, hunger esacpes you." else
   if (p.stats.sanity <=0 ) then "You lose all your sanity" else
   if (p.stats.insight <= 0) then "You lose all your insight" else 
-  if (p.stats.strength <= 0) then "" else 
-  if (p.stats.hunger <= 0) then "" else ""
+  if (p.stats.strength <= 0) then "You collapse! You have lost all strength in your body and can no longer move." else 
+  if (p.stats.hunger <= 0) then "" else "There's an apple on a table next to you. \n > You snatch it off the table and hungrily devour it. \n > It turns to ashes on your tongue."
 
 let player_lose p = 
   (p.stats.strength <= 0 || p.stats.hunger <= 0 || p.stats.sanity <= 0 || p.stats.insight <= 0)
