@@ -1,3 +1,5 @@
+open Effects
+
 open OUnit2
 open Yojson.Basic.Util
 
@@ -63,7 +65,9 @@ let get_player_option s = s.players.(s.in_play)
 let set_current_player p_opt s =
   Array.set s.players s.in_play p_opt; s
 
-let set_player p i st = failwith "Unimplemented"
+let set_player p i st = 
+  if i < 0 || i > 8 then raise OutOfBounds else
+    Array.set st.players i (Some p); st
 
 let get_players st = st.players
 
@@ -71,7 +75,8 @@ let set_players ps st = {st with players = ps}
 
 let get_current_index st = st.in_play
 
-let set_current_index i st = {st with in_play = i}
+let set_current_index i st = 
+  if -1 < i && i < 9 then {st with in_play = i} else raise OutOfBounds
 
 let room_id s =
   match Tiles.get_room s.first_tile with 
@@ -97,8 +102,8 @@ let get_locs s =
       |Some p ->
         let coord = p |> Player.get_loc |> Tiles.get_coords
         in match List.assoc_opt coord lst with 
-        |None -> add_loc ((coord,[id])::lst) (id+1) arr
-        |Some l2 -> add_loc ((coord,id::l2)::lst) (id+1) arr
+        |None -> add_loc ((coord,[id+1])::lst) (id+1) arr
+        |Some l2 -> add_loc ((coord,(id+1)::l2)::lst) (id+1) arr
   in add_loc [] 0 s.players
 
 let get_status st = st.players_status
@@ -238,13 +243,23 @@ let fill_exits st =
        |_ -> fill_row tile
   in fill_board st.first_tile; st
 
-(**[next_player state] returns a state where the player is 
-   the player who's turn begins after the current player's turn ends *)
-let rec next_player state =
-  let state' = {state with in_play = (state.in_play + 1) mod 9} in
-  match get_player_option state' with 
-  |None -> next_player state'
-  |Some p -> state'
+(**[exec_effect tile st] returns a state identical to [st] but with the 
+   first-time effects associated with the room in [tile] having been applied. 
+   Raises if the tile is empty.*)
+let exec_init_effects (tile : Tiles.t) (st : t) : t =
+  (*match Tiles.get_room tile with 
+    |Some r -> (r |> Rooms.init_effects |> Effects.exec_effects) st
+    |None -> failwith "This tile is empty"*)
+  failwith "Unimplemented"
+
+(**[exec_effect tile st] returns a state identical to [st] but with the 
+   recurring effects associated with the room in [tile] having been applied. 
+   Raises if the tile is empty.*)
+let exec_rep_effects tile st =
+  (*match Tiles.get_room tile with 
+    |Some r -> (r |> Rooms.rep_effects |> Effects.exec_effects) st
+    |None -> failwith "This tile is empty"*)
+  failwith "Unimplemented"
 
 let rec move_player (dir : Command.direction) state =
   let loc = Player.get_loc (get_player state) in
@@ -257,7 +272,7 @@ let rec move_player (dir : Command.direction) state =
   in match e with
   | (Discovered, Some(tile)) ->
     let p' = Player.move tile (get_player state) in
-    set_current_player (Some p') state |> next_player
+    state |> set_current_player (Some p') |> exec_rep_effects tile
   | (Undiscovered, Some(tile)) -> move_player_undiscovered tile state
   | (Nonexistent,_) -> raise NoDoor
   | _ -> failwith "Impossible because discovered and undiscovered exits \
@@ -274,8 +289,9 @@ and move_player_undiscovered tile state =
     let new_tile = Tiles.fill_tile tile h in
     let p' = Player.move new_tile (get_player state) in
     let s' = 
-      let s'' = set_current_player (Some p') {state with deck = t} in
-      if t = [] then (fill_exits s'') else s'' |> next_player
+      let s'' = {state with deck = t} |> set_current_player (Some p') 
+                |> exec_init_effects new_tile in
+      if t = [] then (fill_exits s'') else s'' 
     in
     let t_coord = Tiles.get_coords new_tile in 
     let f_coord = first_coord s' in
@@ -288,10 +304,8 @@ and move_player_undiscovered tile state =
     if new_tile |> Tiles.get_s |> snd = None then s' |> add_s_row new_tile
     else s'
 
-
 let print_current_player st =
   Player.print_player (get_player st)
-
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
