@@ -9,6 +9,8 @@ type command =
   | Stats
   | Quit
 
+type choice = Yes | No
+
 exception Empty
 
 exception Malformed
@@ -38,6 +40,15 @@ let parse str =
       | "quit" | "exit" | "end" -> if (t == []) then Quit else raise (Malformed)
       | _ -> raise (Malformed) end
 
+let eff_parse str = 
+  let temp = str |> String.trim |> String.escaped |> String.split_on_char ' ' |> remove_blanks in 
+  match (temp) with 
+  | [] -> raise (Empty)
+  | h::t -> begin
+      match h with
+      | "yes" | "Yes" | "YES" -> Yes
+      | "no" | "No" | "NO" -> No
+      | _ -> raise (Malformed) end
 
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
