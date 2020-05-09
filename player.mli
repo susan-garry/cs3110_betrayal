@@ -1,7 +1,14 @@
+(** @author: Primary author: Daphne Rios, dr434
+             Secondary author: Susan Garry, shg64
+*)
+
 open Tiles
 
 type player_stats
-type player_condition = Winner | Loser |Playing
+type player_condition = 
+  | Winner of (string -> string)
+  | Loser of (string -> string)
+  | Playing
 
 type t
 
@@ -20,9 +27,6 @@ val get_loc : t -> Tiles.t
 
 (** *)
 val get_condition : t -> player_condition
-
-(** *)
-val set_condition : t -> player_condition -> t
 
 (**[move p t] returns a player identical to [p] but located in [t]*)
 val move : Tiles.t -> t -> t

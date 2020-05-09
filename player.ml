@@ -2,18 +2,20 @@ open Tiles
 open OUnit2
 
 type player_stats = {sanity:int; insight:int; strength:int; hunger:int}
-type player_condition = Winner | Loser |Playing
+
+type player_condition =  
+  | Winner of (string -> string)
+  | Loser of (string -> string)
+  | Playing
 
 type t = { name : string;
            location : Tiles.t;
            stats: player_stats;
-           condition: player_condition
          }
 
 let empty = { name = "Player 1";
               location = Tiles.empty;
               stats = {sanity=4; insight=4; strength=4; hunger=4};
-              condition = Playing
             }
 
 let get_name p = p.name
@@ -22,9 +24,58 @@ let set_name name player = {player with name = name}
 
 let get_loc p = p.location
 
-let get_condition p = p.condition
-
-let set_condition p con = {p with condition = con}
+let get_condition p = 
+  if (p.stats.sanity >=8 ) then 
+    Winner (
+      fun x -> "> You feel very sane for once. \n
+              Congratulations, " ^ x ^ " has won!")
+  else if (p.stats.insight >=8 ) then 
+    Winner (
+      fun x -> "> You have unlocked the secrets of this mansion. Having learned \n
+              > It's dark and terrible past, you are now able to bend it to \n
+              > you will. However, the knowledge of these secrets has changed \n
+              > you, and the thought of returning to the life you knew before \n
+              > seems absurd. You haunt the mansion for the rest of your days, \n
+              > unharmed, but too troubled to every truly escape it. \n
+              Congratulations, " ^ x ^ " has won!")
+  else if (p.stats.strength >=8 ) then 
+    Winner (
+      fun x -> "> You have regained your strength. \n
+              Congratulations, " ^ x ^ " has won!")
+  else if (p.stats.hunger >=8 ) then 
+    Winner (
+      fun x ->"> You wander the halls of this house for a few more days. \n
+              > Although you haven't eaten in a while, hunger esacpes you. \n
+              > It seems that you have entered an enlightened state and have \n
+              > complete control over your body and mind. Although you \n 
+              > encounter more attackers, they never seem to land a hit \n
+              > against you, and eventually you find your way out of the \n
+              > mansion. \n
+              Congratulations, " ^ x ^ " has won!") else
+  if (p.stats.sanity <=0 ) then 
+    Loser (
+      fun x -> "> You lose all your sanity. \n
+              " ^ x ^ " has lost.") else
+  if (p.stats.insight <= 0) then 
+    Loser (
+      fun x -> "> You lose all your insight. \n
+              " ^ x ^ " has lost.") else 
+  if (p.stats.strength <= 0) then 
+    Loser (
+      fun x -> "> You collapse! You have lost all strength in your body and can
+              no longer move. \n
+              > Shadows flicker in the corner of your eye. You try to look up \n
+              > to see who - or what - is there, but no matter how hard you try, \n
+              > your body is too exhausted and refuses to obey. \n
+              > The shadows grow larger and more numerous as the creatures \n
+              within this house draw closer, sensing your weakness. \n
+              > Now helpless prey, they finish you off with ease.
+              " ^ x ^ " has lost.")
+  else if (p.stats.hunger <= 0) then 
+    Loser (fun x -> "There's an apple on a table next to you. 
+      \n > You snatch it off the table and hungrily devour it. 
+      \n > It turns to ashes on your tongue.")
+  else Playing
 
 let move t p = {p with location = t}
 
@@ -54,20 +105,24 @@ let set_stat_hunger change p =
 
 
 let player_win_loss p =
-  if (p.stats.sanity >=8 ) then "You feel very sane for once." else
-  if (p.stats.insight >=8 ) then "Your third eye opens." else
-  if (p.stats.strength >=8 ) then "You have regained your strength." else
-  if (p.stats.hunger >=8 ) then "You wander the halls of this house for a few more days. Although you haven't eaten in a while, hunger esacpes you." else
-  if (p.stats.sanity <=0 ) then "You lose all your sanity" else
-  if (p.stats.insight <= 0) then "You lose all your insight" else 
-  if (p.stats.strength <= 0) then "You collapse! You have lost all strength in your body and can no longer move." else 
-  if (p.stats.hunger <= 0) then "" else "There's an apple on a table next to you. \n > You snatch it off the table and hungrily devour it. \n > It turns to ashes on your tongue."
+  if (p.stats.strength <= 0) then 
+    fun x -> "> You collapse! You have lost all strength in your body and can
+              no longer move. \n
+              " ^ x ^ " has lost." else
+  if (p.stats.hunger <= 0) then 
+    fun x -> "> There's an apple on a table next to you. \n
+      > You snatch it off the table and hungrily devour it. \n
+      > It turns to ashes on your tongue. \n
+      " ^ x ^ " has lost."
+  else fun x -> ""
 
 let player_lose p = 
-  (p.stats.strength <= 0 || p.stats.hunger <= 0 || p.stats.sanity <= 0 || p.stats.insight <= 0)
+  (p.stats.strength <= 0 || p.stats.hunger <= 0 
+   || p.stats.sanity <= 0 || p.stats.insight <= 0)
 
 let player_win p = 
-  (p.stats.strength >= 8 || p.stats.hunger >= 8 || p.stats.sanity >= 8 || p.stats.insight >= 8)
+  (p.stats.strength >= 8 || p.stats.hunger >= 8 
+   || p.stats.sanity >= 8 || p.stats.insight >= 8)
 
 (** [print_stats sts] is unit;  *)
 let print_stats sts = 
