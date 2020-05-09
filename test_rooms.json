@@ -2,28 +2,54 @@
   "start room": {
     "id": "Start Room",
     "description": "You start off here. Nothing's really happened yet.",
-    "effects": []
+    "initial effects": [],
+    "repeated effects": [
+      {
+        "id": "nothing"
+      },
+      {
+        "id": "next"
+      }
+    ]
   },
   "deck": [
     {
       "id": "None",
       "description": "You used none room. It wasn't very effective.",
-      "effects": []
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "nothing"
+        },
+        {
+          "id": "next"
+        }
+      ]
     },
     {
       "id": "One",
       "description": "You used one room.",
-      "effects": [
-        1
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "nothing"
+        },
+        {
+          "id": "next"
+        }
       ]
     },
     {
       "id": "Many",
       "description": "You used many room. It was super effective!",
-      "effects": [
-        0,
-        -1,
-        1
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "nothing"
+        },
+        {
+          "id": "next"
+        }
       ]
     }
   ]

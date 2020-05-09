@@ -1,0 +1,176 @@
+{
+  "start room": {
+    "id": "Start Room",
+    "description": "You know you entered the mansion by this room, but you don't seem to see an exit to the outside.",
+    "initial effects": [],
+    "repeated effects": [
+      {
+        "id": "nothing"
+      },
+      {
+        "id": "next"
+      }
+    ]
+  },
+  "deck": [
+    {
+      "id": "Orchard",
+      "description": "You emerge into an orchard. Dark fruit drip invitingly from the trees.\nWill you grab one?",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "choice",
+          "result": "As you reach to grab a fruit, its dark flesh morphs into fingers and grabs you back.",
+          "self changes": [
+            0,
+            -1,
+            0,
+            -1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "Mirror",
+      "description": "As you look into a mirror, another face emerges behind you.\nIt offers you a deal.",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Dolls",
+      "description": "You enter a room filled with shelves of dolls.\nOne looks like another player, accompanied by a set of pins. \nYou try a few.",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "other changes": [
+            -2,
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Dining Hall",
+      "description": "As you enter the dining hall, an ghostly banquet appears before you. \nYour mouth waters, and you can't help but gorge yourself on the delicious meal.",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            1,
+            -2,
+            0
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Decaying floor boards",
+      "description": "The floor boards crumble benesth you, causing you to twist your ankle.",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            -2,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Bedroom",
+      "description": "You see a massive luxurious bed and decide to take a rest.\nWhen you wake up, you aren't quite sure who you are or where you're supposed to be.",
+      "initial effects": [],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            1,
+            0,
+            0,
+            -2
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Pond",
+      "description": "In the corner of the room sits the ghost of a loved one. \nThey tell you not to give up hope.",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            0,
+            2,
+            0
+          ]
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Speed Runes",
+      "description": "You step on a rune and feel an otherworldly power course through you.",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            1,
+            1,
+            -2,
+            1
+          ]
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "repeat"
+        }
+      ]
+    }
+  ]
+}

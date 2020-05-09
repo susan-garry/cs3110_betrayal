@@ -9,7 +9,7 @@ open Tiles
 
 let suite = "test suite for Betrayal"  >::: 
             List.flatten [ Command.tests;
-                           (*Effects.tests; *)
+                           Effects.tests;
                            Gui.tests;
                            Player.tests;
                            Rooms.tests; 
