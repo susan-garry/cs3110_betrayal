@@ -17,7 +17,7 @@ let bottom_options = ["       "; "|_____|"; "|_   _|"]
 let corner_tile st =
   State.first_tile st
 and 
-  player_locations st = State.get_locs st
+  player_locs st = State.get_locs st
 
 (** [e_ith_lst e i lst] is a list with element [e] in the [i]th position of list [lst] *)
 let rec e_ith_lst e i lst = 
@@ -34,11 +34,12 @@ let players_in_room (til: Tiles.coord) (lst : (Tiles.coord * int list) list) =
 
 let first_half bol lst =
   begin match List.length lst with
-    | 0 -> lst
-    | 1 | 2 | 3 -> if (bol) then lst else raise PlayerNumbers
+    | 1 | 2 | 3 -> 
+      if (bol) then lst |> List.map string_of_int 
+      else raise PlayerNumbers
     | 4 | 5 | 6 -> 
-      if (bol) then [List.nth lst 0; List.nth lst 1; List.nth lst 2] 
-      else List.tl lst |> List.tl |> List.tl
+      if (bol) then [List.nth lst 0; List.nth lst 1; List.nth lst 2] |> List.map string_of_int
+      else List.tl lst |> List.tl |> List.tl |> List.map string_of_int
     | _ -> raise PlayerNumbers
   end
 
@@ -91,33 +92,44 @@ let rec go_corner t =
   in the_leftest
 
 (** *)
-let rec print_row_side func t =
+let rec print_row_side func t p_lst =
   let room_side =
-    match Tiles.get_room t with 
-    | Some r ->  func t;
-    | None -> List.nth middle_options 0;
+    begin match Tiles.get_room t with 
+      | Some r ->  func t;
+      | None -> List.nth middle_options 0;
+    end
+  in let player_room =
+       if (List.length p_lst > 0) then 
+         let string_list = String.split_on_char ' ' room_side in 
+         if (func == parse_top_II) then first_half true p_lst |> insert_players string_list |> String.concat ""
+         else if (func == parse_middle) then 
+           if (List.length p_lst > 3 && List.length p_lst <= 6) then first_half false p_lst |> insert_players string_list |> String.concat "" 
+           else room_side
+         else room_side
+       else room_side
   in
-  Stdlib.print_string room_side;
+  Stdlib.print_string player_room;
   match Tiles.get_e t with
-  | (_, Some til) -> print_row_side func til
+  | (_, Some til) -> print_row_side func til p_lst
   | (_, None) -> () 
 
 
-let print_row t =
-  print_row_side parse_top t;
+let print_row t lst =
+  print_row_side parse_top t lst;
   print_newline ();
-  print_row_side parse_top_II t; 
+  print_row_side parse_top_II t lst; 
   print_newline ();
-  print_row_side parse_middle t;
+  print_row_side parse_middle t lst;
   print_newline ();
-  print_row_side parse_bottom t;
+  print_row_side parse_bottom t lst;
   print_newline ();
   ()
 
-let rec print_board t =
-  print_row t;
+let rec print_board t p =
+  let lst = players_in_room (Tiles.get_coords t) p in
+  print_row t lst;
   match Tiles.get_s t with 
-  | (_, Some til) -> print_board til
+  | (_, Some til) -> print_board til p
   | (_, None) -> ()
 
 

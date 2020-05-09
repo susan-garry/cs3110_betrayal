@@ -50,10 +50,10 @@ let parse_move d state =
     state
   | st -> st
 
+let check_status = ()
+
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
-  (** TODO: -print the board 
-            -prompt the user, print a description of the room*)
   print_endline (room_desc state);
   print_newline ();
   print_string "It is "; print_string (player_desc state); 
@@ -61,7 +61,7 @@ let rec play state =
   print_string "> ";
   match parse_input () with
   | Quit -> exit 0
-  | Map -> print_board (corner_tile state); play state
+  | Map -> print_board (corner_tile state) (player_locs state); play state
   | Stats -> print_current_player state; play state;
     (** call [print_player p] for the current player in play *)
   | Go d -> play (parse_move d state)
@@ -69,7 +69,7 @@ let rec play state =
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
   start_screen;
-  let pre_state = "test_game.json" |> Yojson.Basic.from_file |> from_json
+  let pre_state = "spooky_game.json" |> Yojson.Basic.from_file |> from_json
   in
   (*print_string "What is Player 1"; print_endline "'s name?";
     print_string "> ";
