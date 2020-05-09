@@ -134,14 +134,6 @@ let rec print_board t st =
 
 
 
-(* let into_tile t = 
-   failwith "Unimplemented"
-
-   let out_of_tile t = 
-   failwith "Unimplemented"
-*)
-
-
 (* ------------------------------------------------- *)
 (* CODE FOR TESTING *)
 
