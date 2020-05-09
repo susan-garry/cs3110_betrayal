@@ -72,9 +72,11 @@ let get_condition p =
               > Now helpless prey, they finish you off with ease.
               " ^ x ^ " has lost.")
   else if (p.stats.hunger <= 0) then 
-    Loser (fun x -> "There's an apple on a table next to you. 
-      \n > You snatch it off the table and hungrily devour it. 
-      \n > It turns to ashes on your tongue.")
+    Loser (
+      fun x -> "> There's an apple on a table next to you. \n
+      > You snatch it off the table and hungrily devour it. \n
+      > It turns to ashes on your tongue. \n
+      " ^ x ^ " has lost.")
   else Playing
 
 let move t p = {p with location = t}
@@ -102,19 +104,6 @@ let set_stat_strength change p =
 let set_stat_hunger change p = 
   let changed_stats = {p.stats with hunger = change} 
   in {p with stats = changed_stats}
-
-
-let player_win_loss p =
-  if (p.stats.strength <= 0) then 
-    fun x -> "> You collapse! You have lost all strength in your body and can
-              no longer move. \n
-              " ^ x ^ " has lost." else
-  if (p.stats.hunger <= 0) then 
-    fun x -> "> There's an apple on a table next to you. \n
-      > You snatch it off the table and hungrily devour it. \n
-      > It turns to ashes on your tongue. \n
-      " ^ x ^ " has lost."
-  else fun x -> ""
 
 let player_lose p = 
   (p.stats.strength <= 0 || p.stats.hunger <= 0 

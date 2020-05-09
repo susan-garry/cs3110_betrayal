@@ -1,5 +1,3 @@
-open Effects
-
 open OUnit2
 open Yojson.Basic.Util
 
@@ -91,7 +89,7 @@ let room_desc s =
 let player_name s = Player.get_name (get_player s)
 
 let player_desc s = 
-  let player_id = string_of_int (s.in_play)
+  let player_id = string_of_int (s.in_play + 1)
   in (player_name s) ^ " (" ^ (player_id) ^ ")"
 
 let get_locs s = 
@@ -198,11 +196,11 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
   |West -> add_w_row t s
 
 (**[from_json json] takes a json file and creates the initial game state*)
-let from_json json = 
+let from_json json name = 
   let start_tile = json |> member "start room" |> Rooms.from_json 
                    |> Tiles.fill_tile Tiles.empty
   in
-  let p = Player.move start_tile Player.empty in
+  let p = Player.empty |> Player.move start_tile |> Player.set_name name in
   let s' = { 
     first_tile = start_tile;
     x_dim = 1;
@@ -244,22 +242,27 @@ let fill_exits st =
   in fill_board st.first_tile; st
 
 (**[exec_effect tile st] returns a state identical to [st] but with the 
-   first-time effects associated with the room in [tile] having been applied. 
-   Raises if the tile is empty.*)
-let exec_init_effects (tile : Tiles.t) (st : t) : t =
-  (*match Tiles.get_room tile with 
-    |Some r -> (r |> Rooms.init_effects |> Effects.exec_effects) st
-    |None -> failwith "This tile is empty"*)
-  failwith "Unimplemented"
-
-(**[exec_effect tile st] returns a state identical to [st] but with the 
    recurring effects associated with the room in [tile] having been applied. 
    Raises if the tile is empty.*)
 let exec_rep_effects tile st =
-  (*match Tiles.get_room tile with 
-    |Some r -> (r |> Rooms.rep_effects |> Effects.exec_effects) st
-    |None -> failwith "This tile is empty"*)
-  failwith "Unimplemented"
+  match Tiles.get_room tile with 
+  |Some r -> 
+    let update = (r |> Rooms.init_effects 
+                  |> Effects.exec_effects) (st.players, st.in_play)
+    in {st with players = (fst update); in_play = (snd update)}
+  |None -> failwith "This tile is empty"
+
+(**[exec_effect tile st] returns a state identical to [st] but with the 
+   first-time effects associated with the room in [tile] having been applied. 
+   Raises if the tile is empty.*)
+let exec_init_effects (tile : Tiles.t) (st : t) : t =
+  match Tiles.get_room tile with 
+  |Some r -> 
+    let update = (r |> Rooms.init_effects 
+                  |> Effects.exec_effects) (st.players, st.in_play)
+    in {st with players = (fst update); in_play = (snd update)}
+       |> exec_rep_effects tile
+  |None -> failwith "This tile is empty"
 
 let rec move_player (dir : Command.direction) state =
   let loc = Player.get_loc (get_player state) in

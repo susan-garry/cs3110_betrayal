@@ -5,21 +5,32 @@ open Gui
 
 let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
 
-(** [setUp ()] will set up some of the parameters of the game by asking things like how many players are playing and their names. *)
+(** [more_players n state] adds a player at index [n] in the play order of
+    [state].
+    Precondition: 0 <= n <= 8*)
 let more_players n state = 
   print_string "What is Player "; print_int n; print_endline "'s name?";
   print_string "> ";
-  let temp = read_line () |> String.trim |> String.escaped |> String.split_on_char ' ' |> Command.remove_blanks |> String.concat " " in 
+  let temp = read_line () |> String.trim |> String.escaped 
+             |> String.split_on_char ' ' |> Command.remove_blanks 
+             |> String.concat " "
+  in 
   State.add_player temp state
 
-let rec preface n state = 
-  print_endline "Are there any more players you would like to add?";
-  print_string "> ";
-  begin match read_line () with 
-    | "no" -> state
-    | "yes" -> more_players (n) state |> preface (n+1)
-    | _ -> print_endline "What? I didn't understand that."; preface n state
-  end 
+(**[preface n state] prompts the player if they want to add another player to
+   the game. If [n = 9] the game starts; otherwise it takes a string input
+   [input] and adds a player with the name [input] to the play order at index
+   [n]*)
+let rec preface (n : int) (state : State.t) : State.t = 
+  if (n = 9) then (print_endline "You cannot add more than 9 players"; state)
+  else
+    (print_endline "Are there any more players you would like to add?";
+     print_string "> ";
+     match read_line () with 
+     | "no" -> state
+     | "yes" -> more_players (n) state |> preface (n+1)
+     | _ -> print_endline "What? I didn't understand that."; preface n state)
+
 (** [parse_input ()] is [i] only if i is a well-formed command. 
     Otherwise, it will prompt the user again for input. *)
 let rec parse_input () =
@@ -71,12 +82,11 @@ let main () =
   start_screen;
   let pre_state = "spooky_game.json" |> Yojson.Basic.from_file |> from_json
   in
-  (*print_string "What is Player 1"; print_endline "'s name?";
-    print_string "> ";
-    let first_player = read_line () |> String.trim |> String.escaped |> String.split_on_char ' ' |> Command.remove_blanks |> String.concat " " in 
-    let start_state = Player.set_name first_player (get_player pre_state) in*)
-  let start_state = preface 1 pre_state in
-  play (start_state)
+  print_endline "What is Player 1's name?";
+  print_string "> ";
+  read_line () |> String.trim |> String.escaped 
+  |> String.split_on_char ' ' |> Command.remove_blanks |> String.concat " " 
+  |> pre_state |> preface 1 |> play
 
 (* Execute the game engine. *)
 let () = main ()

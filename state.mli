@@ -15,7 +15,7 @@ exception OutOfBounds
 
 (**[from_json json] takes a json file and creates the initial game state. The
    play order is initialized with an "empty" player.*)
-val from_json : Yojson.Basic.t -> t
+val from_json : Yojson.Basic.t -> string -> t
 
 (**[get_first_tile t] returns the upper left corner tile in [t] *)
 val first_tile : t -> Tiles.t
@@ -45,9 +45,12 @@ val player_desc : t -> string
 val add_player : string -> t -> t
 
 (**[set_player p i st] returns a state in which the player located at position
-   i in the play order (including nonexistent players) of [st] is [p] but is
-   otherwise identical to [st]. *)
+   [i] in the play order (including nonexistent players) of [st] is [p] but is
+   otherwise identical to [st].
+   Raises OutOfBounds if [i < 0] or [i > 8]*)
 val set_player : Player.t -> int -> t -> t
+
+(**[set_name n st] *)
 
 (**[get_players st] returns an array of all of the players in [st], in their
    player order *)
@@ -68,9 +71,9 @@ val get_current_index : t -> int
 val set_current_index : int -> t -> t
 
 (**[get_locs st] returns an association list of tile coordinates and 
-   player lists, 
-   where a tile coordinate maps to a list of the players contained within it if there is at least one player inside of that room; 
-   Otherwise it has no binding in the association list. *)
+   player lists, where a tile coordinate maps to a list of the players contained
+   within it if there is at least one player inside of that room; otherwise it
+   has no binding in the association list. *)
 val get_locs : t -> (Tiles.coord * int list) list
 
 (**[get_status st] returns a list of win/lose conditions that occurred during
@@ -82,7 +85,8 @@ val get_status : t -> outcome list
    current location and the next player in the play order in play *)
 val move_player : Command.direction -> t -> t
 
-(** [print_current_player p] returns unit; printing out the name, location, and stats of the player [p] who is currently in play. *)
+(** [print_current_player p] returns unit; printing out the name, location, and 
+    stats of the player [p] who is currently in play. *)
 val print_current_player : t -> unit
 
 
