@@ -92,7 +92,8 @@ let rec go_corner t =
   in the_leftest
 
 (** *)
-let rec print_row_side func t p_lst =
+let rec print_row_side func t p =
+  let  p_lst = players_in_room (Tiles.get_coords t) (player_locs p) in
   let room_side =
     begin match Tiles.get_room t with 
       | Some r ->  func t;
@@ -101,7 +102,7 @@ let rec print_row_side func t p_lst =
   in let player_room =
        if (List.length p_lst > 0) then 
          let string_list = String.split_on_char ' ' room_side in 
-         if (func == parse_top_II) then first_half true p_lst |> insert_players string_list |> String.concat ""
+         if (func == parse_top_II) then first_half true p_lst |> insert_players string_list |> String.concat " "
          else if (func == parse_middle) then 
            if (List.length p_lst > 3 && List.length p_lst <= 6) then first_half false p_lst |> insert_players string_list |> String.concat "" 
            else room_side
@@ -110,26 +111,25 @@ let rec print_row_side func t p_lst =
   in
   Stdlib.print_string player_room;
   match Tiles.get_e t with
-  | (_, Some til) -> print_row_side func til p_lst
+  | (_, Some til) -> print_row_side func til p
   | (_, None) -> () 
 
 
-let print_row t lst =
-  print_row_side parse_top t lst;
+let print_row t st =
+  print_row_side parse_top t st;
   print_newline ();
-  print_row_side parse_top_II t lst; 
+  print_row_side parse_top_II t st; 
   print_newline ();
-  print_row_side parse_middle t lst;
+  print_row_side parse_middle t st;
   print_newline ();
-  print_row_side parse_bottom t lst;
+  print_row_side parse_bottom t st;
   print_newline ();
   ()
 
-let rec print_board t p =
-  let lst = players_in_room (Tiles.get_coords t) p in
-  print_row t lst;
+let rec print_board t st =
+  print_row t st;
   match Tiles.get_s t with 
-  | (_, Some til) -> print_board til p
+  | (_, Some til) -> print_board til st
   | (_, None) -> ()
 
 
