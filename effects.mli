@@ -2,9 +2,12 @@
 
     @author: Primary author Isabel Selin, is389. *)
 
+(** The type of player lists *)
+type p_list = Player.t option array
+
 (** [exec_effect jlist players p] is a copy of [players] updated according to 
     the effects [jlist] indicates when [p] enters its room. *)
-val exec_effects: Yojson.Basic.t list -> State.t -> State.t
+val exec_effects: Yojson.Basic.t list -> p_list * int -> p_list * int
 
 (**
     EFFECT DEFINITIONS:

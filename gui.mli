@@ -14,11 +14,13 @@ type player_icon
 (** *)
 val corner_tile: State.t -> Tiles.t
 
-(** *)
-val print_row : Tiles.t -> unit
+val player_locs : State.t -> (Tiles.coord * int list) list
 
 (** *)
-val print_board : Tiles.t -> unit
+val print_row : Tiles.t -> State.t -> unit
+
+(** *)
+val print_board : Tiles.t -> State.t -> unit
 
 (**[tests] returns a list of OUnit2 tests for the functions in state*)
 val tests : OUnit2.test list

@@ -2,6 +2,9 @@ open Yojson.Basic.Util
 open Player
 open OUnit2
 
+(** The type of player lists *)
+type p_list = Player.t option array
+
 (** [print_change stat diff p] prints a string reporting that player [p]'s stat
     [stat] has changed by [diff] *)
 let print_change stat diff p =
@@ -23,29 +26,24 @@ let update_p changes player =
     print_change "hunger" hun player;
     print_change "sanity" san player;
     print_change "insight" ins player;
-    let changed =
-      player |> set_stat_strength (get_stat_strength player + str) 
-      |> set_stat_hunger (get_stat_hunger player + hun) 
-      |> set_stat_sanity (get_stat_sanity player + san) 
-      |> set_stat_insight (get_stat_insight player + ins) in 
-    if (player_win changed) then set_condition changed Winner 
-    else if (player_lose changed) then set_condition changed Loser 
-    else changed
+    player |> set_stat_strength (get_stat_strength player + str) 
+    |> set_stat_hunger (get_stat_hunger player + hun) 
+    |> set_stat_sanity (get_stat_sanity player + san) 
+    |> set_stat_insight (get_stat_insight player + ins) 
   |_ -> failwith "Malformed stat change array"
 
 (** [next_player state idx] returns the occupied index closest to [idx] cycling 
     to the right. *)
-let rec next_player state idx=
-  let players = State.get_players state in
+let rec next_player players idx=
   match Array.get players idx with 
   |Some p -> idx
-  |None -> next_player state (idx+1 mod 9)
+  |None -> next_player players (idx+1 mod 9)
 
 (** [eff_auto j_assoc state] is the players of [state] with the automatic stat 
     changes indicated by [j_assoc] when the current player enters its room.*)
 let eff_auto j_assoc state =
-  let players = State.get_players state in
-  let idx = State.get_current_index state in
+  let players = fst state in
+  let idx = snd state in
   (* update triggering player *)
   (let self_ch = 
      try (j_assoc |> List.assoc "self changes" |> to_list |> List.map to_int)
@@ -54,12 +52,12 @@ let eff_auto j_assoc state =
    in match Array.get players idx with
    |Some p -> Array.set players idx (Some (update_p self_ch p))
    |None -> failwith "Current player does not exist, eff_auto");
-  if next_player state (idx+1) = idx then players else try(
+  if next_player players (idx+1) = idx then players else try(
     let other_ch =
       j_assoc |> List.assoc "other changes" |> to_list |> List.map to_int
     in Random.self_init ();
-    let o = next_player state (Random.int 8) 
-            |> (fun n -> (if (n = idx) then next_player state (n+1) else n)) 
+    let o = next_player players (Random.int 8) 
+            |> (fun n -> (if (n = idx) then next_player players (n+1) else n)) 
     in match Array.get players o with
     |Some p -> Array.set players o (Some (update_p other_ch p)); players
     |None -> failwith "Should not happen, eff_auto")
@@ -90,21 +88,22 @@ let rec eff_choice j_assoc state =
                   failwith {|Choice effects must have field "result"|}) in
   match parse_eff_input () with
   | Yes -> print_endline result; eff_auto j_assoc state
-  | No -> State.get_players state
+  | No -> fst state
 
 (** [exec_eff j_assoc player players] is [players] with stats updated according 
     to the effect [j_assoc] indicates when [player] enters its room.*)
-let exec_eff j_assoc state: State.t = 
-  let idx = State.get_current_index state in
+let exec_eff j_assoc (state: p_list * int): (p_list * int) =
+  let players = fst state in
+  let idx = snd state in
   let j_name = 
     try (j_assoc |> List.assoc "id" |> to_string) 
     with Not_found -> failwith {|Effects must have field "id." |} in
   match j_name with
-  |"automatic" -> state |> State.set_players (eff_auto j_assoc state)
-  |"choice" -> state |> State.set_players (eff_choice j_assoc state)
+  |"automatic" -> (eff_auto j_assoc state), idx
+  |"choice" -> (eff_choice j_assoc state), idx
   |"nothing" -> print_endline "For now, you are safe."; state
   |"repeat" -> print_endline "Take another turn."; state
-  |"next" -> state |> State.set_current_index (next_player state idx)
+  |"next" -> players, (next_player players idx)
   |_ -> failwith ("effect " ^ j_name ^ " not yet implemented")
 
 let rec exec_effects jlist state =
