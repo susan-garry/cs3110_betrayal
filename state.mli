@@ -40,14 +40,14 @@ val player_desc : t -> string
    current player to the end of the play order of [st] and makes them the 
    current player.
    Requires that the current player in [st] is the last player in the play order
-   and there are not already 5 players in the play order.
-   Raises FullGame if there are already 5 player in the play order. *)
+   and there are not already 6 players in the play order.
+   Raises FullGame if there are already 6 player in the play order. *)
 val add_player : string -> t -> t
 
 (**[set_player p i st] returns a state in which the player located at position
    [i] in the play order (including nonexistent players) of [st] is [p] but is
    otherwise identical to [st].
-   Raises OutOfBounds if [i < 0] or [i > 8]*)
+   Raises OutOfBounds if [i < 0] or [i > 5]*)
 val set_player : Player.t -> int -> t -> t
 
 (**[set_name n st] *)
@@ -65,9 +65,9 @@ val set_players : Player.t option array -> t -> t
 val get_current_index : t -> int
 
 (**[set_current_index i st] returns a state where the index of the player who
-   is currently in play is set to [i] if [0 <= i <= 8] but is otherwise 
+   is currently in play is set to [i] if [0 <= i <= 5] but is otherwise 
    identical to [st].
-   Raises OutOfBounds if [i < 0] or [i > 8] *)
+   Raises OutOfBounds if [i < 0] or [i > 5] *)
 val set_current_index : int -> t -> t
 
 (**[get_locs st] returns an association list of tile coordinates and 

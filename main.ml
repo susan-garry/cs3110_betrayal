@@ -1,5 +1,8 @@
-open Yojson.Basic
+(** @author: Primary author, Daphne Rios dr434
+             Additional contributor: Susan Garry, shg64
+*)
 
+open Yojson.Basic
 
 let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
 
@@ -53,12 +56,21 @@ let parse_move d state =
   | State.EmptyTile -> 
     print_endline "Something went wrong, it's empty!";
     state
-  |  _ -> 
+  | _ -> 
     print_endline "Something went wrong! Oh no!!! ";
     print_newline ();
     state
 
-let check_status = ()
+let check_status st = 
+  let rec check_status_helper lst st =
+    match lst with 
+    | [] -> st
+    | h::t -> 
+      match h with 
+      | State.Win s -> print_endline s; exit 0
+      | State.Loss s -> print_endline s; check_status_helper t st
+  in check_status_helper (State.get_status st) st
+
 
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
