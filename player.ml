@@ -27,21 +27,29 @@ let get_loc p = p.location
 let get_condition p = 
   if (p.stats.sanity >=8 ) then 
     Winner (
-      fun x -> "> You feel very sane for once. \n
+      fun x -> "> You've had enough of this house, and are determined not to \
+                let it get the best of you anymore. Calm and collected, you're \
+                ready for any challenge, and eventually, beaten and battered but \
+                alive, you find your way outside.
               Congratulations, " ^ x ^ " has won!")
   else if (p.stats.insight >=8 ) then 
     Winner (
       fun x -> "> You have unlocked the secrets of this mansion. Having learned \n
-              > It's dark and terrible past, you are now able to bend it to \n
-              > you will. However, the knowledge of these secrets has changed \n
-              > you, and the thought of returning to the life you knew before \n
-              > seems absurd. You haunt the mansion for the rest of your days, \n
-              > unharmed, but too troubled to every truly escape it. \n
+              It's dark and terrible past, you are now able to bend it to \n
+              you will. However, the knowledge of these secrets has changed \n
+              you, and the thought of returning to the life you knew before \n
+              seems absurd. You haunt the mansion for the rest of your days, \n
+              unharmed, but too troubled to every truly escape it. \n
               Congratulations, " ^ x ^ " has won!")
   else if (p.stats.strength >=8 ) then 
     Winner (
-      fun x -> "> You have regained your strength. \n
-              Congratulations, " ^ x ^ " has won!")
+      fun x -> "> You're surprised to find that you've been in this house so \
+                long, you can actually see a noticeable difference in your \
+                muscle tone. Apparently fighting monsters has its perks. \
+                What's more, it seems you've become so strong that you're \
+                effectively immune to damage, enabling you to eventually \
+                battle your way outside. \
+                Congratulations, " ^ x ^ " has won!")
   else if (p.stats.hunger >=8 ) then 
     Winner (
       fun x ->"> You wander the halls of this house for a few more days. \n
@@ -54,12 +62,32 @@ let get_condition p =
               Congratulations, " ^ x ^ " has won!") else
   if (p.stats.sanity <=0 ) then 
     Loser (
-      fun x -> "> You lose all your sanity. \n
-              " ^ x ^ " has lost.") else
+      fun x -> "> That was the last straw. Why is this happening to you? \
+                You've always been a good and deserving person. Stuff like this \
+                simply doesn't happen to good and deserving people. This can't \
+                be happening to you. This isn't happening to you. You must be \
+                having a bad dream, and the sooner you wake up the better. \
+                Look, there's a vial of poison! If you drink it, you'll be able \
+                to wake up from this nightmare! \n
+              You wake up in a dark, unfamiliar room. As your eyes start to \
+                focus, you realize that you were sleeping upright. How odd. \n
+              As your mind begins to shake off the grogginess, you realize \
+                that you've been strung up like a puppet, with ropes threaded \
+                through your wrist so that you cannot undo them. You hear a \
+                deep, raspy voice cackle, \"Good. Now we can have some fun.\" \
+               " ^ x ^ " has lost.") else
   if (p.stats.insight <= 0) then 
     Loser (
-      fun x -> "> You lose all your insight. \n
-              " ^ x ^ " has lost.") else 
+      fun x -> "> Looking around, you can't seem to remember why you are \
+                here. After walking around for a few minutes, you see something \
+                familiar and suddently remember - you've got to escape! You \
+                feverishly run around, looking for a way out, then stop. Looking \
+                around, you can't seem to remember why you are here. \
+                After walking around for a few minutes, you see something \
+                familiar and suddently remember - you've got to escape! You \
+                feverishly run around, looking for a way out, then stop. Looking \
+                around, you can't seem to remember why you are here. \
+               " ^ x ^ " has lost.") else 
   if (p.stats.strength <= 0) then 
     Loser (
       fun x -> "> You collapse! You have lost all strength in your body and can
