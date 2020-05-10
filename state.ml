@@ -90,7 +90,7 @@ let player_name s = Player.get_name (get_player s)
 
 let player_desc s = 
   let player_id = string_of_int (s.in_play + 1)
-  in (player_name s) ^ " (" ^ (player_id) ^ ")"
+  in (player_name s) ^ " (Player " ^ (player_id) ^ ")"
 
 let get_locs s = 
   let rec add_loc lst id arr = 
