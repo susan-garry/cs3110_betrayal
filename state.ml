@@ -198,7 +198,7 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
 (**[from_json json] takes a json file and creates the initial game state*)
 let from_json json name = 
   let start_tile = json |> member "start room" |> Rooms.from_json 
-                   |> Tiles.fill_tile Tiles.empty
+                   |> Tiles.fill_start Tiles.empty
   in
   let p = Player.empty |> Player.move start_tile |> Player.set_name name in
   let s' = { 
@@ -261,7 +261,6 @@ let exec_init_effects (tile : Tiles.t) (st : t) : t =
     let update = (r |> Rooms.init_effects 
                   |> Effects.exec_effects) (st.players, st.in_play)
     in {st with players = (fst update); in_play = (snd update)}
-       |> exec_rep_effects tile
   |None -> failwith "This tile is empty"
 
 let rec move_player (dir : Command.direction) state =
