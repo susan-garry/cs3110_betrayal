@@ -124,8 +124,8 @@ let set_players_status (st: t) =
     |Some p ->
       match Player.get_condition p with
       |Playing -> l
-      |Winner f -> Win (f (string_of_int i))::l
-      |Loser f -> Loss (f (string_of_int i))::l
+      |Winner f -> Win (f (Player.get_name p))::l
+      |Loser f -> Loss (f (Player.get_name p))::l
   in
   let sort (a:outcome) (b:outcome) : int = 
     match a,b with 
