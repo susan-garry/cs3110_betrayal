@@ -22,10 +22,11 @@
   "deck": [
     {
       "id": "Orchard",
-      "description": "You emerge into an orchard. Dark fruit drip invitingly from the trees.\nWill you grab one?",
+      "description": "You emerge into an orchard. Dark fruit drip invitingly from the trees.",
       "initial effects": [
         {
           "id": "choice",
+          "choice": "Will you grab one?",
           "result": "As you reach to grab a fruit, its dark flesh morphs into fingers and grabs you back.",
           "self changes": [
             0,
@@ -38,6 +39,7 @@
       "repeated effects": [
         {
           "id": "choice",
+          "choice": "Will you grab one?",
           "result": "As you reach to grab a fruit, its dark flesh morphs into fingers and grabs you back.",
           "self changes": [
             0,
