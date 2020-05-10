@@ -94,7 +94,7 @@ let player_desc s =
 
 let get_locs s = 
   let rec add_loc lst id arr = 
-    if id = 9 then lst else
+    if id = 6 then lst else
       match arr.(id) with 
       |None -> add_loc lst (id+1) arr
       |Some p ->
@@ -120,14 +120,14 @@ let set_players_status (st: t) =
 (**[add_player_helper o p st] returns a state identical to st but with [p] added
    to at the end of the play order in spot [o] and [in_play] set to [o]*)
 let add_player_helper o p st = 
-  if o > 8 then failwith "There can only be 9 players in a game" else
+  if o > 5 then failwith "There can only be 6 players in a game" else
     st.players.(o) <- Some p; {st with in_play = o}
 
 (**[add_player name st] returns a state identical to st but with a player with
    name [name] at the end of the play order if [get_player st] returns the last
    player in the play order *)
 let add_player name st = 
-  if st.in_play = 8 then raise FullGame else
+  if st.in_play = 5 then raise FullGame else
     let loc = st |> get_player |> Player.get_loc in
     let p = Player.(empty |> set_name name |> move loc) in
     add_player_helper (st.in_play+1) p st 
@@ -206,7 +206,7 @@ let from_json json name =
     x_dim = 1;
     y_dim = 1;
     deck = json |> member "deck" |> create_deck |> shuffle;
-    players = Array.make 9 None;
+    players = Array.make 6 None;
     in_play = 0;
     players_status = []
   }
