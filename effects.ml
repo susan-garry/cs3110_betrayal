@@ -37,7 +37,7 @@ let update_p changes player =
 let rec next_player players idx=
   match Array.get players idx with 
   |Some p -> idx
-  |None -> next_player players (idx+1 mod 6)
+  |None -> next_player players ((idx+1) mod 6)
 
 (** [eff_auto j_assoc state] is the players of [state] with the automatic stat 
     changes indicated by [j_assoc] when the current player enters its room.*)
