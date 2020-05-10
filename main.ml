@@ -56,10 +56,10 @@ let parse_move d state =
   | State.EmptyTile -> 
     print_endline "Something went wrong, it's empty!";
     state
-  | _ -> 
-    print_endline "Something went wrong! Oh no!!! ";
-    print_newline ();
-    state
+(*| _ -> 
+  print_endline "Something went wrong! Oh no!!! ";
+  print_newline ();
+  state *)
 
 let rec check_status_helper lst state = 
   match lst with 
