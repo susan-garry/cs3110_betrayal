@@ -58,11 +58,17 @@ let parse_move d state =
     print_newline ();
     state
 
-let check_status = ()
-
+let check_status st = 
+  begin match State.get_status st with 
+    | [] -> ()
+    | h::t -> 
+      begin match h with 
+        | Win s -> ()
+        | Lose s -> ()
+      end
+  end
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
-
   print_endline (State.room_desc state);
   print_newline ();
   print_string "It is "; print_string (State.player_desc state); 
