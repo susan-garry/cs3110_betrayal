@@ -56,15 +56,22 @@ let insert_players s_lst lst =
   if (List.length lst <= 3) then e_ith_lst (List.hd lst) 3 playerInRoom2 else playerInRoom2
 
 (** I got to account for when the tile is None *)
-let parse_top til =
+let parse_top til p_lst =
   match Tiles.get_n til with 
   | (Nonexistent, _) -> List.nth top_options 1
   | (_,_) -> List.nth top_options 2
 
-let parse_top_II til = 
-  List.nth middle_options 1
+let parse_top_II til p_lst = 
+  let players = players_in_room (Tiles.get_coords til) p_lst in 
+  let room_wall = 
+    match players with 
+    | [] -> List.nth middle_options 1
+    | h1::h2::h3::t -> "|" ^ string_of_int h1 ^ " " ^ string_of_int h2 ^ " " ^ string_of_int h3 ^ "|"
+    | h1::h2::[] -> "| " ^ string_of_int h1 ^ " " ^ string_of_int h2 ^ " |"
+    | h::[] -> "|  "^ string_of_int h ^ "  |"
+  in room_wall
 
-let parse_middle til =
+let parse_middle til p_lst =
   match Tiles.get_w til, Tiles.get_e til with 
   | (Nonexistent, _), (Nonexistent, _) -> List.nth middle_options 1
   | (Nonexistent,_), (_,_) -> List.nth middle_options 2
@@ -72,7 +79,7 @@ let parse_middle til =
   | (_, _), (_,_) -> List.nth middle_options 0
 
 
-let parse_bottom til =
+let parse_bottom til p_lst =
   match Tiles.get_s til with 
   | (Nonexistent, _) -> List.nth bottom_options 1
   | (_, _) -> List.nth bottom_options 2
@@ -91,43 +98,33 @@ let rec go_corner t =
        end
   in the_leftest
 
-(** *)
-let rec print_row_side func t p =
-  let  p_lst = players_in_room (Tiles.get_coords t) (player_locs p) in
+(** [print_row_side] is unit; parses a side of a tile *)
+let rec print_row_side func t (p : (Tiles.coord * int list) list) =
   let room_side =
     begin match Tiles.get_room t with 
-      | Some r ->  func t;
+      | Some r ->  func t p;
       | None -> List.nth middle_options 0;
     end
-  in let player_room =
-       if (List.length p_lst > 0) then 
-         let string_list = String.split_on_char ' ' room_side in 
-         if (func == parse_top_II) then first_half true p_lst |> insert_players string_list |> String.concat " "
-         else if (func == parse_middle) then 
-           if (List.length p_lst > 3 && List.length p_lst <= 6) then first_half false p_lst |> insert_players string_list |> String.concat "" 
-           else room_side
-         else room_side
-       else room_side
-  in
-  Stdlib.print_string player_room;
+  in Stdlib.print_string room_side;
   match Tiles.get_e t with
   | (_, Some til) -> print_row_side func til p
   | (_, None) -> () 
 
 
-let print_row t st =
-  print_row_side parse_top t st;
+let print_row t p_lst =
+  print_row_side parse_top t p_lst;
   print_newline ();
-  print_row_side parse_top_II t st; 
+  print_row_side parse_top_II t p_lst; 
   print_newline ();
-  print_row_side parse_middle t st;
+  print_row_side parse_middle t p_lst;
   print_newline ();
-  print_row_side parse_bottom t st;
+  print_row_side parse_bottom t p_lst;
   print_newline ();
   ()
 
 let rec print_board t st =
-  print_row t st;
+  let  p_lst =  State.get_locs st in
+  print_row t p_lst;
   match Tiles.get_s t with 
   | (_, Some til) -> print_board til st
   | (_, None) -> ()

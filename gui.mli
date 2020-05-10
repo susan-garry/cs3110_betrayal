@@ -17,7 +17,7 @@ val corner_tile: State.t -> Tiles.t
 val player_locs : State.t -> (Tiles.coord * int list) list
 
 (** *)
-val print_row : Tiles.t -> State.t -> unit
+val print_row : Tiles.t -> (Tiles.coord * int list) list-> unit
 
 (** *)
 val print_board : Tiles.t -> State.t -> unit
