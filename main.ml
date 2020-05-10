@@ -1,13 +1,11 @@
 open Yojson.Basic
-open State
-open Gui
 
 
 let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
 
 (** [more_players n state] adds a player at index [n] in the play order of
     [state].
-    Precondition: 0 <= n <= 8*)
+    Precondition: 0 <= n <= 5*)
 let more_players n state = 
   print_string "What is Player "; print_int (n+1); print_endline "'s name?";
   print_string "> ";
@@ -18,11 +16,11 @@ let more_players n state =
   State.add_player temp state
 
 (**[preface n state] prompts the player if they want to add another player to
-   the game. If [n = 9] the game starts; otherwise it takes a string input
+   the game. If [n = 6] the game starts; otherwise it takes a string input
    [input] and adds a player with the name [input] to the play order at index
    [n]*)
 let rec preface (n : int) (state : State.t) : State.t = 
-  if (n = 9) then (print_endline "You cannot add more than 9 players"; state)
+  if (n = 6) then (print_endline "You cannot add more than 6 players"; state)
   else
     (print_endline "Are there any more players you would like to add?";
      print_string "> ";
@@ -48,15 +46,15 @@ let rec parse_input () =
 (** [parse_move d state] is a new state [st] only if State.move_player in direction [d] in state [state] is a valid move. 
     Otherwise, the state remains unchanged. *)
 let parse_move d state =
-  match move_player d state with 
-  | exception NoDoor -> 
+  match State.move_player d state with 
+  | exception State.NoDoor -> 
     print_endline "You can't go that way! Go elsewhere.";
     state
-  | exception EmptyTile -> 
+  | exception State.EmptyTile -> 
     print_endline "Something went wrong, it's empty!";
     state
   | exception _ -> 
-    print_endline "Something went wrong! Oh no. ";
+    print_endline "Something went wrong! Oh no!!! ";
     print_newline ();
     state
   | st -> st
@@ -65,28 +63,28 @@ let check_status = ()
 
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
-  print_endline (room_desc state);
+  print_endline (State.room_desc state);
   print_newline ();
-  print_string "It is "; print_string (player_desc state); 
+  print_string "It is "; print_string (State.player_desc state); 
   print_endline "'s turn.";
   print_string "> ";
   match parse_input () with
   | Quit -> exit 0
-  | Map -> print_board (corner_tile state) (state); play state
-  | Stats -> print_current_player state; play state;
+  | Map -> Gui.print_board (Gui.corner_tile state) (state); play state
+  | Stats -> State.print_current_player state; play state;
     (** call [print_player p] for the current player in play *)
   | Go d -> play (parse_move d state)
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
   start_screen;
-  let pre_state = "spooky_game.json" |> Yojson.Basic.from_file |> from_json
+  let pre_state = "spooky_game.json" |> Yojson.Basic.from_file |> State.from_json
   in
   print_endline "What is Player 1's name?";
   print_string "> ";
   read_line () |> String.trim |> String.escaped 
   |> String.split_on_char ' ' |> Command.remove_blanks |> String.concat " " 
-  |> pre_state |> preface 1 |> play
+  |> pre_state |> preface 1 |> State.set_current_index 0 |> play
 
 (* Execute the game engine. *)
 let () = main ()
