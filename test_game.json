@@ -2,7 +2,14 @@
   "start room": {
     "id": "Start Room",
     "description": "You start off here. Nothing's really happened yet.",
-    "initial effects": [],
+    "initial effects": [
+      {
+        "id": "nothing"
+      },
+      {
+        "id": "next"
+      }
+    ],
     "repeated effects": [
       {
         "id": "nothing"
@@ -14,139 +21,24 @@
   },
   "deck": [
     {
-      "id": "One",
+      "id": "Test Room",
       "description": "Room one.",
-      "initial effects": [],
-      "repeated effects": [
+      "initial effects": [
         {
-          "id": "nothing"
+          "id": "choice",
+          "choice": "yes or no?",
+          "result": "haha you fool",
+          "self changes": [
+            -1,
+            -1,
+            -1,
+            -1
+          ]
         },
         {
           "id": "next"
         }
-      ]
-    },
-    {
-      "id": "Two",
-      "description": "Room two.",
-      "initial effects": [],
-      "repeated effects": [
-        {
-          "id": "nothing"
-        },
-        {
-          "id": "next"
-        }
-      ]
-    },
-    {
-      "id": "Three",
-      "description": "Room three.",
-      "initial effects": [],
-      "repeated effects": [
-        {
-          "id": "nothing"
-        },
-        {
-          "id": "next"
-        }
-      ]
-    },
-    {
-      "id": "Four",
-      "description": "Room Four.",
-      "initial effects": [],
-      "repeated effects": [
-        {
-          "id": "nothing"
-        },
-        {
-          "id": "next"
-        }
-      ]
-    },
-    {
-      "id": "Five",
-      "description": "Room five.",
-      "initial effects": [],
-      "repeated effects": [
-        {
-          "id": "nothing"
-        },
-        {
-          "id": "next"
-        }
-      ]
-    },
-    {
-      "id": "Seven",
-      "description": "Room seven.",
-      "initial effects": [],
-      "repeated effects": [
-        {
-          "id": "nothing"
-        },
-        {
-          "id": "next"
-        }
-      ]
-    },
-    {
-      "id": "Eight",
-      "description": "Room eight.",
-      "initial effects": [],
-      "repeated effects": [
-        {
-          "id": "nothing"
-        },
-        {
-          "id": "next"
-        }
-      ]
-    },
-    {
-      "id": "Nine",
-      "description": "Room nine.",
-      "initial effects": [],
-      "repeated effects": [
-        {
-          "id": "nothing"
-        },
-        {
-          "id": "next"
-        }
-      ]
-    },
-    {
-      "id": "Ten",
-      "description": "Room ten.",
-      "initial effects": [],
-      "repeated effects": [
-        {
-          "id": "nothing"
-        },
-        {
-          "id": "next"
-        }
-      ]
-    },
-    {
-      "id": "Eleven",
-      "description": "Room eleven.",
-      "initial effects": [],
-      "repeated effects": [
-        {
-          "id": "nothing"
-        },
-        {
-          "id": "next"
-        }
-      ]
-    },
-    {
-      "id": "Twelve",
-      "description": "Room twelve",
-      "initial effects": [],
+      ],
       "repeated effects": [
         {
           "id": "nothing"
