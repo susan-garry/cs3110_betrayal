@@ -2,7 +2,14 @@
   "start room": {
     "id": "Start Room",
     "description": "You know you entered the mansion by this room, but you don't seem to see an exit to the outside.",
-    "initial effects": [],
+    "initial effects": [
+      {
+        "id": "nothing"
+      },
+      {
+        "id": "next"
+      }
+    ],
     "repeated effects": [
       {
         "id": "nothing"
@@ -16,7 +23,18 @@
     {
       "id": "Orchard",
       "description": "You emerge into an orchard. Dark fruit drip invitingly from the trees.\nWill you grab one?",
-      "initial effects": [],
+      "initial effects": [
+        {
+          "id": "choice",
+          "result": "As you reach to grab a fruit, its dark flesh morphs into fingers and grabs you back.",
+          "self changes": [
+            0,
+            -1,
+            0,
+            -1
+          ]
+        }
+      ],
       "repeated effects": [
         {
           "id": "choice",
@@ -33,7 +51,11 @@
     {
       "id": "Mirror",
       "description": "As you look into a mirror, another face emerges behind you.\nIt offers you a deal.",
-      "initial effects": [],
+      "initial effects": [
+        {
+          "id": "next"
+        }
+      ],
       "repeated effects": [
         {
           "id": "next"
@@ -58,6 +80,9 @@
             0,
             0
           ]
+        },
+        {
+          "id": "next"
         }
       ],
       "repeated effects": [
@@ -69,7 +94,11 @@
     {
       "id": "Dining Hall",
       "description": "As you enter the dining hall, an ghostly banquet appears before you. \nYour mouth waters, and you can't help but gorge yourself on the delicious meal.",
-      "initial effects": [],
+      "initial effects": [
+        {
+          "id": "next"
+        }
+      ],
       "repeated effects": [
         {
           "id": "automatic",
@@ -88,7 +117,20 @@
     {
       "id": "Decaying floor boards",
       "description": "The floor boards crumble benesth you, causing you to twist your ankle.",
-      "initial effects": [],
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            -2,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ],
       "repeated effects": [
         {
           "id": "automatic",
@@ -107,7 +149,20 @@
     {
       "id": "Bedroom",
       "description": "You see a massive luxurious bed and decide to take a rest.\nWhen you wake up, you aren't quite sure who you are or where you're supposed to be.",
-      "initial effects": [],
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            1,
+            0,
+            0,
+            -2
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ],
       "repeated effects": [
         {
           "id": "automatic",
@@ -135,6 +190,9 @@
             2,
             0
           ]
+        },
+        {
+          "id": "next"
         }
       ],
       "repeated effects": [
@@ -164,6 +222,9 @@
             -2,
             1
           ]
+        },
+        {
+          "id": "repeat"
         }
       ],
       "repeated effects": [
