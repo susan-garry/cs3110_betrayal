@@ -118,10 +118,10 @@ let set_players_status st =
   failwith "Player.player_condition not exposed"
 
 (**[add_player_helper o p st] returns a state identical to st but with [p] added
-   to at the end of the play order in spot [o] *)
+   to at the end of the play order in spot [o] and [in_play] set to [o]*)
 let add_player_helper o p st = 
   if o > 8 then failwith "There can only be 9 players in a game" else
-    st.players.(o) <- Some p; st
+    st.players.(o) <- Some p; {st with in_play = o}
 
 (**[add_player name st] returns a state identical to st but with a player with
    name [name] at the end of the play order if [get_player st] returns the last
@@ -130,7 +130,7 @@ let add_player name st =
   if st.in_play = 8 then raise FullGame else
     let loc = st |> get_player |> Player.get_loc in
     let p = Player.(empty |> set_name name |> move loc) in
-    add_player_helper (st.in_play+1) p st
+    add_player_helper (st.in_play+1) p st 
 
 (**[add_mult d t n] adds n tile off of tile [t] in direction [d] and returns
    the last tile that gets added, e.i. the one furthest in direction [d]*)
@@ -294,7 +294,9 @@ and move_player_undiscovered tile state =
     let s' = 
       let s'' = {state with deck = t} |> set_current_player (Some p') 
                 |> exec_init_effects new_tile in
-      if t = [] then (fill_exits s'') else s'' 
+      if t = [] then 
+        (print_endline "> You hear a loud rumbling, and you realize that all \n
+          > of the undiscovered exits have closed."; fill_exits s'') else s'' 
     in
     let t_coord = Tiles.get_coords new_tile in 
     let f_coord = first_coord s' in
