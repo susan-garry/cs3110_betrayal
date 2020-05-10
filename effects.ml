@@ -37,7 +37,7 @@ let update_p changes player =
 let rec next_player players idx=
   match Array.get players idx with 
   |Some p -> idx
-  |None -> next_player players (idx+1 mod 9)
+  |None -> next_player players (idx+1 mod 6)
 
 (** [eff_auto j_assoc state] is the players of [state] with the automatic stat 
     changes indicated by [j_assoc] when the current player enters its room.*)
@@ -56,13 +56,13 @@ let eff_auto j_assoc state =
     let other_ch =
       j_assoc |> List.assoc "other changes" |> to_list |> List.map to_int
     in Random.self_init ();
-    let o = next_player players (Random.int 8) 
+    let o = next_player players (Random.int 5) 
             |> (fun n -> (if (n = idx) then next_player players (n+1) else n)) 
     in match Array.get players o with
     |Some p -> Array.set players o (Some (update_p other_ch p)); players
     |None -> failwith "Should not happen, eff_auto")
     with Not_found -> players
-(*let o = Random.int 8 |> (fun n -> (if (n = p) then (n+1) mod 9 else n)) in
+(*let o = Random.int 5 |> (fun n -> (if (n = p) then (n+1) mod 6 else n)) in
   Array.set players o (update_p other_ch (Array.get players o)); players*)
 
 (** [parse_eff_input ()] is [i] only if i is a well-formed choice. 
@@ -70,7 +70,7 @@ let eff_auto j_assoc state =
 let rec parse_eff_input () =
   match Command.eff_parse (read_line ()) with
   | exception _ -> 
-    print_endline "You must choose: Yes or No?."; 
+    print_endline "You must choose: Yes or No?.";
     print_string "> ";
     parse_eff_input ()
   | c -> c
