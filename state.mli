@@ -6,7 +6,7 @@
 type t
 
 (**The abstract type representing winning and losing conditions *)
-type outcome = Win of string | Lose of string
+type outcome = Win of string | Loss of string
 
 exception EmptyTile
 exception FullGame
@@ -33,14 +33,14 @@ val room_desc : t -> string
 (**[player_name st] returns the name of the player who is currently in play *)
 val player_name : t -> string
 
-(**[player_id st] returns the id of the player who is currently in play *)
+(**[player_id st] returns a description of the player who is currently in play*)
 val player_desc : t -> string
 
 (**[add_player name st] adds a player with name [name] in the same room as the 
    current player to the end of the play order of [st] and makes them the 
    current player.
    Requires that the current player in [st] is the last player in the play order
-   and there are not already 9 players in the play order.
+   and there are not already 6 players in the play order.
    Raises FullGame if there are already 6 player in the play order. *)
 val add_player : string -> t -> t
 

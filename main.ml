@@ -1,5 +1,8 @@
-open Yojson.Basic
+(** @author: Primary author, Daphne Rios dr434
+             Additional contributor: Susan Garry, shg64
+*)
 
+open Yojson.Basic
 
 let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of CU on the Hill! \n")
 

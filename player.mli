@@ -55,7 +55,6 @@ val set_stat_strength : int -> t -> t
 (** *)
 val set_stat_hunger : int -> t -> t
 
-
 (** [print_player p] returns unit; printing out the name, location, and stats of player [p]. *)
 val print_player : t -> unit
 

@@ -1,7 +1,7 @@
 open OUnit2
 open Yojson.Basic.Util
 
-type outcome = Win of string | Lose of string
+type outcome = Win of string | Loss of string
 
 type t = {first_tile: Tiles.t;
           x_dim : int;
@@ -92,30 +92,47 @@ let player_desc s =
   let player_id = string_of_int (s.in_play + 1)
   in (player_name s) ^ " (Player " ^ (player_id) ^ ")"
 
+(**[arr_fold_lefti f x a] is the same as Array.fold_left except f also takes
+   an element's index as one of its arguemnts; 
+   returns f (n-1) (... (f 1 (f 0 x a.(0)) a.(1)) ...) a.(n-1) *)
+let arr_fold_lefti f x a = 
+  let rec fold_lefti f x i a = 
+    if i = (Array.length a) then x else
+      fold_lefti f (f i x a.(i)) (i+1) a
+  in fold_lefti f x 0 a
+
+
 let get_locs s = 
-  let rec add_loc lst id arr = 
-    if id = 6 then lst else
-      match arr.(id) with 
-      |None -> add_loc lst (id+1) arr
-      |Some p ->
-        let coord = p |> Player.get_loc |> Tiles.get_coords
-        in match List.assoc_opt coord lst with 
-        |None -> add_loc ((coord,[id+1])::lst) (id+1) arr
-        |Some l2 -> add_loc ((coord,(id+1)::l2)::lst) (id+1) arr
-  in add_loc [] 0 s.players
+  let add_loc i acc p =
+    match p with 
+    |None -> acc
+    |Some p -> 
+      let coord = p |> Player.get_loc |> Tiles.get_coords
+      in match List.assoc_opt coord acc with 
+      |None -> (coord,[i+1])::acc
+      |Some l2 -> (coord,(i+1)::l2)::acc
+  in arr_fold_lefti add_loc [] s.players
 
 let get_status st = st.players_status
 
 (**[set_players_status st] adds any instance of a player who has won/lost to 
    the state's players_status list*)
 let set_players_status (st: t) =
-  (*let f (l : outcome list) (p: Player.t) = 
-    match Player.player_condition p with
-    |Playing -> l
-    |Winner f -> (f )
-    |Loser f ->
-    Array.fold_left *)
-  failwith "Player.player_condition not exposed"
+  let f (i : int) (l : outcome list) (p: Player.t option) = 
+    match p with
+    |None -> l
+    |Some p ->
+      match Player.get_condition p with
+      |Playing -> l
+      |Winner f -> Win (f (string_of_int i))::l
+      |Loser f -> Loss (f (string_of_int i))::l
+  in
+  let sort (a:outcome) (b:outcome) : int = 
+    match a,b with 
+    |Win _, Loss _ -> 1
+    |Loss _, Win _ -> -1
+    | _ -> 0
+  in {st with players_status = List.sort sort (arr_fold_lefti f [] st.players)}
 
 (**[add_player_helper o p st] returns a state identical to st but with [p] added
    to at the end of the play order in spot [o] and [in_play] set to [o]*)
@@ -198,7 +215,7 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
 (**[from_json json] takes a json file and creates the initial game state*)
 let from_json json name = 
   let start_tile = json |> member "start room" |> Rooms.from_json 
-                   |> Tiles.fill_start Tiles.empty
+                   |> Tiles.fill_tile Tiles.empty
   in
   let p = Player.empty |> Player.move start_tile |> Player.set_name name in
   let s' = { 
@@ -271,14 +288,16 @@ let rec move_player (dir : Command.direction) state =
     |Down -> Tiles.get_s loc
     |Left -> Tiles.get_w loc
     |Right -> Tiles.get_e loc
-  in match e with
-  | (Discovered, Some(tile)) ->
-    let p' = Player.move tile (get_player state) in
-    state |> set_current_player (Some p') |> exec_rep_effects tile
-  | (Undiscovered, Some(tile)) -> move_player_undiscovered tile state
-  | (Nonexistent,_) -> raise NoDoor
-  | _ -> failwith "Impossible because discovered and undiscovered exits \
-                   must contain a tile"
+  in 
+  let s = match e with
+    | (Discovered, Some(tile)) ->
+      let p' = Player.move tile (get_player state) in
+      state |> set_current_player (Some p') |> exec_rep_effects tile
+    | (Undiscovered, Some(tile)) -> move_player_undiscovered tile state
+    | (Nonexistent,_) -> raise NoDoor
+    | _ -> failwith "Impossible because discovered and undiscovered exits \
+                     must contain a tile"
+  in set_players_status s
 
 (**move_player_undiscovered tile state returns a state where [tile] has been
    filled with a room, the player in play has been moved to that tile, and the

@@ -37,7 +37,7 @@ let update_p changes player =
 let rec next_player players idx=
   match Array.get players idx with 
   |Some p -> idx
-  |None -> next_player players (idx+1 mod 9)
+  |None -> next_player players (idx+1 mod 6)
 
 (** [eff_auto j_assoc state] is the players of [state] with the automatic stat 
     changes indicated by [j_assoc] when the current player enters its room.*)
@@ -70,7 +70,7 @@ let eff_auto j_assoc state =
 let rec parse_eff_input () =
   match Command.eff_parse (read_line ()) with
   | exception _ -> 
-    print_endline "You must choose: Yes or No?."; 
+    print_endline "You must choose: Yes or No?.";
     print_string "> ";
     parse_eff_input ()
   | c -> c
@@ -104,6 +104,7 @@ let exec_eff j_assoc (state: p_list * int): (p_list * int) =
   |"nothing" -> print_endline "For now, you are safe."; state
   |"repeat" -> print_endline "Take another turn."; state
   |"next" -> players, (next_player players idx)
+  |"skip next" -> players, (next_player players idx |> next_player players)
   |_ -> failwith ("effect " ^ j_name ^ " not yet implemented")
 
 let rec exec_effects jlist state =

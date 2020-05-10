@@ -117,7 +117,7 @@ let new_tile (t:t) (dir:char): t =
     If [t_op] = [None], there is a chance of 1 in [nc] that [fst g1 t] 
     is set to [Nonexistent]. *)
 let link_exits_r t1 t_op (g1:t->exit ref) (g2:t->exit ref) nc: unit =
-  let new_set = if Random.int nc = 1 then (g1 t1) := Nonexistent, t_op 
+  let new_set = if nc !=0 && Random.int nc = 1 then (g1 t1) := Nonexistent, t_op 
     else () in
   let update_other t2 = let ex2 = g2 t2 in if fst (!ex2) = Undiscovered 
     then ex2 := Discovered, Some t1 else ex2 := fst !ex2, Some t1 in
@@ -229,6 +229,13 @@ let s3_t1 = {coord = 0,0;
              e_exit = ref (Undiscovered, None);
              s_exit = ref (Undiscovered, None);
              w_exit = ref (Undiscovered, None)}
+let s4_t1 = {coord = 0,0; 
+             room = None;
+             n_exit = ref (Undiscovered, None); 
+             e_exit = ref (Undiscovered, None);
+             s_exit = ref (Undiscovered, None);
+             w_exit = ref (Undiscovered, None)}
+
 
 let coords_tests = [
   make_coords_test "Solo tile" s1_t1 (0,0);
@@ -264,8 +271,13 @@ let room0 = List.hd test_rooms |> Rooms.from_json
 let fill_tile_tests =
   let s3_t1 = 
     fill_tile s3_t1 room0 in
-  ["Filled tile contains room" >:: (fun _ -> 
-       assert_equal (get_room s3_t1) (Some room0))]
+  let st_room = fill_start s4_t1 room0 in
+  [
+    "Filled tile contains room" >:: (fun _ -> 
+        assert_equal (get_room s3_t1) (Some room0));
+    "Filled start tile contains room" >:: (fun _ -> 
+        assert_equal (get_room st_room) (Some room0));
+  ]
 
 let tests = List.flatten [
     coords_tests;
