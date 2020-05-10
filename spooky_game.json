@@ -34,6 +34,9 @@
             0,
             -1
           ]
+        },
+        {
+          "id": "next"
         }
       ],
       "repeated effects": [
@@ -47,18 +50,43 @@
             0,
             -1
           ]
+        },
+        {
+          "id": "next"
         }
       ]
     },
     {
       "id": "Mirror",
-      "description": "As you look into a mirror, another face emerges behind you.\nIt offers you a deal.",
+      "description": "As you look into a mirror, another face emerges behind you.",
       "initial effects": [
+        {
+          "id": "choice",
+          "choice": "It offers you a deal. Sacrifice your sanity for knowledge?",
+          "result": "Your mind is filled with an understanding of the world.",
+          "self changes": [
+            0,
+            0,
+            -2,
+            2
+          ]
+        },
         {
           "id": "next"
         }
       ],
       "repeated effects": [
+        {
+          "id": "choice",
+          "choice": "It offers you a deal. Sacrifice your sanity for knowledge?",
+          "result": "Your mind is filled with an understanding of the world.",
+          "self changes": [
+            0,
+            0,
+            -2,
+            2
+          ]
+        },
         {
           "id": "next"
         }
@@ -89,6 +117,21 @@
       ],
       "repeated effects": [
         {
+          "id": "automatic",
+          "self changes": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "other changes": [
+            -1,
+            0,
+            0,
+            0
+          ]
+        },
+        {
           "id": "next"
         }
       ]
@@ -97,6 +140,15 @@
       "id": "Dining Hall",
       "description": "As you enter the dining hall, an ghostly banquet appears before you. \nYour mouth waters, and you can't help but gorge yourself on the delicious meal.",
       "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            1,
+            -2,
+            0
+          ]
+        },
         {
           "id": "next"
         }
@@ -123,7 +175,7 @@
         {
           "id": "automatic",
           "self changes": [
-            -2,
+            -1,
             0,
             0,
             0
@@ -137,7 +189,7 @@
         {
           "id": "automatic",
           "self changes": [
-            -2,
+            -1,
             0,
             0,
             0
@@ -214,7 +266,7 @@
     },
     {
       "id": "Speed Runes",
-      "description": "You step on a rune and feel an otherworldly power course through you.",
+      "description": "You step on a glowing rune and feel an otherworldly power course through you.",
       "initial effects": [
         {
           "id": "automatic",
@@ -255,6 +307,64 @@
       "repeated effects": [
         {
           "id": "skip"
+        }
+      ]
+    },
+    {
+      "id": "Hallway",
+      "description": "You pass through an open hallway. \nSoft breezes whisper around you and you get a change to catch your breath.",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            0,
+            1,
+            0
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "nothing"
+        },
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Strength win",
+      "description": "You notice the shaddows darkening around you. \nIn a panic, you gather your strength and burst through the door into the light.",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            4,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "next"
         }
       ]
     }
