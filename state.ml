@@ -313,8 +313,7 @@ and move_player_undiscovered tile state =
       let s'' = {state with deck = t} |> set_current_player (Some p') 
                 |> exec_init_effects new_tile in
       if t = [] then 
-        (print_endline "> You hear a loud rumbling, and you realize that all \n
-          > of the undiscovered exits have closed."; fill_exits s'') else s'' 
+        (print_endline "> You hear a loud rumbling, and you realize that all of the undiscovered exits have closed. \n"; fill_exits s'') else s'' 
     in
     let t_coord = Tiles.get_coords new_tile in 
     let f_coord = first_coord s' in
