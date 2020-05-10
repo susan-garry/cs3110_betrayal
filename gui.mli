@@ -1,3 +1,7 @@
+(** @author: Primary author, Daphne Rios, dr434
+             Additional contributor: Susan Garry, shg64
+*)
+
 (* Gives user prompts, takes user commands as input *)
 
 (* Will likely use ASCII representation for displaying the map of the board and user interface 
@@ -8,18 +12,8 @@
 
 *)
 
-(** *)
-type player_icon
-
-(** *)
-val corner_tile: State.t -> Tiles.t
-
-val player_locs : State.t -> (Tiles.coord * int list) list
-
-(** *)
-val print_row : Tiles.t -> (Tiles.coord * int list) list-> unit
-
-(** *)
+(**[print_board] prints an ASCII representation of the board with player_id's
+    denoting each player's locations and returns unit*)
 val print_board : Tiles.t -> State.t -> unit
 
 (**[tests] returns a list of OUnit2 tests for the functions in state*)

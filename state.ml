@@ -215,7 +215,7 @@ let add_row (d:dir) (t:Tiles.t) (s:t): t =
 (**[from_json json] takes a json file and creates the initial game state*)
 let from_json json name = 
   let start_tile = json |> member "start room" |> Rooms.from_json 
-                   |> Tiles.fill_start Tiles.empty
+                   |> Tiles.fill_tile Tiles.empty
   in
   let p = Player.empty |> Player.move start_tile |> Player.set_name name in
   let s' = { 
