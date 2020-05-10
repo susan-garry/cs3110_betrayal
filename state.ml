@@ -64,7 +64,7 @@ let set_current_player p_opt s =
   Array.set s.players s.in_play p_opt; s
 
 let set_player p i st = 
-  if i < 0 || i > 8 then raise OutOfBounds else
+  if i < 0 || i > 5 then raise OutOfBounds else
     Array.set st.players i (Some p); st
 
 let get_players st = st.players
@@ -74,7 +74,7 @@ let set_players ps st = {st with players = ps}
 let get_current_index st = st.in_play
 
 let set_current_index i st = 
-  if -1 < i && i < 9 then {st with in_play = i} else raise OutOfBounds
+  if -1 < i && i < 5 then {st with in_play = i} else raise OutOfBounds
 
 let room_id s =
   match Tiles.get_room s.first_tile with 
@@ -108,12 +108,12 @@ let get_status st = st.players_status
 
 (**[set_players_status st] adds any instance of a player who has won/lost to 
    the state's players_status list*)
-let set_players_status st =
-  (*let f l p = 
+let set_players_status (st: t) =
+  (*let f (l : outcome list) (p: Player.t) = 
     match Player.player_condition p with
     |Playing -> l
-    |Winner m ->
-    |Loser m ->
+    |Winner f -> (f )
+    |Loser f ->
     Array.fold_left *)
   failwith "Player.player_condition not exposed"
 

@@ -46,18 +46,17 @@ let rec parse_input () =
 (** [parse_move d state] is a new state [st] only if State.move_player in direction [d] in state [state] is a valid move. 
     Otherwise, the state remains unchanged. *)
 let parse_move d state =
-  match State.move_player d state with 
-  | exception State.NoDoor -> 
+  try State.move_player d state with 
+  | State.NoDoor -> 
     print_endline "You can't go that way! Go elsewhere.";
     state
-  | exception State.EmptyTile -> 
+  | State.EmptyTile -> 
     print_endline "Something went wrong, it's empty!";
     state
-  | exception _ -> 
-    print_endline "Something went wrong! Oh no!!! ";
-    print_newline ();
-    state
-  | st -> st
+(*| exception _ -> 
+  print_endline "Something went wrong! Oh no!!! ";
+  print_newline ();
+  state*)
 
 let check_status = ()
 
