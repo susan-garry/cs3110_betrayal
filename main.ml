@@ -9,7 +9,7 @@ let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of 
     [state].
     Precondition: 0 <= n <= 8*)
 let more_players n state = 
-  print_string "What is Player "; print_int n; print_endline "'s name?";
+  print_string "What is Player "; print_int (n+1); print_endline "'s name?";
   print_string "> ";
   let temp = read_line () |> String.trim |> String.escaped 
              |> String.split_on_char ' ' |> Command.remove_blanks 
@@ -86,7 +86,7 @@ let main () =
   print_string "> ";
   read_line () |> String.trim |> String.escaped 
   |> String.split_on_char ' ' |> Command.remove_blanks |> String.concat " " 
-  |> pre_state |> preface 2 |> play
+  |> pre_state |> preface 1 |> play
 
 (* Execute the game engine. *)
 let () = main ()
