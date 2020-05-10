@@ -105,13 +105,6 @@ let set_stat_hunger change p =
   let changed_stats = {p.stats with hunger = change} 
   in {p with stats = changed_stats}
 
-let player_lose p = 
-  (p.stats.strength <= 0 || p.stats.hunger <= 0 
-   || p.stats.sanity <= 0 || p.stats.insight <= 0)
-
-let player_win p = 
-  (p.stats.strength >= 8 || p.stats.hunger >= 8 
-   || p.stats.sanity >= 8 || p.stats.insight >= 8)
 
 (** [print_stats sts] is unit;  *)
 let print_stats sts = 
@@ -171,17 +164,6 @@ let make_get_stat_hunger_test
     (ex: int) =
   name >:: (fun _ -> assert_equal ex (get_stat_hunger player))
 
-let make_player_lose_test
-    (name : string)
-    (player: t)
-    (ex: bool) =
-  name >:: (fun _ -> assert_equal ex (player_lose player))
-
-let make_player_win_test
-    (name : string)
-    (player: t)
-    (ex: bool) =
-  name >:: (fun _ -> assert_equal ex (player_win player))
 
 
 let player1 = empty |> set_name "Player 1"
@@ -211,8 +193,6 @@ let stat_tests = [
 ]
 
 let condition_tests = [
-  make_player_lose_test "Player playing 1" player1 false;
-  make_player_win_test "Player playing 1" player1 false
 ]
 
 let tests = List.flatten [
