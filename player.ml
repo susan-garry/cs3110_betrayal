@@ -90,8 +90,7 @@ let get_condition p =
                " ^ x ^ " has lost.") else 
   if (p.stats.strength <= 0) then 
     Loser (
-      fun x -> "> You collapse! You have lost all strength in your body and can
-              no longer move. \n
+      fun x -> "> You collapse! You have lost all strength in your body and can no longer move. \n
               > Shadows flicker in the corner of your eye. You try to look up \n
               > to see who - or what - is there, but no matter how hard you try, \n
               > your body is too exhausted and refuses to obey. \n
