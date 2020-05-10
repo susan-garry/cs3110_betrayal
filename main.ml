@@ -58,15 +58,18 @@ let parse_move d state =
     print_newline ();
     state
 
-let check_status st = 
-  begin match State.get_status st with 
-    | [] -> ()
-    | h::t -> 
-      begin match h with 
-        | Win s -> ()
-        | Lose s -> ()
-      end
-  end
+let rec check_status_helper lst state = 
+  match lst with 
+  | [] -> state
+  | h::t -> 
+    begin match h with 
+      | State.Win s -> print_string s; exit 0
+      | State.Lose s -> print_string s; check_status_helper t state
+    end
+
+let check_status state = 
+  state |> check_status_helper (State.get_status state)
+
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
   print_endline (State.room_desc state);
@@ -79,7 +82,7 @@ let rec play state =
   | Map -> Gui.print_board (Gui.corner_tile state) (state); play state
   | Stats -> State.print_current_player state; play state;
     (** call [print_player p] for the current player in play *)
-  | Go d -> play (parse_move d state)
+  | Go d -> state |> parse_move d |> check_status |> play
 
 (** [main ()] prompts for the game to play, then starts it. *)
 let main () =
