@@ -53,7 +53,11 @@ let parse_move d state =
   | State.EmptyTile -> 
     print_endline "Something went wrong, it's empty!";
     state
+<<<<<<< HEAD
   |  _ -> 
+=======
+  | _ -> 
+>>>>>>> ba3ffb688d5c816eaa3ef6d98411ae6c949c3adc
     print_endline "Something went wrong! Oh no!!! ";
     print_newline ();
     state
