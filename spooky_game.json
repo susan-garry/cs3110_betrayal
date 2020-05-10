@@ -234,6 +234,29 @@
           "id": "repeat"
         }
       ]
+    },
+    {
+      "id": "Greenhouse",
+      "description": "You enter a greenhouse, knocking over a pot of writhing vines. \nThe plant slips beneath the doorway, seeking out a new victim. \nThe next player is tangled in vines, and misses a turn.",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            0,
+            0,
+            0,
+            1
+          ]
+        },
+        {
+          "id": "skip"
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "skip"
+        }
+      ]
     }
   ]
 }
