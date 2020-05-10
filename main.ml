@@ -67,7 +67,7 @@ let rec check_status_helper lst state =
   | h::t -> 
     begin match h with 
       | State.Win s -> print_string s; exit 0
-      | State.Lose s -> print_string s; check_status_helper t state
+      | State.Loss s -> print_string s; check_status_helper t state
     end
 
 let check_status state = 
