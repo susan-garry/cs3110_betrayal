@@ -104,6 +104,7 @@ let exec_eff j_assoc (state: p_list * int): (p_list * int) =
   |"nothing" -> print_endline "For now, you are safe."; state
   |"repeat" -> print_endline "Take another turn."; state
   |"next" -> players, (next_player players idx)
+  |"skip next" -> players, (next_player players idx |> next_player players)
   |_ -> failwith ("effect " ^ j_name ^ " not yet implemented")
 
 let rec exec_effects jlist state =
