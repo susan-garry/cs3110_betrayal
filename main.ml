@@ -81,7 +81,7 @@ let rec play state =
   print_string "> ";
   match parse_input () with
   | Quit -> exit 0
-  | Map -> Gui.print_board (Gui.corner_tile state) (state); play state
+  | Map -> Gui.print_board state; play state
   | Stats -> State.print_current_player state; play state;
     (** call [print_player p] for the current player in play *)
   | Go d -> play (parse_move d state)

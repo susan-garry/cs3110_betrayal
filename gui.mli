@@ -14,7 +14,7 @@
 
 (**[print_board] prints an ASCII representation of the board with player_id's
     denoting each player's locations and returns unit*)
-val print_board : Tiles.t -> State.t -> unit
+val print_board : State.t -> unit
 
 (**[tests] returns a list of OUnit2 tests for the functions in state*)
 val tests : OUnit2.test list

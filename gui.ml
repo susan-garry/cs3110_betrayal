@@ -122,13 +122,14 @@ let print_row t p_lst =
   print_newline ();
   ()
 
-let rec print_board t st =
-  let  p_lst =  State.get_locs st in
-  print_row t p_lst;
-  match Tiles.get_s t with 
-  | (_, Some til) -> print_board til st
-  | (_, None) -> ()
-
+let print_board st =
+  let rec print_board_helper t st =
+    let  p_lst =  State.get_locs st in
+    print_row t p_lst;
+    match Tiles.get_s t with 
+    | (_, Some til) -> print_board_helper til st
+    | (_, None) -> ()
+  in print_board_helper (corner_tile st) st
 
 
 (* ------------------------------------------------- *)
