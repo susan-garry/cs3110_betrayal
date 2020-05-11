@@ -117,18 +117,20 @@ let new_tile (t:t) (dir:char): t =
     If [t_op] = [None], there is a chance of 1 in [nc] that [fst g1 t] 
     is set to [Nonexistent]. *)
 let link_exits_r t1 t_op (g1:t->exit ref) (g2:t->exit ref) nc: unit =
-  let new_set = if nc !=0 && Random.int nc = 1 then (g1 t1) := Nonexistent, t_op 
+  let new_set () = 
+    if nc !=0 && Random.int nc = 1 then 
+      (g1 t1) := Nonexistent, t_op 
     else () in
   let update_other t2 = let ex2 = g2 t2 in if fst (!ex2) = Undiscovered 
     then ex2 := Discovered, Some t1 else ex2 := fst !ex2, Some t1 in
-  let secret_set = if Random.int secret_chance = 1 
+  let secret_set () = if Random.int secret_chance = 1 
     then (g1 t1) := Nonexistent, t_op else () in
   match t_op with
-  |None -> new_set
-  |Some t2 -> (if t2.room = None then new_set
+  |None -> new_set ()
+  |Some t2 -> (if t2.room = None then new_set ()
                else let ex2 = g2 t2 in 
-                 if fst !(ex2) = Nonexistent then secret_set
-                 else g1 t1 := Discovered, Some t2);
+                 if fst !(ex2) = Nonexistent then secret_set ()
+                 else g1 t1 := Discovered, t_op);
     update_other t2
 
 (** [fill_helper t r chance] is tile [t] with its room set to [r] and a chance
