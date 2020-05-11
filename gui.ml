@@ -56,20 +56,6 @@ let parse_bottom til p_lst =
   | (Nonexistent, _) -> List.nth bottom_options 1
   | (_, _) -> List.nth bottom_options 2
 
-(** [go_corner t] is the tile that does not have a tile above or to the left of it.  *)
-let rec go_corner t = 
-  let the_top =
-    begin match Tiles.get_n t  with
-      | (_, None) -> t
-      | (_, Some til) -> go_corner til
-    end
-  in let the_leftest =
-       begin match Tiles.get_w the_top with 
-         | (_, None) -> t
-         | (_, Some til_2) -> go_corner til_2
-       end
-  in the_leftest
-
 (** [print_row_side] is unit; parses a side of a tile for a row of tiles. *)
 let rec print_row_side func t (p : (Tiles.coord * int list) list) =
   let room_side =
@@ -82,17 +68,35 @@ let rec print_row_side func t (p : (Tiles.coord * int list) list) =
   | (_, Some til) -> print_row_side func til p
   | (_, None) -> () 
 
-(** [print_row_side] is unit; parses all sides of a tile for a row of tiles. *)
-let print_row t p_lst =
-  print_row_side parse_top t p_lst;
-  print_newline ();
-  print_row_side parse_top_II t p_lst; 
-  print_newline ();
-  print_row_side parse_middle t p_lst;
-  print_newline ();
-  print_row_side parse_bottom t p_lst;
-  print_newline ();
-  ()
+(** [print_row t pl] is unit; prints the ascii representation of the row of
+    tiles beginning with [t] on the left and the players given in the association
+    list [pl]. *)
+let print_row t pl =
+  let rec get_row asciis t pl =
+    let next_tile = Tiles.get_e t in
+    match next_tile, asciis, Tiles.get_room t with
+    |(_,None), (t1,t2,m,b), None -> 
+      let t1' = t1 ^ "       " in
+      let t2' = t2 ^ "       " in 
+      let m' = m ^ "       " in 
+      let b' = b ^ "       " in
+      (t1',t2',m',b')
+    |(_,Some t'), (t1,t2,m,b), None -> 
+      let t1' = t1 ^ "       " in
+      let t2' = t2 ^ "       " in 
+      let m' = m ^ "       " in 
+      let b' = b ^ "       " in
+      get_row (t1',t2',m',b') t' pl
+    |(_,Some t'), (t1,t2,m,b), _ ->
+      let t1' = t1 ^ (parse_top t pl) in
+      let t2' = t2 ^ (parse_top_II t pl) in 
+      let m' = m ^ (parse_middle t pl) in 
+      let b' = b ^ (parse_bottom t pl) in
+      get_row (t1',t2',m',b') t' pl
+    | _ -> failwith "Filled tiles cannot be adjascent to nonexistent tiles"
+  in match get_row ("","","","") t pl with
+  |(t1,t2,m,b) ->
+    print_endline t1; print_endline t2; print_endline m; print_endline b
 
 let print_board st =
   let rec print_board_helper t st =

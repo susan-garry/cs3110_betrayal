@@ -79,11 +79,11 @@ let get_condition p =
     Loser (
       fun x -> " Looking around, you can't seem to remember why you are 
       \n here. After walking around for a few minutes, you see something 
-      \n familiar and suddently remember - you've got to escape! You 
+      \n familiar and suddendly remember - you've got to escape! You 
       \n feverishly run around, looking for a way out, then stop. Looking 
       \n around, you can't seem to remember why you are here. 
       \n After walking around for a few minutes, you see something 
-      \n familiar and suddently remember - you've got to escape! You 
+      \n familiar and suddendly remember - you've got to escape! You 
       \n feverishly run around, looking for a way out, then stop. Looking 
       \n around, you can't seem to remember why you are here. 
       \n " ^ x ^ " has lost. \n \n") else 
