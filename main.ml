@@ -74,9 +74,9 @@ let check_status state =
   state |> check_status_helper (State.get_status state)
 
 (** [play st] resumes play from the game state in [state]. *)
-let rec play state = 
-  print_endline (State.room_desc state);
+let rec play state =
   print_newline ();
+  print_endline (State.room_desc state);
   print_string "It is "; print_string (State.player_desc state); 
   print_endline "'s turn.";
   print_string "> ";
