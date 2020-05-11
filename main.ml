@@ -75,6 +75,7 @@ let check_status state =
 
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state = 
+  print_newline ();
   print_endline (State.room_desc state);
   print_newline ();
   print_string "It is "; print_string (State.player_desc state); 
