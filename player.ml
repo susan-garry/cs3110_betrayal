@@ -27,11 +27,11 @@ let get_loc p = p.location
 let get_condition p = 
   if (p.stats.sanity >=8 ) then 
     Winner (
-      fun x -> "> You've had enough of this house, and are determined not to \
-                let it get the best of you anymore. Calm and collected, you're \
-                ready for any challenge, and eventually, beaten and battered but \
-                alive, you find your way outside.
-              Congratulations, " ^ x ^ " has won! \n \n")
+      fun x -> " You've had enough of this house, and are determined not to 
+      \n let it get the best of you anymore. Calm and collected, you're 
+      \n ready for any challenge, and eventually, beaten and battered but 
+      \n alive, you find your way outside. 
+      \n Congratulations, " ^ x ^ " has won! \n \n")
   else if (p.stats.insight >=8 ) then 
     Winner (
       fun x -> "> You have unlocked the secrets of this mansion. Having learned 
