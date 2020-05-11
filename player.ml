@@ -31,7 +31,7 @@ let get_condition p =
                 let it get the best of you anymore. Calm and collected, you're \
                 ready for any challenge, and eventually, beaten and battered but \
                 alive, you find your way outside.
-              Congratulations, " ^ x ^ " has won!")
+              Congratulations, " ^ x ^ " has won! \n \n")
   else if (p.stats.insight >=8 ) then 
     Winner (
       fun x -> "> You have unlocked the secrets of this mansion. Having learned \n
@@ -40,54 +40,53 @@ let get_condition p =
               you, and the thought of returning to the life you knew before \n
               seems absurd. You haunt the mansion for the rest of your days, \n
               unharmed, but too troubled to every truly escape it. \n
-              Congratulations, " ^ x ^ " has won!")
+              Congratulations, " ^ x ^ " has won! \n \n")
   else if (p.stats.strength >=8 ) then 
     Winner (
-      fun x -> "> You're surprised to find that you've been in this house so \
-                long, you can actually see a noticeable difference in your \
-                muscle tone. Apparently fighting monsters has its perks. \
-                What's more, it seems you've become so strong that you're \
-                effectively immune to damage, enabling you to eventually \
-                battle your way outside. \
-                Congratulations, " ^ x ^ " has won!")
+      fun x -> "> You're surprised to find that you've been in this house so
+      \n  long, you can actually see a noticeable difference in your 
+      \n  muscle tone. Apparently fighting monsters has its perks. 
+      \n  What's more, it seems you've become so strong that you're 
+      \n  effectively immune to damage, enabling you to eventually 
+      \n  battle your way outside. 
+      \n  Congratulations, " ^ x ^ " has won! \n \n")
   else if (p.stats.hunger >=8 ) then 
     Winner (
-      fun x ->"> You wander the halls of this house for a few more days. \n
-              > Although you haven't eaten in a while, hunger esacpes you. \n
-              > It seems that you have entered an enlightened state and have \n
-              > complete control over your body and mind. Although you \n 
-              > encounter more attackers, they never seem to land a hit \n
-              > against you, and eventually you find your way out of the \n
-              > mansion. \n
-              Congratulations, " ^ x ^ " has won!") else
+      fun x ->"> You wander the halls of this house for a few more days. 
+      \n> Although you haven't eaten in a while, hunger esacpes you. 
+      \n> It seems that you have entered an enlightened state and have 
+      \n> complete control over your body and mind. Although you 
+      \n> encounter more attackers, they never seem to land a hit 
+      \n> against you, and eventually you find your way out of the mansion. \n
+              Congratulations, " ^ x ^ " has won! \n \n") else
   if (p.stats.sanity <=0 ) then 
     Loser (
-      fun x -> "> That was the last straw. Why is this happening to you? \
-                You've always been a good and deserving person. Stuff like this \
-                simply doesn't happen to good and deserving people. This can't \
-                be happening to you. This isn't happening to you. You must be \
-                having a bad dream, and the sooner you wake up the better. \
-                Look, there's a vial of poison! If you drink it, you'll be able \
+      fun x -> "> That was the last straw. Why is this happening to you? \n
+                You've always been a good and deserving person. Stuff like this \n
+                simply doesn't happen to good and deserving people. This can't \n
+                be happening to you. This isn't happening to you. You must be \n
+                having a bad dream, and the sooner you wake up the better. \n
+                Look, there's a vial of poison! If you drink it, you'll be able \n
                 to wake up from this nightmare! \n
-              You wake up in a dark, unfamiliar room. As your eyes start to \
+              You wake up in a dark, unfamiliar room. As your eyes start to \n
                 focus, you realize that you were sleeping upright. How odd. \n
-              As your mind begins to shake off the grogginess, you realize \
-                that you've been strung up like a puppet, with ropes threaded \
-                through your wrist so that you cannot undo them. You hear a \
-                deep, raspy voice cackle, \"Good. Now we can have some fun.\" \
-               " ^ x ^ " has lost.") else
+              As your mind begins to shake off the grogginess, you realize \n
+                that you've been strung up like a puppet, with ropes threaded \n
+                through your wrist so that you cannot undo them. You hear a \n
+                deep, raspy voice cackle, \"Good. Now we can have some fun.\" \n
+               " ^ x ^ " has lost. \n \n") else
   if (p.stats.insight <= 0) then 
     Loser (
-      fun x -> "> Looking around, you can't seem to remember why you are \
-                here. After walking around for a few minutes, you see something \
-                familiar and suddently remember - you've got to escape! You \
-                feverishly run around, looking for a way out, then stop. Looking \
-                around, you can't seem to remember why you are here. \
-                After walking around for a few minutes, you see something \
-                familiar and suddently remember - you've got to escape! You \
-                feverishly run around, looking for a way out, then stop. Looking \
-                around, you can't seem to remember why you are here. \
-               " ^ x ^ " has lost.") else 
+      fun x -> "> Looking around, you can't seem to remember why you are \n
+                here. After walking around for a few minutes, you see something \n
+                familiar and suddently remember - you've got to escape! You \n
+                feverishly run around, looking for a way out, then stop. Looking \n
+                around, you can't seem to remember why you are here. \n
+                After walking around for a few minutes, you see something \n
+                familiar and suddently remember - you've got to escape! You \n
+                feverishly run around, looking for a way out, then stop. Looking \n
+                around, you can't seem to remember why you are here. \n
+               " ^ x ^ " has lost. \n \n") else 
   if (p.stats.strength <= 0) then 
     Loser (
       fun x -> "> You collapse! You have lost all strength in your body and can no longer move. \n
@@ -97,13 +96,13 @@ let get_condition p =
               > The shadows grow larger and more numerous as the creatures \n
               within this house draw closer, sensing your weakness. \n
               > Now helpless prey, they finish you off with ease.
-              " ^ x ^ " has lost.")
+              " ^ x ^ " has lost. \n \n")
   else if (p.stats.hunger <= 0) then 
     Loser (
       fun x -> "> There's an apple on a table next to you. \n
       > You snatch it off the table and hungrily devour it. \n
       > It turns to ashes on your tongue. \n
-      " ^ x ^ " has lost.")
+      " ^ x ^ " has lost. \n \n")
   else Playing
 
 let move t p = {p with location = t}
@@ -150,7 +149,6 @@ let print_player p =
   print_string "Player: "; print_endline p.name;
   print_string "Location: "; print_endline locale;
   print_stats p.stats;
-  print_string "Room: ";
   ()
 (*-------------------------------------------*)
 (*Code for testing here*)

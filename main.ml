@@ -10,8 +10,9 @@ let start_screen = ANSITerminal.(print_string [blue]"\n\nWelcome to Betrayal of 
     [state].
     Precondition: 0 <= n <= 5*)
 let more_players n state = 
+  print_newline ();
   print_string "What is Player "; print_int (n+1); print_endline "'s name?";
-  print_string "> ";
+  ANSITerminal.(print_string [blue]"> ");
   let temp = read_line () |> String.trim |> String.escaped 
              |> String.split_on_char ' ' |> Command.remove_blanks 
              |> String.concat " "
@@ -23,10 +24,11 @@ let more_players n state =
    [input] and adds a player with the name [input] to the play order at index
    [n]*)
 let rec preface (n : int) (state : State.t) : State.t = 
+  print_newline ();
   if (n = 6) then (print_endline "You cannot add more than 6 players"; state)
   else
     (print_endline "Are there any more players you would like to add?";
-     print_string "> ";
+     ANSITerminal.(print_string [blue]"> ");
      match read_line () with 
      | "no" -> state
      | "yes" -> more_players (n) state |> preface (n+1)
@@ -38,11 +40,11 @@ let rec parse_input () =
   match Command.parse (read_line ()) with
   | exception Command.Empty -> 
     print_endline "Where would you like to go?"; 
-    print_string "> ";
+    ANSITerminal.(print_string [blue]"> ");
     parse_input ()
   | exception _ -> 
     print_endline "I don't understand that."; 
-    print_string "> ";
+    ANSITerminal.(print_string [blue]"> ");
     parse_input ()
   | c -> c
 
@@ -66,8 +68,14 @@ let rec check_status_helper lst state =
   | [] -> state
   | h::t -> 
     begin match h with 
-      | State.Win s -> print_string s; exit 0
-      | State.Loss s -> print_string s; check_status_helper t state
+      | State.Win s -> 
+        print_newline(); 
+        ANSITerminal.(print_string [yellow]s);
+        exit 0
+      | State.Loss s -> 
+        print_newline(); 
+        ANSITerminal.(print_string [yellow]s); 
+        check_status_helper t state
     end
 
 let check_status state = 
@@ -76,14 +84,16 @@ let check_status state =
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state =
   print_newline ();
-  print_string "It is "; print_string (State.player_desc state); 
-  print_endline "'s turn.";
+  ANSITerminal.(print_string [red]"It is ");
+  ANSITerminal.(print_string [red](State.player_desc state));
+  ANSITerminal.(print_string [red]"'s turn.");
+  print_newline ();
   print_endline (State.room_desc state);
-  print_string "> ";
+  ANSITerminal.(print_string [blue]"> ");
   match parse_input () with
   | Quit -> exit 0
   | Map -> Gui.print_board state; play state
-  | Stats -> State.print_current_player state; play state;
+  | Stats -> State.print_current_player state; print_newline (); play state;
     (** call [print_player p] for the current player in play *)
   | Go d -> state |> parse_move d |> check_status |> play
 
@@ -93,7 +103,7 @@ let main () =
   let pre_state = "spooky_game.json" |> Yojson.Basic.from_file |> State.from_json
   in
   print_endline "What is Player 1's name?";
-  print_string "> ";
+  ANSITerminal.(print_string [blue]"> ");
   read_line () |> String.trim |> String.escaped 
   |> String.split_on_char ' ' |> Command.remove_blanks |> String.concat " " 
   |> pre_state |> preface 1 |> State.set_current_index 0 |> play

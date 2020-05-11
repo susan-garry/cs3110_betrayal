@@ -338,7 +338,7 @@
     },
     {
       "id": "Strength win",
-      "description": "You notice the shaddows darkening around you. \nIn a panic, you gather your strength and burst through the door into the light.",
+      "description": "You notice the shadows darkening around you. \nIn a panic, you gather your strength and burst through the door into the light.",
       "initial effects": [
         {
           "id": "automatic",
@@ -369,8 +369,8 @@
       ]
     },
     {
-      "id": "Glass",
-      "description": "You walk into a hallway and see a piece of rope hanging from the ceiling. \nYou pull on it and are crushed underneath the weight of plaster and old, dusty picture frames. \nGlass digs into your skin as pick yourself off the floor. You look down at your scratched hands. \nHow much more will you have to bleed for this monstrous house?",
+      "id": "Fallen Ceiling",
+      "description": "You walk into a hallway and see a piece of rope hanging from the ceiling. You pull on it and are crushed underneath the weight of plaster and old, dusty picture frames.",
       "initial effects": [
         {
           "id": "automatic",
@@ -378,7 +378,7 @@
             -1,
             0,
             -1,
-            1
+            0
           ]
         },
         {
@@ -422,7 +422,7 @@
     },
     {
       "id": "Sala",
-      "description": "Walking, you hear the pitter patter of small feet behind you but when you turn around, there in no one there. \nYou arrive in a living room with broken toys scattered around. You squat down to inspect them when you feel a push on your back by tiny hands. \nSinister laughter echoes in the corners of the room as you fall forward onto a pile of broken figurines.",
+      "description": "You arrive in a living room with broken toys scattered around. \nYou squat down to inspect them when you feel a push on your back by tiny hands. Sinister laughter echoes in the corners of the room as you fall forward onto a pile of broken figurines.",
       "initial effects": [
         {
           "id": "automatic",
@@ -448,7 +448,7 @@
     },
     {
       "id": "Kitchen",
-      "description": "You’ve found your way into the kitchen and a short, sharp man greets you with a wide grin. He asks if you’d like some refreshments after a long day exploring the mansion. \nThe smell of blood overwhelms you as the feeling of nails raking down you back sends shivers down your spine. \nYou decline his kind offer, watching his grin grow until it splits his face in two.",
+      "description": "You’ve found your way into the kitchen and a short, sharp man greets you with a wide grin. \nHe asks if you’d like some refreshments after a long day exploring the mansion. \nThe smell of blood overwhelms you as the feeling of nails raking down you back sends shivers down your spine. \nYou decline his kind offer, watching his grin grow until it splits his face in two.",
       "initial effects": [
         {
           "id": "automatic",
@@ -466,6 +466,38 @@
       "repeated effects": [
         {
           "id": "nothing"
+        },
+        {
+          "id": "next"
+        }
+      ]
+    },
+    {
+      "id": "Glass",
+      "description": "Glass digs into your skin as you pick yourself off the floor. \nYou look down at your scratched hands. \nHow much more will you have to bleed for this monstrous house?",
+      "initial effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            -1,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "id": "next"
+        }
+      ],
+      "repeated effects": [
+        {
+          "id": "automatic",
+          "self changes": [
+            -1,
+            0,
+            0,
+            -2
+          ]
         },
         {
           "id": "next"
