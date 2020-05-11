@@ -12,6 +12,7 @@ betrayal.zip
 *.native
 *.byte
 _build
+*.code-workspace
 
 # temporary files
 *.swp
