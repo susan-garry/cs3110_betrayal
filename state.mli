@@ -6,7 +6,7 @@
 type t
 
 (**The abstract type representing winning and losing conditions *)
-type outcome = Win of string | Loss of string
+type outcome = Win of string | Loss of string | Endgame of string
 
 exception EmptyTile
 exception FullGame

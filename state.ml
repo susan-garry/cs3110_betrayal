@@ -1,7 +1,7 @@
 open OUnit2
 open Yojson.Basic.Util
 
-type outcome = Win of string | Loss of string
+type outcome = Win of string | Loss of string | Endgame of string
 
 type t = {first_tile: Tiles.t;
           x_dim : int;
@@ -114,14 +114,6 @@ let get_locs s =
 
 let get_status st = st.players_status
 
-(**[remove_player p st] removes [p] from the play order of [st]
-   TODO: test *)
-let remove_player p st =
-  let rem_helper i p2 =
-    if p2 = Some p then None else p2
-  in
-  Array.mapi rem_helper st.players
-
 (**[count_players st] returns the number of remaining players in the game*)
 let count_players st =
   let f x a =
@@ -143,27 +135,36 @@ let survivor_win x =
 (**[set_players_status st] adds any instance of a player who has won/lost to 
    the state's players_status list*)
 let set_players_status (st: t) =
-  let f (i : int) (l : outcome list) (p: Player.t option) = 
-    match p with
-    |None -> l
-    |Some p ->
-      match Player.get_condition p with
-      |Playing -> l
-      |Winner f -> Win (f (Player.get_name p))::l
-      |Loser f -> 
-        ignore (remove_player p st); 
-        let l' = Loss (f (Player.get_name p))::l
-        in if (count_players st) <> 1 then l' else
-          let p'_name = Player.get_name (get_last st) in 
-          Win (survivor_win p'_name) :: l'
+  let rec f (i : int) (l : outcome list) (a: Player.t option array) = 
+    if Array.length a = i then l else
+      match a.(i) with
+      |None -> f (i+1) l a
+      |Some p ->
+        match Player.get_condition p with
+        |Playing -> f (i+1) l a
+        |Winner sf -> 
+          if count_players st = 1 then 
+            (Endgame (p |> Player.get_name |> survivor_win))::l else
+            f (i+1) (Win (sf (Player.get_name p))::l) a
+        |Loser sf -> 
+          Array.set a i None; 
+          let l' = f (i+1) (Loss (sf (Player.get_name p))::l) a
+          in if (count_players st) > 1 then l' else
+          if (count_players st) = 0 then (Endgame ("You are dead. The mansion \
+                                                    has won."))::l'
+          else
+            let p'_name = Player.get_name (get_last st) in 
+            Win (survivor_win p'_name) :: l'
   in
 
   let sort (a:outcome) (b:outcome) : int = 
     match a,b with 
-    |Win _, Loss _ -> 1
-    |Loss _, Win _ -> -1
+    |Win _, Loss _ 
+    | _, Endgame _ -> 1
+    |Loss _, Win _
+    |Endgame _, _ -> -1
     | _ -> 0
-  in let ps = (arr_fold_lefti f [] st.players) |> List.sort sort |> List.rev
+  in let ps = (f 0 [] st.players) |> List.sort sort |> List.rev
   in
   {st with players_status = ps}
 
