@@ -2,11 +2,11 @@
    used by other modules *)
 
 
-(** The type [direction] represents a player direction that is decomposed
-    into a verb and possibly a string list. *)
+(** The type [direction] represents the direction a player wants to proceed in. *)
 type direction = 
   | Right | Left | Up | Down
 
+(** The type [commmand] represents a player's course of action that is decomposed into a verb and possibly a direction. *)
 type command = 
   | Go of direction
   | Map

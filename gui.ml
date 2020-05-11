@@ -2,7 +2,7 @@ type player_icon = {icon: string}
 
 exception PlayerNumbers
 
-(** *)
+(** [top_options]/[middle_options]/[bottom_options] is a string list of possible ways a wall of a tile/room can be represented using ASCII representation. *)
 let top_options = ["       "; " _____ "; " _   _ "]
 let middle_options = ["       "; "|     |"; "|      "; "      |"]
 let bottom_options = ["       "; "|_____|"; "|_   _|"]
@@ -11,8 +11,6 @@ let bottom_options = ["       "; "|_____|"; "|_   _|"]
 (** *)
 let corner_tile st =
   State.first_tile st
-and 
-  player_locs st = State.get_locs st
 
 (** [e_ith_lst e i lst] is a list with element [e] in the [i]th position of list [lst] *)
 let rec e_ith_lst e i lst = 
@@ -67,12 +65,20 @@ let parse_top_II til p_lst =
   in room_wall
 
 let parse_middle til p_lst =
-  match Tiles.get_w til, Tiles.get_e til with 
-  | (Nonexistent, _), (Nonexistent, _) -> List.nth middle_options 1
-  | (Nonexistent,_), (_,_) -> List.nth middle_options 2
-  | (_, _), (Nonexistent, _) -> List.nth middle_options 3
-  | (_, _), (_,_) -> List.nth middle_options 0
-
+  let players = players_in_room (Tiles.get_coords til) p_lst in
+  let room_wall =
+    match Tiles.get_w til, Tiles.get_e til with 
+    | (Nonexistent, _), (Nonexistent, _) -> List.nth middle_options 1
+    | (Nonexistent,_), (_,_) -> List.nth middle_options 2
+    | (_, _), (Nonexistent, _) -> List.nth middle_options 3
+    | (_, _), (_,_) -> List.nth middle_options 0 in 
+  if (List.length players > 3) then 
+    match (players |> List.tl |> List.tl |> List.tl) with 
+    | [] -> room_wall
+    | h1::h2::h3::t -> String.sub room_wall 0 1 ^ string_of_int h1 ^ " " ^ string_of_int h2 ^ " " ^ string_of_int h3 ^ String.sub room_wall 6 1
+    | h1::h2::[] -> String.sub room_wall 0 2 ^ string_of_int h1 ^ " " ^ string_of_int h2 ^ String.sub room_wall 6 2
+    | h::[] -> String.sub room_wall 0 3 ^ string_of_int h ^ String.sub room_wall 6 3
+  else room_wall
 
 let parse_bottom til p_lst =
   match Tiles.get_s til with 
