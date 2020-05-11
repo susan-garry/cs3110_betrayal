@@ -422,7 +422,7 @@
     },
     {
       "id": "Sala",
-      "description": "You arrive in a living room with broken toys scattered around. \nYou squat down to inspect them when you feel a push on your back by tiny hands. Sinister laughter echoes in the corners of the room as you fall forward onto a pile of broken figurines.",
+      "description": "You arrive in a living room with broken toys scattered around. \nYou squat down to inspect them when you feel a push on your back by tiny hands. \nSinister laughter echoes in the corners of the room as you fall forward onto a pile of broken figurines.",
       "initial effects": [
         {
           "id": "automatic",

@@ -1,8 +1,3 @@
-open OUnit2
-open ANSITerminal
-
-
-
 type player_icon = {icon: string}
 
 exception PlayerNumbers
@@ -131,8 +126,3 @@ let print_board st =
     | (_, None) -> ()
   in print_board_helper (corner_tile st) st
 
-
-(* ------------------------------------------------- *)
-(* CODE FOR TESTING *)
-
-let tests = []

@@ -16,5 +16,3 @@
     denoting each player's locations and returns unit*)
 val print_board : State.t -> unit
 
-(**[tests] returns a list of OUnit2 tests for the functions in state*)
-val tests : OUnit2.test list
