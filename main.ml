@@ -76,9 +76,9 @@ let check_status state =
 (** [play st] resumes play from the game state in [state]. *)
 let rec play state =
   print_newline ();
-  print_endline (State.room_desc state);
   print_string "It is "; print_string (State.player_desc state); 
   print_endline "'s turn.";
+  print_endline (State.room_desc state);
   print_string "> ";
   match parse_input () with
   | Quit -> exit 0
