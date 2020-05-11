@@ -101,7 +101,6 @@ let arr_fold_lefti f x a =
       fold_lefti f (f i x a.(i)) (i+1) a
   in fold_lefti f x 0 a
 
-
 let get_locs s = 
   let add_loc i acc p =
     match p with 
@@ -115,6 +114,32 @@ let get_locs s =
 
 let get_status st = st.players_status
 
+(**[remove_player p st] removes [p] from the play order of [st]
+   TODO: test *)
+let remove_player p st =
+  let rem_helper i p2 =
+    if p2 = Some p then None else p2
+  in
+  Array.mapi rem_helper st.players
+
+(**[count_players st] returns the number of remaining players in the game*)
+let count_players st =
+  let f x a =
+    if a = None then x else (x+1)
+  in Array.fold_left f 0 st.players
+
+let get_last st =
+  let rec get_last_helper i a =
+    match a.(i) with 
+    |Some p -> p
+    |None -> get_last_helper (i+1) a
+  in get_last_helper 0 st.players
+
+let survivor_win x = 
+  x ^ " is the last player standing. The mansion seems \
+       to have had its fun, and allows you to escape. Or perhaps it \
+       wanted a survivor to tell the tale."
+
 (**[set_players_status st] adds any instance of a player who has won/lost to 
    the state's players_status list*)
 let set_players_status (st: t) =
@@ -125,14 +150,22 @@ let set_players_status (st: t) =
       match Player.get_condition p with
       |Playing -> l
       |Winner f -> Win (f (Player.get_name p))::l
-      |Loser f -> Loss (f (Player.get_name p))::l
+      |Loser f -> 
+        ignore (remove_player p st); 
+        let l' = Loss (f (Player.get_name p))::l
+        in if (count_players st) <> 1 then l' else
+          let p'_name = Player.get_name (get_last st) in 
+          Win (survivor_win p'_name) :: l'
   in
+
   let sort (a:outcome) (b:outcome) : int = 
     match a,b with 
     |Win _, Loss _ -> 1
     |Loss _, Win _ -> -1
     | _ -> 0
-  in {st with players_status = List.sort sort (arr_fold_lefti f [] st.players)}
+  in let ps = (arr_fold_lefti f [] st.players) |> List.sort sort |> List.rev
+  in
+  {st with players_status = ps}
 
 (**[add_player_helper o p st] returns a state identical to st but with [p] added
    to at the end of the play order in spot [o] and [in_play] set to [o]*)
@@ -291,8 +324,13 @@ let rec move_player (dir : Command.direction) state =
   in 
   let s = match e with
     | (Discovered, Some(tile)) ->
-      let p' = Player.move tile (get_player state) in
-      state |> set_current_player (Some p') |> exec_rep_effects tile
+      begin match Tiles.get_room tile with 
+        |None -> failwith "Discovered exits must contain filled tiles"
+        |Some r -> print_endline (Rooms.room_desc r);
+          let p' = Player.move tile (get_player state) in
+          state |> set_current_player (Some p') 
+          |> exec_rep_effects tile
+      end
     | (Undiscovered, Some(tile)) -> move_player_undiscovered tile state
     | (Nonexistent,_) -> raise NoDoor
     | _ -> failwith "Impossible because discovered and undiscovered exits \
@@ -307,13 +345,17 @@ and move_player_undiscovered tile state =
   match state.deck with 
   | [] -> failwith "There are no more rooms to discover"
   | h::t ->
+    print_endline (Rooms.room_desc h);
     let new_tile = Tiles.fill_tile tile h in
     let p' = Player.move new_tile (get_player state) in
     let s' = 
       let s'' = {state with deck = t} |> set_current_player (Some p') 
-                |> exec_init_effects new_tile in
+                |> exec_init_effects new_tile
+      in
       if t = [] then 
-        (print_endline "> You hear a loud rumbling, and you realize that all of the undiscovered exits have closed. \n"; fill_exits s'') else s'' 
+        (print_endline "> You hear a loud rumbling, and realize that all of the\
+                        undiscovered exits have closed."; fill_exits s'') 
+      else s'' 
     in
     let t_coord = Tiles.get_coords new_tile in 
     let f_coord = first_coord s' in
