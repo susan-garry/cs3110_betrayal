@@ -47,16 +47,16 @@ val get_stat_strength : t -> int
 (**[get_stat_hunger p] returns the [player_stats] field [hunger] of [p]*)
 val get_stat_hunger : t -> int
 
-(** *)
+(**[get_stat_sanity p] returns returns a player identical to [p] but whose [player_stats] field [sanity] is [n]*)
 val set_stat_sanity : int -> t -> t
 
-(** *)
+(**[get_stat_insight p] returns returns a player identical to [p] but whose [player_stats] field [insight] is [n]*)
 val set_stat_insight : int -> t -> t
 
-(** *)
+(**[get_stat_strength p] returns returns a player identical to [p] but whose [player_stats] field [strength] is [n]*)
 val set_stat_strength : int -> t -> t
 
-(** *)
+(**[get_stat_hunger p] returns returns a player identical to [p] but whose [player_stats] field [hunger] is [n]*)
 val set_stat_hunger : int -> t -> t
 
 (** [print_player p] returns unit; printing out the name, location, and stats of player [p]. *)
